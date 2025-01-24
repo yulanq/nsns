@@ -1,0 +1,67 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage Staff";
+}
+
+
+@model IEnumerable<Staff>
+
+
+<h1>Manage Staff</h1>
+
+<a href="/Staff/Add" style="display: inline-block; margin-bottom: 20px;">Add Staff</a>
+
+<table style="border-collapse: collapse; width: 50%; text-align: left;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="padding: 8px; border: 1px solid #ddd;">Name</th>
+        @*     <th style="padding: 8px; border: 1px solid #ddd;">Specialty</th> *@
+          @*   <th style="padding: 8px; border: 1px solid #ddd;">Gender</th> *@
+            <th style="padding: 8px; border: 1px solid #ddd;">Email</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Phone</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Wechat</th>
+         @*    <th style="padding: 8px; border: 1px solid #ddd;">City</th> *@
+            <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var staff in Model)
+        {
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">@staff.Name</td>
+              @*   <td style="padding: 8px; border: 1px solid #ddd;">@(staff.Specialty != null ? staff.Specialty.Title : "N/A")</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@staff.Gender</td> *@
+                <td style="padding: 8px; border: 1px solid #ddd;">@staff.Email</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@staff.Phone</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@staff.Wechat</td>
+          @*       <td style="padding: 8px; border: 1px solid #ddd;">@(staff.City != null ? staff.City.Name : "N/A")</td> *@
+                <td style="padding: 8px; border: 1px solid #ddd;">
+                   @*  <form method="get" action="/Staff/ConfirmDelete/@staff.UserID" style="display: inline;">
+                   
+                        <button type="submit" style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer;">Delete</button>
+                    </form> *@
+
+                    <a href="/Staff/ConfirmDelete/@staff.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
+                    <a href="/Staff/Edit/@staff.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
