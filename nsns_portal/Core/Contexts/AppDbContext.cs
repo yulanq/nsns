@@ -19,8 +19,6 @@ namespace Core.Contexts
 {
    
 
-    
-
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -65,7 +63,7 @@ namespace Core.Contexts
           .ToTable("admins"); // Explicitly map to the table name
 
             modelBuilder.Entity<Child>()
-          .ToTable("cildren"); // Explicitly map to the table name
+          .ToTable("children"); // Explicitly map to the table name
 
             modelBuilder.Entity<ChildBalance>()
           .ToTable("child_balance"); // Explicitly map to the table name
