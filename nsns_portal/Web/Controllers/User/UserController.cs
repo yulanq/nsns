@@ -26,73 +26,49 @@ namespace Web.Controllers.Authentication
 
 
 
-        // POST: AddAdmin Action
-        [HttpPost("AddAdmin")]
-        //[HttpPost]
-        public async Task<IActionResult> AddAdmin(string email, string password)
-        {
+        //// POST: AddAdmin Action
+        //[HttpPost("AddAdmin")]
+        ////[HttpPost]
+        //public async Task<IActionResult> AddAdmin(string email, string password)
+        //{
 
-            // Basic validation
-            //if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
-            //{
-            //    ModelState.AddModelError(string.Empty, "Email and Password are required.");
-            //    return View(); // Return the same view with an error message
-            //}
+          
 
 
+        //    // Add admin using IUserService
+        //    var result = false;
+        //    try
+        //    {
+        //         result = await _userService.AddAdminAsync(email, password);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ModelState.AddModelError(String.Empty, ex.Message);
+        //        return View();
+        //    }
 
-            // Add admin using IUserService
-            var result = false;
-            try
-            {
-                 result = await _userService.AddAdminAsync(email, password);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(String.Empty, ex.Message);
-                return View();
-            }
+        //    if (!result)
+        //    {
+        //        ModelState.AddModelError(string.Empty, "Failed to add admin.");
+        //        return View();
+        //    }
 
-            if (!result)
-            {
-                ModelState.AddModelError(string.Empty, "Failed to add admin.");
-                return View();
-            }
-
-            // Redirect to a success page or list of users
-            return RedirectToAction("Index", "User");
+        //    // Redirect to a success page or list of users
+        //    return RedirectToAction("Index", "User");
 
             
 
-        }
-
-        // GET: AddAdmin View
-        [HttpGet("AddAdmin")]
-        //[HttpGet]
-        public IActionResult AddAdmin()
-        {
-            return View();
-
-        }
-
-        //public async Task<List<User>> GetAllUsersAsync()
-        //{
-        //    return await _userService.GetAllUsersAsync();
         //}
 
-        //public async Task<User> GetUserByIdAsync(int userId)
+        //// GET: AddAdmin View
+        //[HttpGet("AddAdmin")]
+        ////[HttpGet]
+        //public IActionResult AddAdmin()
         //{
-        //    return await _userService.GetUserByIdAsync(userId);
+        //    return View();
+
         //}
 
-        //public async Task UpdateUserAsync(int userId, string username, string email)
-        //{
-        //    await _userService.UpdateUserAsync(userId, username, email);
-        //}
-
-        //public async Task DeleteUserAsync(int userId)
-        //{
-        //    await _userService.DeleteUserAsync(userId);
-        //}
+       
     }
 }

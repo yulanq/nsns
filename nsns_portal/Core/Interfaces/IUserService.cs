@@ -15,7 +15,7 @@ namespace Core.Interfaces
         /// <summary>
         /// Adds a new admin user with the specified email and password.
         /// </summary>
-        Task<bool> AddAdminAsync(string email, string password);
+        //Task<bool> AddAdminAsync(string email, string password);
 
         /// <summary>
         /// Registers a new user with the specified email and password.

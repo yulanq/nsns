@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\qiang\\source\\repos\\nsns_portal\\Core\\Core.csproj": {}
+    "C:\\Users\\qiang\\Source\\Repo\\nsns_portal\\Core\\Core.csproj": {}
   },
   "projects": {
-    "C:\\Users\\qiang\\source\\repos\\nsns_portal\\Core\\Core.csproj": {
+    "C:\\Users\\qiang\\Source\\Repo\\nsns_portal\\Core\\Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\qiang\\source\\repos\\nsns_portal\\Core\\Core.csproj",
+        "projectUniqueName": "C:\\Users\\qiang\\Source\\Repo\\nsns_portal\\Core\\Core.csproj",
         "projectName": "Core",
-        "projectPath": "C:\\Users\\qiang\\source\\repos\\nsns_portal\\Core\\Core.csproj",
+        "projectPath": "C:\\Users\\qiang\\Source\\Repo\\nsns_portal\\Core\\Core.csproj",
         "packagesPath": "C:\\Users\\qiang\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\qiang\\source\\repos\\nsns_portal\\Core\\obj\\",
+        "outputPath": "C:\\Users\\qiang\\Source\\Repo\\nsns_portal\\Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\qiang\\AppData\\Roaming\\NuGet\\NuGet.Config",

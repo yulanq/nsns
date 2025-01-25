@@ -12,48 +12,19 @@ namespace Core.Models
     
     public class Admin:User
     {
-    
-        public int AdminID { get; set; } // Primary key
+        //[Key]
+        public int AdminID { get; set; }
 
-        // Foreign key referencing the users table
-        //[Required]
-        //public int UserID { get; set; }
 
-        //[ForeignKey(nameof(UserID))]
-        //public virtual User User { get; set; } // Navigation property for the related User
+        [MaxLength(255)]
+        public required string Name { get; set; }
 
-        // Admin's name
-        [Required]
-        [Display(Name = "姓名")]
-        public string Name { get; set; } = string.Empty;
 
-        // Admin's phone number (optional)
-        [Display(Name = "电话号码")]
+        [MaxLength(50)]
         public string? Phone { get; set; }
 
-        // Admin's email (optional)
-        //[Display(Name = "邮箱")]
-        //[EmailAddress]
-        //public required string Email { get; set; }
 
-        // Admin's WeChat ID (optional)
-        [Display(Name = "微信号")]
+        [MaxLength(100)]
         public string? Wechat { get; set; }
-
-        // Foreign key referencing the users table for creator
-        public int? CreatedBy { get; set; }
-
-        [ForeignKey(nameof(CreatedBy))]
-        public virtual User? CreatedByUser { get; set; } // Navigation property for creator
-
-        // Foreign key referencing the users table for updater
-        public int? UpdatedBy { get; set; }
-
-        [ForeignKey(nameof(UpdatedBy))]
-        public virtual User? UpdatedByUser { get; set; } // Navigation property for updater
-
-        // Timestamps
-        public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow;
     }
 }

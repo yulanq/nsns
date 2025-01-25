@@ -12,11 +12,8 @@ namespace Core.Interfaces
 {
     public interface IStaffRepository:IUserRepository<Staff>
     {
-        //Task<User> GetByEmailAsync(string email);
 
-       
-
-
+        //Task<Admin> GetByEmailAsync(string email);
 
         // Add a new User to the database asynchronously
         Task<bool> AddAsync(Staff entity);
@@ -36,7 +33,6 @@ namespace Core.Interfaces
 
         // Get all Users from the database asynchronously
         Task<IEnumerable<Staff>> GetAllAsync();
-     
 
     }
 }

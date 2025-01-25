@@ -40,29 +40,62 @@ namespace Core.Services
 
         }
 
-        public async Task<bool> AddAdminAsync(string email, string password)
-        {
-            // Check if a user with the same username or email already exists
-            var existingUser = await _userRepository.GetByEmailAsync(email);
-            if (existingUser != null)
-            {
-                throw new Exception("A user with the same username or email already exists.");
-            }
+        //public async Task<bool> AddAdminAsync(string email, string password)
+        //{
+        //    // Check if a user with the same username or email already exists
+        //    var existingUser = await _userRepository.GetByEmailAsync(email);
+        //    if (existingUser != null)
+        //    {
+        //        throw new Exception("A user with the same username or email already exists.");
+        //    }
 
-            // Create the admin user
-            var adminUser = new User
-            {
-                Email = email,
-                Role = "Admin",
-                Password = password,
-                CreatedDate = DateTime.UtcNow,
-            };
-            adminUser.Password = _passwordHasher.HashPassword(adminUser, password);
-            // Save to the database
-            return await _userRepository.AddAsync(adminUser);
+        //    // Create the admin user
+        //    var adminUser = new User
+        //    {
+        //        Email = email,
+        //        Role = "Admin",
+        //        Password = password,
+        //        CreatedDate = DateTime.UtcNow,
+        //    };
+        //    adminUser.Password = _passwordHasher.HashPassword(adminUser, password);
+        //    // Save to the database
+        //    return await _userRepository.AddAsync(adminUser);
 
             
-        }
+        //}
+
+
+
+
+        //public async Task<bool> AddAsync(string name, string email, string password, string phone, string wechat)
+        //{
+        //    // Check if a user with the same username or email already exists
+        //    var existingUser = await _staffRepository.GetByEmailAsync(email);
+        //    if (existingUser != null)
+        //    {
+        //        throw new Exception("A staff with the same username or email already exists.");
+        //    }
+
+
+
+        //    // Create the admin user
+        //    var staffUser = new Staff
+        //    {
+        //        Name = name,
+        //        Email = email,
+        //        Password = password,
+        //        Role = "Staff",
+
+        //        Phone = phone,
+        //        Wechat = wechat,
+        //        CreatedDate = DateTime.UtcNow,
+        //    };
+        //    staffUser.Password = _passwordHasher.HashPassword(staffUser, password);
+        //    // Save to the database
+        //    return await _staffRepository.AddAsync(staffUser);
+
+
+        //}
 
 
 

@@ -46,10 +46,32 @@
                 </td>
             </tr>
         }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <tr>
+                <td colspan="5">
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                </td>
+            </tr>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <tr>
+                <td colspan="5">
+                    <div class="alert alert-success">
+                        @TempData["ErrorMessage"]
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
-@if (TempData["SuccessMessage"] != null)
+@* @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
         @TempData["SuccessMessage"]
@@ -61,4 +83,4 @@
     <div class="alert alert-danger">
         @TempData["ErrorMessage"]
     </div>
-}
+} *@

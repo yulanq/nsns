@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Report\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

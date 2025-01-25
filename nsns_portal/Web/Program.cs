@@ -26,6 +26,8 @@ builder.Services.AddScoped<IStaffService, StaffService>();
 
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
 builder.Services.AddScoped<ICoachService, CoachService>();
 
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
@@ -36,7 +38,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 //builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
 
-builder.Services.AddScoped<IStaffService, StaffService>();
+
+
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddScoped<IRepository<City>, CityRepository>();
 
