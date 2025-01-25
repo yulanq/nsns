@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/nsns_portal/.vs/nsns_portal
+/nsns_portal/Web/bin/Debug/net8.0
+/nsns_portal/Web/obj
+/.vs/Repo/v17
+/nsns_portal/Test/bin/Debug/net8.0
+/nsns_portal/Test/obj
