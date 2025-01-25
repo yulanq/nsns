@@ -4,21 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers.Courses
 {
-    public class CourseController
+    [Route("Course")]
+    public class CourseController: Controller
     {
-        [Route("Course")]
+        
         //[ApiController]
-        public class StaffController : Controller
-        {
-            private readonly IStaffService _staffService;
-            private readonly IRepository<City> _cityRepository;
-            private readonly IRepository<Specialty> _specialtyRepository;
+     
+            private readonly ICourseService _courseService;
+           
 
-            public StaffController(IStaffService staffService, IRepository<City> cityRepository, IRepository<Specialty> specialtyRepository)
+            public CourseController(ICourseService courseService)
             {
-                _staffService = staffService;
-                _cityRepository = cityRepository;
-                _specialtyRepository = specialtyRepository;
+            _courseService = courseService;
+             
             }
 
 
@@ -27,14 +25,15 @@ namespace Web.Controllers.Courses
             // POST: Add Staff Action
             [HttpPost("Add")]
             //[HttpPost]
-            public async Task<IActionResult> Add(string name, string email, string password, string phone, string wechat)
+            public async Task<IActionResult> Add(string title, string description, decimal hourlyCost, bool active, int coachId, int createdBy)
             {
+            //string title, string description, decimal hourlyCost, bool active, int coachId, int createdBy
 
                 // Add admin using IUserService
                 var result = false;
                 try
                 {
-                    result = await _staffService.AddAsync(name, email, password, phone, wechat);
+                    result = await _courseService.AddAsync(title,  description,  hourlyCost,  active,  coachId, createdBy);
                 }
                 catch (Exception ex)
                 {
@@ -66,10 +65,10 @@ namespace Web.Controllers.Courses
 
             // GET: Staff/Delete/{userId}
             [HttpGet("ConfirmDelete/{userId}")]
-            public async Task<IActionResult> ConfirmDelete(int userId)
+            public async Task<IActionResult> ConfirmDelete(int courseId)
             {
                 // Fetch the staff details from the database
-                var staff = await _staffService.GetAsync(userId);
+                var staff = await _courseService.GetAsync(courseId);
                 if (staff == null)
                 {
                     return NotFound();
@@ -81,11 +80,11 @@ namespace Web.Controllers.Courses
 
 
             [HttpPost("DeleteConfirmed")]
-            public async Task<IActionResult> DeleteConfirmed(int userId)
+            public async Task<IActionResult> DeleteConfirmed(int courseId)
             {
                 try
                 {
-                    var result = await _staffService.RemoveAsync(userId);
+                    var result = await _courseService.RemoveAsync(courseId);
 
                     if (!result)
                     {
@@ -94,16 +93,17 @@ namespace Web.Controllers.Courses
                     }
 
                     TempData["SuccessMessage"] = "Staff member has been deleted successfully.";
-                    return RedirectToAction("List"); // Redirect to the staff list page
+                    return RedirectToAction("List"); // Redirect to the course list page
                 }
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                    return RedirectToAction("List"); // Redirect to the course list page
                 }
 
                 // If delete fails, reload the confirmation page
-                var staff = await _staffService.RemoveAsync(userId);
-                return View(staff);
+               
+                
             }
 
 
@@ -114,42 +114,42 @@ namespace Web.Controllers.Courses
             public async Task<IActionResult> List()
             {
 
-                var staffList = await _staffService.GetAllAsync();
-                return View(staffList); // Ensure there is a corresponding List.cshtml in Views/Staff
+                var courseList = await _courseService.GetAllAsync();
+                return View(courseList); // Ensure there is a corresponding List.cshtml in Views/Staff
 
             }
 
 
             // GET: Edit View
-            [HttpGet("Edit/{userId}")]
+            [HttpGet("Edit/{courseId}")]
             //[HttpGet]
-            public async Task<IActionResult> Edit(int userId)
+            public async Task<IActionResult> Edit(int courseId)
             {
                 // Fetch the staff details from the database
-                var staff = await _staffService.GetAsync(userId);
-                if (staff == null)
+                var course = await _courseService.GetAsync(courseId);
+                if (course == null)
                 {
                     return NotFound();
                 }
 
                 // Pass the staff details to the Delete.cshtml view
-                return View(staff);
+                return View(course);
 
             }
 
 
-            [HttpPost("Edit/{userId}")]
+            [HttpPost("Edit/{courseId}")]
             [ValidateAntiForgeryToken]
-            public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/ string phone, string wechat)
+            public async Task<IActionResult> Edit(int courseId, string title, string description, decimal hourlyCost, bool active, int coachId, int updatedBy)
             {
                 if (!ModelState.IsValid)
                 {
                     return View();
                 }
 
-                var result = await _staffService.UpdateAsync(userId, name, email, /*password,*/ phone, wechat);
+                var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, active, coachId, updatedBy);
 
-
+            
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed to update staff information.");
@@ -158,7 +158,7 @@ namespace Web.Controllers.Courses
 
                 TempData["SuccessMessage"] = "Staff information updated successfully.";
                 return RedirectToAction("List");
-            }
+          
         }
     }
 }

@@ -22,15 +22,23 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddScoped<IUserRepository<User>, UserRepository>();
 // Add UserService
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 
-builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+
 
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
-builder.Services.AddScoped<ICoachService, CoachService>();
 
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
+builder.Services.AddScoped<ICoachService, CoachService>();
+
+
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+
+
 // Add UserService
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -40,7 +48,7 @@ builder.Services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
 
 
 
-builder.Services.AddScoped<IAdminService, AdminService>();
+
 
 builder.Services.AddScoped<IRepository<City>, CityRepository>();
 

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Repositories
 {
-    public class CourseRepository
+    public class CourseRepository: ICourseRepository
     {
         private readonly AppDbContext _context;
 
@@ -24,8 +24,8 @@ namespace Core.Repositories
         {
             return await _context.Courses
                 .Include(c => c.Coach)
-                .Include(c => c.CreatedByUser)
-                .Include(c => c.UpdatedByUser)
+                //.Include(c => c.CreatedByUser)
+                //.Include(c => c.UpdatedByUser)
                 .ToListAsync();
         }
 
@@ -34,39 +34,65 @@ namespace Core.Repositories
         {
             return await _context.Courses
                 .Include(c => c.Coach)
-                .Include(c => c.CreatedByUser)
-                .Include(c => c.UpdatedByUser)
+                //.Include(c => c.CreatedByUser)
+                //.Include(c => c.UpdatedByUser)
                 .FirstOrDefaultAsync(c => c.CourseID == courseId);
         }
 
         // Add a new course
-        public async Task AddAsync(Course course)
+        public async Task<bool> AddAsync(Course entity)
         {
-            if (course == null)
-                throw new ArgumentNullException(nameof(course));
+           
 
-            await _context.Courses.AddAsync(course);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (entity == null)
+                    throw new ArgumentNullException(nameof(entity));
+
+                await _context.Courses.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false; // Return failure in case of an exception
+            }
         }
 
         // Update an existing course
-        public async Task UpdateAsync(Course course)
+        public async Task<bool> UpdateAsync(Course entity)
         {
-            if (course == null)
-                throw new ArgumentNullException(nameof(course));
+            try
+            {
+                if (entity == null)
+                    throw new ArgumentNullException(nameof(entity));
 
-            _context.Courses.Update(course);
-            await _context.SaveChangesAsync();
+                _context.Courses.Update(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false; // Return failure in case of an exception
+            }
+
         }
 
         // Delete a course by ID
-        public async Task DeleteAsync(int courseId)
+        public async Task<bool> DeleteAsync(Course entity)
         {
-            var course = await _context.Courses.FindAsync(courseId);
-            if (course != null)
+            try
             {
-                _context.Courses.Remove(course);
+                if (entity == null)
+                    throw new ArgumentNullException(nameof(entity));
+
+                _context.Courses.Remove(entity);
                 await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false; // Return failure in case of an exception
             }
         }
 

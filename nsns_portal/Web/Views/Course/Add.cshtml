@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Title"] = "Add Course";
+}
+
+<h2>Add Course</h2>
+
+<form method="post" action="/Course/Add">
+    <table style="border-collapse: collapse; width: 50%; text-align: left;">
+        <tr>
+            <td style="padding: 8px;"><label for="title">Title:</label></td>
+            <td style="padding: 8px;"><input type="text" name="title" placeholder="Course Title" style="width: 100%;" required /></td>
+        </tr>
+        <tr>
+            <td style="padding: 8px;"><label for="description">Description:</label></td>
+            <td style="padding: 8px;"><textarea name="description" placeholder="Course Description" style="width: 100%;" rows="4"></textarea></td>
+        </tr>
+        <tr>
+            <td style="padding: 8px;"><label for="hourlyCost">Hourly Cost:</label></td>
+            <td style="padding: 8px;"><input type="number" name="hourlyCost" placeholder="Hourly Cost" step="0.01" style="width: 100%;" required /></td>
+        </tr>
+        <tr>
+            <td style="padding: 8px;"><label for="coachId">Coach ID:</label></td>
+            <td style="padding: 8px;"><input type="number" name="coachId" placeholder="Coach ID" style="width: 100%;" required /></td>
+        </tr>
+        <tr>
+            <td style="padding: 8px;"><label for="active">Active:</label></td>
+            <td style="padding: 8px;">
+                <select name="active" style="width: 100%;">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: left; padding: 20px 16px 16px 8px;">
+                <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer;">Add Course</button>
+                <a href="/Course/List" style="background-color: #ddd; color: black; text-decoration: none; padding: 5px 10px; border: 1px solid #ccc;">Cancel</a>
+            </td>
+        </tr>
+    </table>
+
+    @if (!ViewData.ModelState.IsValid)
+
+    {
+
+        foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+
+        {
+            <div class="alert alert-danger">
+                @error.ErrorMessage
+            </div>
+        }
+
+    }
+</form>

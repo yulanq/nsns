@@ -22,15 +22,15 @@ namespace Core.Interfaces
 
 
         // Add a new course
-        Task AddAsync(Course course);
+        Task<bool> AddAsync(Course entity);
 
 
         // Update an existing course
-        Task UpdateAsync(Course course);
+        Task<bool> UpdateAsync(Course entity);
        
 
         // Delete a course by ID
-       Task DeleteAsync(int courseId);
+       Task<bool> DeleteAsync(Course entity);
        
 
         // Get active courses

@@ -20,9 +20,9 @@ namespace Core.Services
 
     public class CourseService : ICourseService
     {
-        private readonly CourseRepository _courseRepository;
+        private readonly ICourseRepository _courseRepository;
 
-        public CourseService(CourseRepository courseRepository)
+        public CourseService(ICourseRepository courseRepository)
         {
             _courseRepository = courseRepository;
         }
@@ -46,7 +46,7 @@ namespace Core.Services
 
         // Add a new course
         
-        public async Task AddAsync(string title, string description, decimal hourlyCost, bool active, int coachId, int createdBy)
+        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool active, int coachId, int createdBy)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -80,12 +80,12 @@ namespace Core.Services
             };
 
             // Add the course to the repository
-            await _courseRepository.AddAsync(course);
+            return await _courseRepository.AddAsync(course);
         }
 
 
         // Update an existing course
-        public async Task UpdateCourseAsync(int courseId, string title, string description, decimal hourlyCost, bool active, int coachId, int updatedBy)
+        public async Task<bool> UpdateAsync(int courseId, string title, string description, decimal hourlyCost, bool active, int coachId, int updatedBy)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -123,11 +123,11 @@ namespace Core.Services
             existingCourse.UpdatedDate = DateTime.UtcNow;
 
             // Save changes to the repository
-            await _courseRepository.UpdateAsync(existingCourse);
+            return await _courseRepository.UpdateAsync(existingCourse);
         }
 
         // Delete a course by ID
-        public async Task DeleteCourseAsync(int courseId)
+        public async Task<bool> RemoveAsync(int courseId)
         {
             var course = await _courseRepository.GetAsync(courseId);
             if (course == null)
@@ -135,7 +135,7 @@ namespace Core.Services
                 throw new KeyNotFoundException($"Course with ID {courseId} not found.");
             }
 
-            await _courseRepository.DeleteAsync(courseId);
+            return await _courseRepository.DeleteAsync(course);
         }
 
         // Get active courses
