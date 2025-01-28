@@ -24,7 +24,7 @@ namespace Core.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal HourlyCost { get; set; } // Hourly cost of the course
 
-        public bool Active { get; set; } = true; // Whether the course is active or not
+        public bool IsActive { get; set; } = true; // Whether the course is active or not
 
         // Foreign keys for related tables
         public int CoachID { get; set; } // Foreign key to the Coach table

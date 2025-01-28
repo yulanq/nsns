@@ -100,6 +100,13 @@ namespace Core.Repositories
                 .ToListAsync();  // Retrieves all users asynchronously
         }
 
+        public async Task<IEnumerable<Coach>> GetCoachesBySpecialtyAsync(int specialtyId)
+        {
+            return await _context.Coaches
+                         .Where(c => c.SpecialtyID == specialtyId)
+                         .ToListAsync();
+        }
+
 
 
 

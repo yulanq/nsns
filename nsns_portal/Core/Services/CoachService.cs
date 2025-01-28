@@ -161,6 +161,24 @@ namespace Core.Services
         }
 
 
+        public async Task<IEnumerable<Coach>> GetCoachesBySpecailtyAsync(int specialtyId)
+        {
+            try
+            {
+                // Fetch all staff records from the repository
+                var coachList = await _coachRepository.GetCoachesBySpecialtyAsync(specialtyId);
+
+                // You can add additional logic or transformations here if necessary
+                return coachList;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions as needed (e.g., logging)
+                throw new Exception("An error occurred while retrieving staff records.", ex);
+            }
+
+        }
+
         public async Task<bool> RegisterAsync(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId)
         {
             return await AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId);

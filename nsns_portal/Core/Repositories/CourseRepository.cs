@@ -100,7 +100,7 @@ namespace Core.Repositories
         public async Task<IEnumerable<Course>> GetActiveCoursesAsync()
         {
             return await _context.Courses
-                .Where(c => c.Active)
+                .Where(c => c.IsActive == true)
                 .Include(c => c.Coach)
                 .ToListAsync();
         }

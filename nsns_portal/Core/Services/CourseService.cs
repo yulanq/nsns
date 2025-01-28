@@ -73,7 +73,7 @@ namespace Core.Services
                 Title = title,
                 Description = description,
                 HourlyCost = hourlyCost,
-                Active = active,
+                IsActive = active,
                 CoachID = coachId,
                 CreatedBy = createdBy,
                 CreatedDate = DateTime.UtcNow
@@ -117,7 +117,7 @@ namespace Core.Services
             existingCourse.Title = title;
             existingCourse.Description = description;
             existingCourse.HourlyCost = hourlyCost;
-            existingCourse.Active = active;
+            existingCourse.IsActive = active;
             existingCourse.CoachID = coachId;
             existingCourse.UpdatedBy = updatedBy;
             existingCourse.UpdatedDate = DateTime.UtcNow;

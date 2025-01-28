@@ -36,7 +36,10 @@ namespace Core.Interfaces
 
         // Get all Users from the database asynchronously
         Task<IEnumerable<Coach>> GetAllAsync();
-     
+
+        Task<IEnumerable<Coach>> GetCoachesBySpecialtyAsync(int specialtyId);
+
+
 
     }
 }

@@ -26,6 +26,7 @@ namespace Core.Interfaces
 
         Task<IEnumerable<Coach>> GetAllAsync();
 
+        Task<IEnumerable<Coach>> GetCoachesBySpecailtyAsync(int specialtyId);
 
         /// <summary>
         /// Registers a new user with the specified email and password.
