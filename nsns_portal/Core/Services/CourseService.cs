@@ -21,10 +21,14 @@ namespace Core.Services
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository _courseRepository;
+        private readonly ICoachRepository _coachRepository;
+        private readonly IUserRepository<User> _userRepository;
 
-        public CourseService(ICourseRepository courseRepository)
+        public CourseService(ICourseRepository courseRepository, ICoachRepository coachRepository, IUserRepository<User> userRepository)
         {
             _courseRepository = courseRepository;
+            _coachRepository = coachRepository;
+            _userRepository = userRepository;
         }
 
         // Get all courses
@@ -68,19 +72,45 @@ namespace Core.Services
             // }
 
             // Create a new course instance
+
+            // Retrieve the coach entity
+            //var coach = await _coachRepository.GetByCoachIdAsync(coachId);
+            //if (coach == null)
+            //{
+            //    throw new Exception("No coach is added.");
+            //}
+
+            //var createdByUser = await _userRepository.GetAsync(createdBy);
+            //if (createdByUser == null)
+            //{
+            //    throw new Exception("No createdBy  is added.");
+            //}
+
             var course = new Course
             {
                 Title = title,
                 Description = description,
                 HourlyCost = hourlyCost,
                 IsActive = active,
+                //CoachID = coach.CoachID,
                 CoachID = coachId,
+                //Coach = coach,
                 CreatedBy = createdBy,
+                //CreatedByUser = createdByUser,
                 CreatedDate = DateTime.UtcNow
+
             };
 
             // Add the course to the repository
-            return await _courseRepository.AddAsync(course);
+            try
+            {
+                return await _courseRepository.AddAsync(course);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No course is added.");
+            }
+            
         }
 
 

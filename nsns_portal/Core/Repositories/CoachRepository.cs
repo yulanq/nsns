@@ -44,7 +44,7 @@ namespace Core.Repositories
         {
             try
             {
-                await _context.Users.AddAsync(entity);
+                await _context.Coaches.AddAsync(entity);
                 await _context.SaveChangesAsync();  // Commit the changes asynchronously
                 return true;
             }
@@ -59,7 +59,7 @@ namespace Core.Repositories
         {
             try
             {
-                _context.Users.Remove(entity);
+                _context.Coaches.Remove(entity);
                 await _context.SaveChangesAsync();  // Commit the changes asynchronously
                 return true;
             }
@@ -75,7 +75,7 @@ namespace Core.Repositories
         {
             try
             {
-                _context.Users.Update(entity);
+                _context.Coaches.Update(entity);
                 await _context.SaveChangesAsync();  // Commit the changes asynchronously
                 return true;
             }
@@ -89,7 +89,14 @@ namespace Core.Repositories
         public async Task<Coach> GetAsync(int userId)
         {
             return await _context.Coaches.FindAsync(userId);  // Finds by ID asynchronously
+            
         }
+
+        public async Task<Coach> GetByCoachIdAsync(int coachId)
+        {
+            return await _context.Coaches.FirstOrDefaultAsync(c => c.CoachID == coachId);
+        }
+        
 
         // Get all Users from the database asynchronously
         public async Task<IEnumerable<Coach>> GetAllAsync()

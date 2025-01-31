@@ -49,7 +49,7 @@ namespace Core.Repositories
         {
             try
             {
-                await _context.Users.AddAsync(entity);
+                await _context.Staff.AddAsync(entity);
                 await _context.SaveChangesAsync();  // Commit the changes asynchronously
                 return true;
             }
@@ -64,7 +64,7 @@ namespace Core.Repositories
         {
             try
             {
-                _context.Users.Remove(entity);
+                _context.Staff.Remove(entity);
                 await _context.SaveChangesAsync();  // Commit the changes asynchronously
                 return true;
             }
@@ -80,7 +80,7 @@ namespace Core.Repositories
         {
             try
             {
-                _context.Users.Update(entity);
+                _context.Staff.Update(entity);
                 await _context.SaveChangesAsync();  // Commit the changes asynchronously
                 return true;
             }

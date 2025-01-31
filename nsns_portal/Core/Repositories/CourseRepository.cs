@@ -22,12 +22,24 @@ namespace Core.Repositories
         // Get all courses
         public async Task<IEnumerable<Course>> GetAllAsync()
         {
-            return await _context.Courses
-                .Include(c => c.Coach)
-                //.Include(c => c.CreatedByUser)
+            try
+            {
+                return await _context.Courses
+                //.Include(c => c.Coach)
+                .Include(c => c.CreatedByUser)
                 //.Include(c => c.UpdatedByUser)
                 .ToListAsync();
+
+                //return await _context.Courses.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
+
+
+       
 
         // Get a course by ID
         public async Task<Course> GetAsync(int courseId)

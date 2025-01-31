@@ -134,6 +134,24 @@ namespace Core.Services
         {
             // Retrieve the staff by ID
             var coach = await _coachRepository.GetAsync(id);
+            if(coach.CityID!= null)
+            {
+                var city = await _cityRepository.GetAsync(coach.CityID);
+                coach.City = city;
+            }
+                
+            
+
+            //Retrieve the Specialty entity
+
+            if (coach.SpecialtyID != null)
+            {
+                var specialty = await _specialtyRepository.GetAsync(coach.SpecialtyID);
+                coach.Specialty = specialty;
+            }
+
+           
+
             if (coach == null)
             {
                 throw new Exception("Coach not found.");
@@ -141,6 +159,8 @@ namespace Core.Services
 
             return coach;
         }
+
+
 
 
         public async Task<IEnumerable<Coach>> GetAllAsync()
