@@ -25,7 +25,7 @@ namespace Core.Repositories
             try
             {
                 return await _context.Courses
-                //.Include(c => c.Coach)
+                .Include(c => c.Coach)
                 .Include(c => c.CreatedByUser)
                 //.Include(c => c.UpdatedByUser)
                 .ToListAsync();
@@ -46,7 +46,7 @@ namespace Core.Repositories
         {
             return await _context.Courses
                 .Include(c => c.Coach)
-                //.Include(c => c.CreatedByUser)
+                .Include(c => c.CreatedByUser)
                 //.Include(c => c.UpdatedByUser)
                 .FirstOrDefaultAsync(c => c.CourseID == courseId);
         }
@@ -60,7 +60,8 @@ namespace Core.Repositories
             {
                 if (entity == null)
                     throw new ArgumentNullException(nameof(entity));
-
+                _context.Entry(entity.Coach).State = EntityState.Unchanged;
+                //_context.ChangeTracker.Clear();  // Clears EF's tracking cache, this prevents EF Core from modifying CoachID unexpectedly
                 await _context.Courses.AddAsync(entity);
                 await _context.SaveChangesAsync();
                 return true;
@@ -118,12 +119,12 @@ namespace Core.Repositories
         }
 
         // Get courses by coach ID
-        public async Task<IEnumerable<Course>> GetCoursesByCoachIdAsync(int coachId)
-        {
-            return await _context.Courses
-                .Where(c => c.CoachID == coachId)
-                .Include(c => c.Coach)
-                .ToListAsync();
-        }
+        //public async Task<IEnumerable<Course>> GetCoursesByCoachIdAsync(int coachId)
+        //{
+        //    return await _context.Courses
+        //        .Where(c => c.userID == coachId)
+        //        .Include(c => c.Coach)
+        //        .ToListAsync();
+        //}
     }
 }

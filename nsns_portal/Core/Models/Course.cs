@@ -27,7 +27,8 @@ namespace Core.Models
         public bool IsActive { get; set; } = true; // Whether the course is active or not
 
         // Foreign keys for related tables
-        public int CoachID { get; set; } // Foreign key to the Coach table
+        [Required]
+        public int UserID { get; set; } // Foreign key to the Coach table
         public int CreatedBy { get; set; } // Foreign key to the User table for the creator
         public int? UpdatedBy { get; set; } // Foreign key to the User table for the last updater
 
@@ -36,11 +37,12 @@ namespace Core.Models
         public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        [ForeignKey(nameof(CoachID))]
-        public virtual Coach Coach { get; set; } // Navigation property to the Coach
+        [ForeignKey(nameof(UserID))]
+        public virtual required Coach Coach { get; set; } // Correctly mapped to Coach
+
 
         [ForeignKey(nameof(CreatedBy))]
-        public virtual User CreatedByUser { get; set; } // Navigation property for the user who created the course
+        public virtual required User CreatedByUser { get; set; } // Navigation property for the user who created the course
 
         [ForeignKey(nameof(UpdatedBy))]
         public virtual User? UpdatedByUser { get; set; } // Navigation property for the user who last updated the course

@@ -11,7 +11,8 @@ namespace Core.Models
 {
     public class Coach: User
     {
-        public int CoachID { get; set; }
+        
+      
 
         //[Required]
         //public int UserID { get; set; }

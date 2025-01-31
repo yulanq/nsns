@@ -132,7 +132,7 @@ namespace Web.Controllers.Courses
         public async Task<IActionResult> GetCoachesBySpecialty(int specialtyId)
         {
             var coaches = await _coachService.GetCoachesBySpecailtyAsync(specialtyId);
-            return Json(coaches.Select(c => new { c.CoachID, c.Name }));
+            return Json(coaches.Select(c => new { c.UserID, c.Name }));
         }
 
         [HttpGet("Add")]
@@ -163,7 +163,7 @@ namespace Web.Controllers.Courses
             //};
             try
             {
-                var result = await _courseService.AddAsync(model.Title, model.Description, model.HourlyCost, model.IsActive, model.CoachID,15);
+                var result = await _courseService.AddAsync(model.Title, model.Description, model.HourlyCost, model.IsActive, model.UserID,15);
 
                 if (!result)
                 {
@@ -171,12 +171,12 @@ namespace Web.Controllers.Courses
 
                     // Reload specialties in case of error
 
-                    var specialties = await _specialtyRepository.GetAllAsync();
-                    ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
-                    {
-                        Value = s.SpecialtyID.ToString(),
-                        Text = s.Title
-                    }).ToList();
+                    //var specialties = await _specialtyRepository.GetAllAsync();
+                    //ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+                    //{
+                    //    Value = s.SpecialtyID.ToString(),
+                    //    Text = s.Title
+                    //}).ToList();
                     //return View(model);
                     return RedirectToAction("List"); // Redirect to the course list page
                 }

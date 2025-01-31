@@ -33,7 +33,7 @@ namespace Core.Interfaces
         // Find a User by its email asynchronously
         Task<Coach> GetAsync(int userId);
 
-        Task<Coach> GetByCoachIdAsync(int coachId);
+        //Task<Coach> GetByCoachIdAsync(int coachId);
 
 
         // Get all Users from the database asynchronously

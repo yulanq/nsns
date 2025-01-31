@@ -181,6 +181,7 @@ namespace Web.Controllers.User
             var coachList = await _coachService.GetAllAsync();
             return View(coachList); // Ensure there is a corresponding List.cshtml in Views/Staff
 
+           
         }
 
 

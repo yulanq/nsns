@@ -13,6 +13,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Core.Repositories;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services
 {
@@ -50,7 +51,7 @@ namespace Core.Services
 
         // Add a new course
         
-        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool active, int coachId, int createdBy)
+        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool active, int userId, int createdBy)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -63,28 +64,28 @@ namespace Core.Services
                 throw new ArgumentException("Hourly cost must be greater than zero.", nameof(hourlyCost));
             }
 
-            // Check for valid Coach ID (optional: if repository has a method to validate Coach ID)
+            //Check for Coach/Specialty exists in course table)
             // Uncomment if needed
-            // var coachExists = await _courseRepository.CheckIfCoachExistsAsync(coachId);
-            // if (!coachExists)
-            // {
-            //     throw new ArgumentException($"No coach found with ID {coachId}.", nameof(coachId));
-            // }
+             var coachExists = await _courseRepository.GetAsync(userId);
+            if (coachExists !=  null)
+            {
+                throw new Exception("The coach course has been added.");
+            }
 
             // Create a new course instance
 
-            // Retrieve the coach entity
-            //var coach = await _coachRepository.GetByCoachIdAsync(coachId);
-            //if (coach == null)
-            //{
-            //    throw new Exception("No coach is added.");
-            //}
+            //Retrieve the coach entity
+            var coach = await _coachRepository.GetAsync(userId);
+            if (coach == null)
+            {
+                throw new Exception("No coach is added.");
+            }
 
-            //var createdByUser = await _userRepository.GetAsync(createdBy);
-            //if (createdByUser == null)
-            //{
-            //    throw new Exception("No createdBy  is added.");
-            //}
+            var createdByUser = await _userRepository.GetAsync(createdBy);
+            if (createdByUser == null)
+            {
+                throw new Exception("No createdBy  is added.");
+            }
 
             var course = new Course
             {
@@ -92,15 +93,15 @@ namespace Core.Services
                 Description = description,
                 HourlyCost = hourlyCost,
                 IsActive = active,
-                //CoachID = coach.CoachID,
-                CoachID = coachId,
-                //Coach = coach,
+                //UserID = coach.UserID,
+                Coach = coach,
+                //CoachID = coachId,
                 CreatedBy = createdBy,
-                //CreatedByUser = createdByUser,
+                CreatedByUser = createdByUser,
                 CreatedDate = DateTime.UtcNow
-
             };
 
+            
             // Add the course to the repository
             try
             {
@@ -115,7 +116,7 @@ namespace Core.Services
 
 
         // Update an existing course
-        public async Task<bool> UpdateAsync(int courseId, string title, string description, decimal hourlyCost, bool active, int coachId, int updatedBy)
+        public async Task<bool> UpdateAsync(int courseId, string title, string description, decimal hourlyCost, bool active, int userId, int updatedBy)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -148,7 +149,7 @@ namespace Core.Services
             existingCourse.Description = description;
             existingCourse.HourlyCost = hourlyCost;
             existingCourse.IsActive = active;
-            existingCourse.CoachID = coachId;
+            existingCourse.UserID = userId;
             existingCourse.UpdatedBy = updatedBy;
             existingCourse.UpdatedDate = DateTime.UtcNow;
 
@@ -175,10 +176,10 @@ namespace Core.Services
         }
 
         // Get courses by coach ID
-        public async Task<IEnumerable<Course>> GetCoursesByCoachIdAsync(int coachId)
-        {
-            return await _courseRepository.GetCoursesByCoachIdAsync(coachId);
-        }
+        //public async Task<IEnumerable<Course>> GetCoursesByCoachIdAsync(int coachId)
+        //{
+        //    return await _courseRepository.GetCoursesByCoachIdAsync(coachId);
+        //}
     }
 }
 

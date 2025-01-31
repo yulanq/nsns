@@ -77,6 +77,7 @@ namespace Core.Contexts
             modelBuilder.Entity<Course>()
           .ToTable("courses"); // Explicitly map to the table name
 
+
             modelBuilder.Entity<CourseEnrollment>()
           .ToTable("course_enrollment"); // Explicitly map to the table name
 

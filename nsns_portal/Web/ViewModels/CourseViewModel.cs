@@ -8,7 +8,7 @@ namespace Web.ViewModels
         public int SpecialtyID { get; set; }
 
         [Required]
-        public int CoachID { get; set; }
+        public int UserID { get; set; }
 
         [Required]
         [StringLength(255)]
