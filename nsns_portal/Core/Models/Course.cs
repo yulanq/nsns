@@ -21,8 +21,9 @@ namespace Core.Models
         public string? Description { get; set; } // Description of the course
 
         [Required]
+        [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid hourly cost.")]
         [Column(TypeName = "decimal(10,2)")]
-        public decimal HourlyCost { get; set; } // Hourly cost of the course
+        public decimal HourlyCost { get; set; } = 0; // Hourly cost of the course
 
         public bool IsActive { get; set; } = true; // Whether the course is active or not
 

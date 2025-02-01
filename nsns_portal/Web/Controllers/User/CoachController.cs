@@ -30,7 +30,42 @@ namespace Web.Controllers.User
         }
 
 
+        //private async Task<IActionResult> LoadPageForEdit(int userId)
+        //{
+        //    // Fetch the staff details from the database
 
+        //    var coach = await _coachService.GetAsync(userId);
+
+        //    if (coach == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+
+
+
+        //    ViewBag.CityList = cities.Select(c => new SelectListItem
+        //    {
+        //        Value = c.CityID.ToString(),
+        //        Text = c.Name,
+        //        Selected = c.CityID == coach.CityID
+        //    }).ToList();
+
+
+        //    var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+
+        //    ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+        //    {
+        //        Value = s.SpecialtyID.ToString(),
+        //        Text = s.Title,
+        //        Selected = s.SpecialtyID == coach.SpecialtyID
+        //    }).ToList();
+
+        //    // Pass the coach details to the Edit.cshtml view
+        //    return View(coach);
+
+        //}
 
         // POST: Add Staff Action
         [HttpPost("Add")]
@@ -38,41 +73,51 @@ namespace Web.Controllers.User
         public async Task<IActionResult> Add(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId)
         {
 
-            // Basic validation
-            //if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
-            //{
-            //    ModelState.AddModelError(string.Empty, "Email and Password are required.");
-            //    return View(); // Return the same view with an error message
-            //}
-
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || (cityId == 0) || (specialtyId == 0))
+           
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Name, Email, Password, specialty, city are required.");
-                return View(); // Return the same view with an error message
+                return View();
             }
 
-           
 
-            // Add admin using IUserService
-            var result = false;
+            
+
             try
             {
-                result = await _coachService.AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId);
+                var result = await _coachService.AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId);
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed in adding the coach info.");
+
+                   
+                    // Repopulate CityList for the dropdown if validation fails
+
+                    var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+                    ViewBag.CityList = cities.Select(c => new SelectListItem
+                    {
+                        Value = c.CityID.ToString(),
+                        Text = c.Name
+                    }).ToList();
+
+                    var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+                    ViewBag.SpecialtyList = specialties.Select(c => new SelectListItem
+                    {
+                        Value = c.SpecialtyID.ToString(),
+                        Text = c.Title
+                    }).ToList();
+
+
+                    return View();
+                }
+                TempData["SuccessMessage"] = "Coach info has been added successfully.";
+                return RedirectToAction("List"); // Redirect to the coach list page
+
+
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(String.Empty, ex.Message);
-
-            }
-
-            if (!result)
-            {
-                ModelState.AddModelError(string.Empty, "Failed to add staff.");
-
-            }
-
-            if (!ModelState.IsValid)
-            {
+                ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
+                
                 // Repopulate CityList for the dropdown if validation fails
 
                 var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
@@ -89,12 +134,11 @@ namespace Web.Controllers.User
                     Text = c.Title
                 }).ToList();
 
-                return View(); // Return view with errors for correction
+                  
+                return View();
             }
-            // Redirect to a success page or list of users
-            TempData["SuccessMessage"] = "The coach member has been added.";
-            return RedirectToAction("List", "Coach");
 
+            
 
 
         }
@@ -191,9 +235,10 @@ namespace Web.Controllers.User
         //[HttpGet]
         public async Task<IActionResult> Edit(int userId)
         {
-            // Fetch the staff details from the database
+            //Fetch the staff details from the database
 
-            var coach = await _coachService.GetAsync(userId);
+
+           var coach = await _coachService.GetAsync(userId);
 
             if (coach == null)
             {
@@ -201,7 +246,7 @@ namespace Web.Controllers.User
             }
 
             var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
-           
+
 
 
             ViewBag.CityList = cities.Select(c => new SelectListItem
@@ -210,10 +255,10 @@ namespace Web.Controllers.User
                 Text = c.Name,
                 Selected = c.CityID == coach.CityID
             }).ToList();
-            
+
 
             var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
-          
+
             ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
             {
                 Value = s.SpecialtyID.ToString(),
@@ -223,6 +268,7 @@ namespace Web.Controllers.User
 
             // Pass the coach details to the Edit.cshtml view
             return View(coach);
+            //return LoadPageForEdit(userId);
 
         }
 
@@ -233,22 +279,85 @@ namespace Web.Controllers.User
        
         public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/int specialtyId, string gender, string phone, string wechat, int cityId)
         {
-            if (!ModelState.IsValid)
+           
+
+            try
             {
-                return View();
+                var result = await _coachService.UpdateAsync(userId, name, email, /*password,*/specialtyId, gender, phone, wechat, cityId);
+
+
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to update coach information.");
+                    var coach = await _coachService.GetAsync(userId);
+
+                    if (coach == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+
+
+
+                    ViewBag.CityList = cities.Select(c => new SelectListItem
+                    {
+                        Value = c.CityID.ToString(),
+                        Text = c.Name,
+                        Selected = c.CityID == coach.CityID
+                    }).ToList();
+
+
+                    var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+
+                    ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+                    {
+                        Value = s.SpecialtyID.ToString(),
+                        Text = s.Title,
+                        Selected = s.SpecialtyID == coach.SpecialtyID
+                    }).ToList();
+
+                    // Pass the coach details to the Edit.cshtml view
+                    return View(coach);
+                }
+
+                TempData["SuccessMessage"] = "coach information updated successfully.";
+                return RedirectToAction("List");
             }
-
-            var result = await _coachService.UpdateAsync(userId, name, email, /*password,*/specialtyId, gender,phone, wechat,cityId);
-
-
-            if (!result)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Failed to update coach information.");
-                return View();
-            }
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                var coach = await _coachService.GetAsync(userId);
 
-            TempData["SuccessMessage"] = "coach information updated successfully.";
-            return RedirectToAction("List");
+                if (coach == null)
+                {
+                    return NotFound();
+                }
+
+                var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+
+
+
+                ViewBag.CityList = cities.Select(c => new SelectListItem
+                {
+                    Value = c.CityID.ToString(),
+                    Text = c.Name,
+                    Selected = c.CityID == coach.CityID
+                }).ToList();
+
+
+                var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+
+                ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+                {
+                    Value = s.SpecialtyID.ToString(),
+                    Text = s.Title,
+                    Selected = s.SpecialtyID == coach.SpecialtyID
+                }).ToList();
+
+                // Pass the coach details to the Edit.cshtml view
+                return View(coach);
+            }
         }
 
 

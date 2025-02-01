@@ -34,30 +34,31 @@ namespace Web.Controllers.User
         //[HttpPost]
         public async Task<IActionResult> Add(string name, string email, string password, string phone, string wechat)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
 
-            // Add admin using IUserService
-            var result = false;
+            
+            
             try
             {
-                result = await _adminService.AddAsync( name, email, password,  phone,  wechat);
+               var result = await _adminService.AddAsync( name, email, password,  phone,  wechat);
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed in adding the admin info.");
+                    return View();
+                }
+                TempData["SuccessMessage"] = "he admin member has been added.";
+                return RedirectToAction("List"); // Redirect to the admin list page
+
+
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(String.Empty, ex.Message);
-               
+                ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
+                return View();
             }
-
-            if (!result)
-            {
-                return View(); // Return view with errors for correction
-
-            }
-
-            // Redirect to a success page or list of users
-
-            TempData["SuccessMessage"] = "The admin member has been added.";
-            return RedirectToAction("List", "Admin");
-
         }
 
         // GET: Add View
@@ -147,22 +148,29 @@ namespace Web.Controllers.User
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/ string phone, string wechat)
         {
-            if (!ModelState.IsValid)
+           
+
+            try
             {
-                return View();
+                var result = await _adminService.UpdateAsync(userId, name, email, /*password,*/ phone, wechat);
+
+
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to update staff information.");
+                    var admin = await _adminService.GetAsync(userId);
+                    return View(admin);
+                }
+
+                TempData["SuccessMessage"] = "Admin information updated successfully.";
+                return RedirectToAction("List");
             }
-
-            var result = await _adminService.UpdateAsync(userId, name, email, /*password,*/ phone, wechat);
-
-
-            if (!result)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Failed to update staff information.");
-                return View();
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                var admin = await _adminService.GetAsync(userId);
+                return View(admin);
             }
-
-            TempData["SuccessMessage"] = "Admin information updated successfully.";
-            return RedirectToAction("List");
         }
     }
 }

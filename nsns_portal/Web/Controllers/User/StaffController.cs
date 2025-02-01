@@ -38,28 +38,33 @@ namespace Web.Controllers.User
         public async Task<IActionResult> Add(string name, string email, string password, string phone, string wechat)
         {
 
-            // Add admin using IUserService
-            var result = false;
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            
             try
             {
-                result = await _staffService.AddAsync( name, email, password,  phone,  wechat);
+                var result = await _staffService.AddAsync( name, email, password,  phone,  wechat);
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed in adding the staff info.");
+                    return View();
+                }
+
+                TempData["SuccessMessage"] = "Staff info has been added successfully.";
+                return RedirectToAction("List"); // Redirect to the staff list page
+
+
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(String.Empty, ex.Message);
-               
-            }
-
-            if (!result)
-            {
-                return View(); // Return view with errors for correction
+                ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
+                return View();
 
             }
-
-            // Redirect to a success page or list of users
-
-            TempData["SuccessMessage"] = "The staff member has been added.";
-            return RedirectToAction("List", "Staff");
+           
 
         }
 
@@ -107,13 +112,11 @@ namespace Web.Controllers.User
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                return RedirectToAction("List"); // Redirect to the staff list page
             }
-
-            // If delete fails, reload the confirmation page
-            var staff = await _staffService.RemoveAsync(userId);
-            return View(staff);
         }
 
+            
 
 
         // GET: Add View
@@ -150,22 +153,32 @@ namespace Web.Controllers.User
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/ string phone, string wechat)
         {
-            if (!ModelState.IsValid)
+            
+
+            try
             {
-                return View();
+                var result = await _staffService.UpdateAsync(userId, name, email, /*password,*/ phone, wechat);
+
+
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to update staff information.");
+                    var staff = await _staffService.GetAsync(userId);
+                    return View(staff);
+                }
+
+                TempData["SuccessMessage"] = "Staff information updated successfully.";
+                return RedirectToAction("List");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                var staff = await _staffService.GetAsync(userId);
+                return View(staff);
             }
 
-            var result = await _staffService.UpdateAsync(userId, name, email, /*password,*/ phone, wechat);
-
-
-            if (!result)
-            {
-                ModelState.AddModelError(string.Empty, "Failed to update staff information.");
-                return View();
-            }
-
-            TempData["SuccessMessage"] = "Staff information updated successfully.";
-            return RedirectToAction("List");
+           
         }
+       
     }
 }

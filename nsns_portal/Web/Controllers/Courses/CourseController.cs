@@ -112,18 +112,31 @@ namespace Web.Controllers.Courses
         [HttpPost("Add")]
         public async Task<IActionResult> Add(CourseViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                var specialties = await _specialtyRepository.GetAllAsync();
+                ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+                {
+                    Value = s.SpecialtyID.ToString(),
+                    Text = s.Title
+                }).ToList();
+                return View();
+            }
 
-           
             try
             {
                 var result = await _courseService.AddAsync(model.Title, model.Description, model.HourlyCost, model.IsActive, model.UserID,15);
 
                 if (!result)
                 {
-                    TempData["ErrorMessage"] = "Failed in adding the course info.";
-
-                 
-                    return RedirectToAction("List"); // Redirect to the course list page
+                    ModelState.AddModelError(string.Empty, "Failed in adding the course info.");
+                    var specialties = await _specialtyRepository.GetAllAsync();
+                    ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+                    {
+                        Value = s.SpecialtyID.ToString(),
+                        Text = s.Title
+                    }).ToList();
+                    return View();
                 }
 
                 TempData["SuccessMessage"] = "Course info has been added successfully.";
@@ -131,8 +144,15 @@ namespace Web.Controllers.Courses
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
-                return RedirectToAction("List"); // Redirect to the course list page
+               
+                ModelState.AddModelError(string.Empty, $"Error: {ex.Message}");
+                var specialties = await _specialtyRepository.GetAllAsync();
+                ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+                {
+                    Value = s.SpecialtyID.ToString(),
+                    Text = s.Title
+                }).ToList();
+                return View(); 
             }
 
                 
@@ -173,23 +193,29 @@ namespace Web.Controllers.Courses
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int courseId, string title, string description, decimal hourlyCost, bool isActive/*, int userId, int updatedBy*/)
         {
-            if (!ModelState.IsValid)
+           
+
+            try
             {
-                return View();
+                var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, isActive /*userId, updatedBy*/);
+
+
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to update staff information.");
+                    var course = await _courseService.GetAsync(courseId);
+                    return View(course);
+                }
+
+                TempData["SuccessMessage"] = "Staff information updated successfully.";
+                return RedirectToAction("List");
             }
-
-            var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, isActive /*userId, updatedBy*/);
-
-
-            if (!result)
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Failed to update staff information.");
-                return View();
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                var course = await _courseService.GetAsync(courseId);
+                return View(course);
             }
-
-            TempData["SuccessMessage"] = "Staff information updated successfully.";
-            return RedirectToAction("List");
-
         }
     }   
 }

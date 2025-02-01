@@ -84,6 +84,19 @@
                 <a href="/Staff/List" style="background-color: #ddd; color: black; text-decoration: none; padding: 5px 10px; border: 1px solid #ccc;">Cancel</a>
             </td>
         </tr>
+        <tr>
+            <td colspan="2" style="text-align: left; padding: 20px 16px 16px 8px;">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <div class="alert alert-danger">
+                            @error.ErrorMessage
+                        </div>
+                    }
+                }
+            </td>
+        </tr>
     </table>
 
 
@@ -94,15 +107,7 @@
 
 
 
-@if (!ViewData.ModelState.IsValid)
-{
-    foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-    {
-        <div class="alert alert-danger">
-            @error.ErrorMessage
-        </div>
-    }
-}
+
 
 
 
@@ -110,12 +115,3 @@
     <partial name="_ValidationScriptsPartial" />
 } *@
 
-@if (!ViewData.ModelState.IsValid)
-{
-    foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-    {
-        <div class="alert alert-danger">
-            @error.ErrorMessage
-        </div>
-    }
-}
