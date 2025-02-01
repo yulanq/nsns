@@ -16,7 +16,7 @@
 <h2>Add Course</h2>
 
 <form method="post" action="/Course/Add">
-    <table style="border-collapse: collapse; width: 50%;  margin-left: 0;">
+    <table style="border-collapse: collapse; width: 50%; text-align: left;">
         <tr>
             <td style="padding: 8px;"><label for="SpecialtyID">Specialty:</label></td>
             <td style="padding: 8px;">
@@ -59,7 +59,8 @@
         <tr>
             <td style="padding: 8px;"><label for="IsActive">Active:</label></td>
             <td style="padding: 8px;">
-                <input id="IsActive" name="IsActive" type="checkbox" />
+                <input id="IsActive" name="IsActive" type="checkbox" value="true" />
+                <input name="IsActive" type="hidden" value="false" />
                 <label for="IsActive">Check if the course is active</label>
             </td>
         </tr>
@@ -71,7 +72,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 @if (!ViewData.ModelState.IsValid)
 
                 {
