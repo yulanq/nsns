@@ -51,7 +51,7 @@ namespace Core.Services
 
         // Add a new course
         
-        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool active, int userId, int createdBy)
+        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool isActive, int userId, int createdBy)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -92,8 +92,7 @@ namespace Core.Services
                 Title = title,
                 Description = description,
                 HourlyCost = hourlyCost,
-                IsActive = active,
-                //UserID = coach.UserID,
+                IsActive = isActive,
                 Coach = coach,
                 //CoachID = coachId,
                 CreatedBy = createdBy,
@@ -116,7 +115,7 @@ namespace Core.Services
 
 
         // Update an existing course
-        public async Task<bool> UpdateAsync(int courseId, string title, string description, decimal hourlyCost, bool active, int userId, int updatedBy)
+        public async Task<bool> UpdateAsync(int courseId, string title, string description, decimal hourlyCost, bool isActive/*, int userId, int updatedBy*/)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -148,9 +147,9 @@ namespace Core.Services
             existingCourse.Title = title;
             existingCourse.Description = description;
             existingCourse.HourlyCost = hourlyCost;
-            existingCourse.IsActive = active;
-            existingCourse.UserID = userId;
-            existingCourse.UpdatedBy = updatedBy;
+            existingCourse.IsActive = isActive;
+           // existingCourse.UserID = userId;
+            //existingCourse.UpdatedBy = updatedBy;
             existingCourse.UpdatedDate = DateTime.UtcNow;
 
             // Save changes to the repository

@@ -31,60 +31,21 @@ namespace Web.Controllers.Courses
 
 
 
-        // POST: Add Staff Action
-        //[HttpPost("Add")]
-        ////[HttpPost]
-        //public async Task<IActionResult> Add(string title, string description, decimal hourlyCost, bool active, int coachId, int createdBy)
-        //{
-        ////string title, string description, decimal hourlyCost, bool active, int coachId, int createdBy
-
-        //    // Add admin using IUserService
-        //    var result = false;
-        //    try
-        //    {
-        //        result = await _courseService.AddAsync(title,  description,  hourlyCost,  active,  coachId, createdBy);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModelState.AddModelError(String.Empty, ex.Message);
-
-        //    }
-
-        //    if (!result)
-        //    {
-        //        return View(); // Return view with errors for correction
-
-        //    }
-
-        //    // Redirect to a success page or list of users
-
-        //    TempData["SuccessMessage"] = "The staff member has been added.";
-        //    return RedirectToAction("List", "Staff");
-
-        //}
-
-        //// GET: Add View
-        //[HttpGet("Add")]
-        ////[HttpGet]
-        //public async Task<IActionResult> Add()
-        //{
-        //    return View();
-
-        //}
+       
 
         // GET: Staff/Delete/{userId}
-        [HttpGet("ConfirmDelete/{userId}")]
+        [HttpGet("ConfirmDelete/{courseId}")]
         public async Task<IActionResult> ConfirmDelete(int courseId)
         {
             // Fetch the staff details from the database
-            var staff = await _courseService.GetAsync(courseId);
-            if (staff == null)
+            var course = await _courseService.GetAsync(courseId);
+            if (course == null)
             {
                 return NotFound();
             }
 
             // Pass the staff details to the Delete.cshtml view
-            return View(staff);
+            return View(course);
         }
 
 
@@ -97,11 +58,11 @@ namespace Web.Controllers.Courses
 
                 if (!result)
                 {
-                    TempData["ErrorMessage"] = "The staff member could not be deleted.";
+                    TempData["ErrorMessage"] = "The course could not be deleted.";
                     return RedirectToAction("List");
                 }
 
-                TempData["SuccessMessage"] = "Staff member has been deleted successfully.";
+                TempData["SuccessMessage"] = "The course has been deleted successfully.";
                 return RedirectToAction("List"); // Redirect to the course list page
             }
             catch (Exception ex)
@@ -152,15 +113,7 @@ namespace Web.Controllers.Courses
         public async Task<IActionResult> Add(CourseViewModel model)
         {
 
-            // Save course to database
-            //var course = new Course
-            //{
-            //    Title = model.Title,
-            //    Description = model.Description,
-            //    HourlyCost = model.HourlyCost,
-            //    IsActive = model.IsActive,
-            //    CoachID = model.CoachID
-            //};
+           
             try
             {
                 var result = await _courseService.AddAsync(model.Title, model.Description, model.HourlyCost, model.IsActive, model.UserID,15);
@@ -169,15 +122,7 @@ namespace Web.Controllers.Courses
                 {
                     TempData["ErrorMessage"] = "Failed in adding the course info.";
 
-                    // Reload specialties in case of error
-
-                    //var specialties = await _specialtyRepository.GetAllAsync();
-                    //ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
-                    //{
-                    //    Value = s.SpecialtyID.ToString(),
-                    //    Text = s.Title
-                    //}).ToList();
-                    //return View(model);
+                 
                     return RedirectToAction("List"); // Redirect to the course list page
                 }
 
@@ -190,16 +135,8 @@ namespace Web.Controllers.Courses
                 return RedirectToAction("List"); // Redirect to the course list page
             }
 
-
-
-
                 
-
-
-                
-
-                
-            }
+        }
             
 
 
@@ -234,14 +171,14 @@ namespace Web.Controllers.Courses
 
         [HttpPost("Edit/{courseId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int courseId, string title, string description, decimal hourlyCost, bool active, int coachId, int updatedBy)
+        public async Task<IActionResult> Edit(int courseId, string title, string description, decimal hourlyCost, bool isActive/*, int userId, int updatedBy*/)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, active, coachId, updatedBy);
+            var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, isActive /*userId, updatedBy*/);
 
 
             if (!result)
