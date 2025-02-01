@@ -51,6 +51,22 @@ namespace Core.Repositories
                 .FirstOrDefaultAsync(c => c.CourseID == courseId);
         }
 
+
+        
+
+
+        public async Task<Course> GetByCoachAsync(int userId, bool isActive)
+        {
+            return await _context.Courses
+                .Include(c => c.Coach)
+                .Include(c => c.CreatedByUser)
+                //.Include(c => c.UpdatedByUser)
+                .Where(c => c.UserID == userId && c.IsActive == isActive)
+                .FirstOrDefaultAsync();
+        }
+
+
+
         // Add a new course
         public async Task<bool> AddAsync(Course entity)
         {

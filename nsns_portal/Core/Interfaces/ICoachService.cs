@@ -22,8 +22,9 @@ namespace Core.Interfaces
 
         Task<bool> UpdateAsync(int id, string name, string email, /*string password, */int specialtyId, string gender, string phone, string wechat, int cityId);
 
-        Task<Coach> GetAsync(int userId);
+        Task<Coach> GetAsync(int courseId);
 
+        
         Task<IEnumerable<Coach>> GetAllAsync();
 
         Task<IEnumerable<Coach>> GetCoachesBySpecailtyAsync(int specialtyId);

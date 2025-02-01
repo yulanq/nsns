@@ -66,10 +66,10 @@ namespace Core.Services
 
             //Check for Coach/Specialty exists in course table)
             // Uncomment if needed
-             var coachExists = await _courseRepository.GetAsync(userId);
+             var coachExists = await _courseRepository.GetByCoachAsync(userId, true);
             if (coachExists !=  null)
             {
-                throw new Exception("The coach course has been added.");
+                throw new Exception("The coach already has active course in system.");
             }
 
             // Create a new course instance
