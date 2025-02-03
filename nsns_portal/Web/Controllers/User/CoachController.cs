@@ -19,13 +19,13 @@ namespace Web.Controllers.User
     public class CoachController : Controller
     {
         private readonly ICoachService _coachService;
-        private readonly ICityRepository _cityRepository;
+        private readonly ICityService _cityService;
         private readonly IRepository<Specialty> _specialtyRepository;
 
-        public CoachController(ICoachService coachService, ICityRepository cityRepository, IRepository<Specialty> specialtyRepository)
+        public CoachController(ICoachService coachService, ICityService cityService, IRepository<Specialty> specialtyRepository)
         {
             _coachService = coachService;
-            _cityRepository = cityRepository;
+            _cityService = cityService;
             _specialtyRepository = specialtyRepository;
         }
 
@@ -55,7 +55,7 @@ namespace Web.Controllers.User
                    
                     // Repopulate CityList for the dropdown if validation fails
 
-                    var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+                    var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
                     ViewBag.CityList = cities.Select(c => new SelectListItem
                     {
                         Value = c.CityID.ToString(),
@@ -83,7 +83,7 @@ namespace Web.Controllers.User
                 
                 // Repopulate CityList for the dropdown if validation fails
 
-                var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+                var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
                 ViewBag.CityList = cities.Select(c => new SelectListItem
                 {
                     Value = c.CityID.ToString(),
@@ -111,7 +111,7 @@ namespace Web.Controllers.User
         //[HttpGet]
         public async Task<IActionResult> AddAsync()
         {
-            var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+            var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
             ViewBag.CityList = cities.Select(c => new SelectListItem
             {
                 Value = c.CityID.ToString(),
@@ -208,7 +208,7 @@ namespace Web.Controllers.User
                 return NotFound();
             }
 
-            var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+            var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
 
 
 
@@ -259,7 +259,7 @@ namespace Web.Controllers.User
                         return NotFound();
                     }
 
-                    var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+                    var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
 
 
 
@@ -297,7 +297,7 @@ namespace Web.Controllers.User
                     return NotFound();
                 }
 
-                var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
+                var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
 
 
 
