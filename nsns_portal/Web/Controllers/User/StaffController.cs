@@ -19,8 +19,7 @@ namespace Web.Controllers.User
     public class StaffController : Controller
     {
         private readonly IStaffService _staffService;
-        private readonly IRepository<City> _cityRepository;
-        private readonly IRepository<Specialty> _specialtyRepository;
+
 
         public StaffController(IStaffService staffService)
         {

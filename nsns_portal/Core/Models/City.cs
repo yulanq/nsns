@@ -22,7 +22,7 @@ namespace Core.Models
 
         
 
-        [Required]
+        
         [ForeignKey("CreatedByUser")]
         public int CreatedBy { get; set; }
 
