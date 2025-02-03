@@ -19,10 +19,10 @@ namespace Web.Controllers.User
     public class CoachController : Controller
     {
         private readonly ICoachService _coachService;
-        private readonly IRepository<City> _cityRepository;
+        private readonly ICityRepository _cityRepository;
         private readonly IRepository<Specialty> _specialtyRepository;
 
-        public CoachController(ICoachService coachService, IRepository<City> cityRepository, IRepository<Specialty> specialtyRepository)
+        public CoachController(ICoachService coachService, ICityRepository cityRepository, IRepository<Specialty> specialtyRepository)
         {
             _coachService = coachService;
             _cityRepository = cityRepository;

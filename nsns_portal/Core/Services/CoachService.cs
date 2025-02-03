@@ -21,14 +21,14 @@ namespace Core.Services
     {
         private readonly ICoachRepository _coachRepository;
         private readonly IRepository<Specialty> _specialtyRepository;
-        private readonly IRepository<City> _cityRepository;
+        private readonly ICityRepository _cityRepository;
         private readonly IPasswordHasher<Coach> _passwordHasher;
         private readonly JwtOptions _jwtOptions;
         //private const int TokenExpirationMinutes = 60; // Token validity duration
 
 
 
-        public CoachService(ICoachRepository coachRepository, IRepository<City> cityRepository, IRepository<Specialty> specialtyRepository, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions)
+        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, IRepository<Specialty> specialtyRepository, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions)
         {
             _coachRepository = coachRepository;
             _cityRepository = cityRepository;

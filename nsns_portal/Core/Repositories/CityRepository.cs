@@ -14,11 +14,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Core.Repositories
 {
 
-    public class CityRepository : IRepository<City>
+    public class CityRepository : ICityRepository
     {
         
-
-
 
 
         private readonly AppDbContext _context;
@@ -89,6 +87,16 @@ namespace Core.Repositories
             return await _context.Cities
                 .Include(s => s.CreatedByUser)
                 .Include(s => s.UpdatedByUser)
+                .ToListAsync();
+        }
+
+        // Get all Specialties
+        public async Task<IEnumerable<City>> GetByNameAsync(string name)
+        {
+            return await _context.Cities
+                .Where(c => c.Name.ToLower() == name.ToLower())  // ✅ Search for partial match
+                .Include(c => c.CreatedByUser)  // ✅ Include related data if needed
+                .Include(c => c.UpdatedByUser)
                 .ToListAsync();
         }
 

@@ -49,7 +49,8 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 //builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
 
-builder.Services.AddScoped<IRepository<City>, CityRepository>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<ICityService, CityService>();
 
 builder.Services.AddScoped<IRepository<Specialty>, SpecialtyRepository>();
 
