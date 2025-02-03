@@ -22,11 +22,10 @@ namespace Web.Controllers.User
         private readonly IRepository<City> _cityRepository;
         private readonly IRepository<Specialty> _specialtyRepository;
 
-        public StaffController(IStaffService staffService, IRepository<City> cityRepository, IRepository<Specialty> specialtyRepository)
+        public StaffController(IStaffService staffService)
         {
             _staffService = staffService;
-            _cityRepository = cityRepository;
-            _specialtyRepository = specialtyRepository;
+          
         }
 
 

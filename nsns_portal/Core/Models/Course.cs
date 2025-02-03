@@ -18,13 +18,15 @@ namespace Core.Models
         [StringLength(255)]
         public string Title { get; set; } // Title of the course
 
-        public string? Description { get; set; } // Description of the course
+        [Required]
+        public string Description { get; set; } // Description of the course
 
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid hourly cost.")]
         [Column(TypeName = "decimal(10,2)")]
         public decimal HourlyCost { get; set; } = 0; // Hourly cost of the course
 
+        [Required]
         public bool IsActive { get; set; } = true; // Whether the course is active or not
 
         // Foreign keys for related tables

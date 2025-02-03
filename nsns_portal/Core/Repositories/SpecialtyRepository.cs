@@ -17,10 +17,6 @@ namespace Core.Repositories
     public class SpecialtyRepository : IRepository<Specialty>
     {
         
-
-
-
-
         private readonly AppDbContext _context;
 
         // Constructor to inject DbContext

@@ -92,13 +92,7 @@ namespace Core.Repositories
             
         }
 
-        //public async Task<Coach> GetByCoachIdAsync(int coachId)
-        //{
-        //    return await _context.Coaches
-        //        .Include(c => c.City) // Eagerly load the City navigation property
-        //        .Include(c => c.Specialty) // Eagerly load the Specialty navigation property
-        //        .FirstOrDefaultAsync(c => c.CoachID == coachId);
-        //}
+       
         
 
         // Get all Users from the database asynchronously

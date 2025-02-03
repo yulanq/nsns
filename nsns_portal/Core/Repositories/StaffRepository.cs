@@ -100,8 +100,6 @@ namespace Core.Repositories
         public async Task<IEnumerable<Staff>> GetAllAsync()
         {
             return await _context.Staff
-                //.Include(s => s.City) // Eagerly load the City navigation property
-                //.Include(s => s.Specialty) // Eagerly load the Specialty navigation property
                 .ToListAsync();  // Retrieves all users asynchronously
         }
 

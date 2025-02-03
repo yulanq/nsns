@@ -20,19 +20,17 @@ namespace Core.Services
     public class StaffService : IStaffService
     {
         private readonly IStaffRepository _staffRepository;
-        private readonly IRepository<Specialty> _specialtyRepository;
-        private readonly IRepository<City> _cityRepository;
+        //private readonly IRepository<Specialty> _specialtyRepository;
+        //private readonly IRepository<City> _cityRepository;
         private readonly IPasswordHasher<Staff> _passwordHasher;
         private readonly JwtOptions _jwtOptions;
         //private const int TokenExpirationMinutes = 60; // Token validity duration
 
 
 
-        public StaffService(IStaffRepository staffRepository, IRepository<City> cityRepository, IRepository<Specialty> specialtyRepository, IPasswordHasher<Staff> password, IOptions<JwtOptions> jwtOptions)
+        public StaffService(IStaffRepository staffRepository,IPasswordHasher<Staff> password, IOptions<JwtOptions> jwtOptions)
         {
             _staffRepository = staffRepository;
-            _cityRepository = cityRepository;
-            _specialtyRepository = specialtyRepository;
             _passwordHasher = password;
             _jwtOptions = jwtOptions.Value;
 
@@ -184,7 +182,7 @@ namespace Core.Services
             // Define the key and signing credentials
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            List<string> roleList = new List<string> { "Admin", "Staff", "Coach#", "Child" };
+            List<string> roleList = new List<string> { "Admin", "Staff", "Coach", "Child" };
 
         // Define claims
         var claims = new List<Claim>

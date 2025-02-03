@@ -38,7 +38,7 @@ namespace Core.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }
@@ -53,7 +53,7 @@ namespace Core.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }
@@ -68,7 +68,7 @@ namespace Core.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

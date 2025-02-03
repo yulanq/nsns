@@ -44,7 +44,7 @@ namespace Core.Services
             var existingUser = await _coachRepository.GetByEmailAsync(email);
             if (existingUser != null)
             {
-                throw new Exception("A staff with the same username or email already exists.");
+                throw new Exception("A staff with the same email already exists.");
             }
 
             //Retrieve the Specialty entity
@@ -78,6 +78,7 @@ namespace Core.Services
                 Wechat = wechat,
                 CreatedDate = DateTime.UtcNow,
             };
+
             coachUser.Password = _passwordHasher.HashPassword(coachUser, password);
             // Save to the database
             return await _coachRepository.AddAsync(coachUser);
@@ -93,7 +94,7 @@ namespace Core.Services
             var staff = await _coachRepository.GetAsync(id);
             if (staff == null)
             {
-                throw new Exception("Staff not found.");
+                throw new Exception("Coach not found.");
             }
 
             // Remove the staff
@@ -107,7 +108,7 @@ namespace Core.Services
             var coach = await _coachRepository.GetAsync(id);
             if (coach == null)
             {
-                throw new Exception("Staff not found.");
+                throw new Exception("Coach not found.");
             }
 
             // Update fields
@@ -167,7 +168,7 @@ namespace Core.Services
         {
             try
             {
-                // Fetch all staff records from the repository
+                // Fetch all coach records from the repository
                 var coachList = await _coachRepository.GetAllAsync();
 
                 // You can add additional logic or transformations here if necessary
@@ -176,7 +177,7 @@ namespace Core.Services
             catch (Exception ex)
             {
                 // Handle exceptions as needed (e.g., logging)
-                throw new Exception("An error occurred while retrieving staff records.", ex);
+                throw new Exception("An error occurred while retrieving coach records.", ex);
             }
         }
 

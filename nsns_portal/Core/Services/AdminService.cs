@@ -37,7 +37,7 @@ namespace Core.Services
             var existingUser = await _adminRepository.GetByEmailAsync(email);
             if (existingUser != null)
             {
-                throw new Exception("A admin with the same username or email already exists.");
+                throw new Exception("A admin with the same email already exists.");
             }
 
 
@@ -93,11 +93,7 @@ namespace Core.Services
             admin.Wechat = wechat;
             admin.UpdatedDate = DateTime.UtcNow;
 
-            // Update the password if provided
-            //if (!string.IsNullOrWhiteSpace(password))
-            //{
-            //    staff.Password = _passwordHasher.HashPassword(staff, password);
-            //}
+           
 
             // Save changes
             return await _adminRepository.UpdateAsync(admin);
@@ -132,74 +128,7 @@ namespace Core.Services
                 throw new Exception("An error occurred while retrieving admin records.", ex);
             }
         }
-
-
-
-        //public async Task<bool> RegisterAsync(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId)
-        //{
-        //    return await AddAsync(name, email, password, phone, wechat);
-        //}
-
-
-
-
-    //    public async Task<string?> LoginAsync(string email, string password)
-    //    {
-    //        var user = await _adminRepository.GetByEmailAsync(email);
-    //        if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, password) == PasswordVerificationResult.Failed)
-    //            return null; // Invalid username or password
-
-    //        return GenerateToken(user);
-    //    }
-
-    //    public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
-    //    {
-    //        var user = await _adminRepository.GetAsync(userId);
-    //        if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword) == PasswordVerificationResult.Failed)
-    //            return false; // User not found or incorrect password
-
-    //        user.Password = _passwordHasher.HashPassword(user, newPassword);
-    //        user.UpdatedDate = DateTime.UtcNow;
-    //        await _adminRepository.UpdateAsync(user);
-    //        return true;
-    //    }
-
-    //    public async Task<User?> GetUserProfileAsync(int userId)
-    //    {
-    //        return await _adminRepository.GetAsync(userId);
-    //    }
-
-
-
-    //    private string GenerateToken(User user)
-    //    {
-    //        // This method should implement token generation (e.g., JWT)
-    //        // Define the key and signing credentials
-    //        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey));
-    //        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-    //        List<string> roleList = new List<string> { "Admin", "Staff", "Coach#", "Child" };
-
-    //        // Define claims
-    //        var claims = new List<Claim>
-    //{
-    //    //new Claim(JwtRegisteredClaimNames.Sub, user.Username), // Subject
-    //    new Claim(JwtRegisteredClaimNames.Email, user.Email),  // Email
-    //    new Claim("role", user.Role),                         // Custom claim for role
-    //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Unique identifier
-    //};
-
-    //        // Create the token
-    //        var token = new JwtSecurityToken(
-    //            issuer: _jwtOptions.Issuer,          // Replace with your issuer (e.g., your app name)
-    //            audience: _jwtOptions.Audience,      // Replace with your audience
-    //            claims: claims,
-    //            expires: DateTime.UtcNow.AddMinutes(_jwtOptions.TokenExpirationMinutes),
-    //            signingCredentials: credentials
-    //        );
-
-    //        // Return the serialized token
-    //        return new JwtSecurityTokenHandler().WriteToken(token);
-    //    }
+     
     }
 
 }

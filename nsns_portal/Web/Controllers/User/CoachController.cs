@@ -30,43 +30,6 @@ namespace Web.Controllers.User
         }
 
 
-        //private async Task<IActionResult> LoadPageForEdit(int userId)
-        //{
-        //    // Fetch the staff details from the database
-
-        //    var coach = await _coachService.GetAsync(userId);
-
-        //    if (coach == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var cities = await _cityRepository.GetAllAsync(); // Replace with your data fetching logic
-
-
-
-        //    ViewBag.CityList = cities.Select(c => new SelectListItem
-        //    {
-        //        Value = c.CityID.ToString(),
-        //        Text = c.Name,
-        //        Selected = c.CityID == coach.CityID
-        //    }).ToList();
-
-
-        //    var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
-
-        //    ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
-        //    {
-        //        Value = s.SpecialtyID.ToString(),
-        //        Text = s.Title,
-        //        Selected = s.SpecialtyID == coach.SpecialtyID
-        //    }).ToList();
-
-        //    // Pass the coach details to the Edit.cshtml view
-        //    return View(coach);
-
-        //}
-
         // POST: Add Staff Action
         [HttpPost("Add")]
         //[HttpPost]

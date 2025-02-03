@@ -160,15 +160,7 @@ namespace Web.Controllers.Courses
             
 
 
-
-
-
-
-
-
-
-
-       
+      
 
 
         // GET: Edit View
@@ -193,12 +185,9 @@ namespace Web.Controllers.Courses
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int courseId, string title, string description, decimal hourlyCost, bool isActive/*, int userId, int updatedBy*/)
         {
-           
-
             try
             {
                 var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, isActive /*userId, updatedBy*/);
-
 
                 if (!result)
                 {
