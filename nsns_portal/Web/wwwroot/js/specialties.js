@@ -1,27 +1,31 @@
 ﻿/*$(document).ready(function () {*/
 // Load Add/Edit Form in Modal
 function loadAddForm() {
-    $.get("/City/Add/", function (data) {
+    $.get("/Specialty/Add/", function (data) {
         $("#modalContent").html(data);
-        $("#cityModal").modal("show");
+        $("#specialtyModal").modal("show");
     });
 }
 
-function loadEditForm(cityId) {
-    $.get("/City/Edit/" + cityId, function (data) {
+function loadEditForm(specialtyId) {
+    $.get("/Specialty/Edit/" + specialtyId, function (data) {
         $("#modalContent").html(data);
-        $("#cityModal").modal("show");
+        $("#specialtyModal").modal("show");
     });
 }
 
 
 // Submit Add/Edit Form
-function saveCity() {
-    var formData = $("#cityForm").serialize();
-    $.post("/City/Save?" + new Date().getTime(), formData, function (response) {
-        if (response.success) {
+function saveSpecialty() {
+    var formData = $("#specialtyForm").serialize();
+    $.post("/Specialty/Save?" + new Date().getTime(), formData, function (response) {
+        console.log(response);
+        if (response.success) 
+        {
             location.reload();  // Refresh list after saving
-        } else {
+        } 
+        else 
+        {
             $("#errorMessage").text(response.message).show();
         }
     });
@@ -43,24 +47,24 @@ function saveCity() {
 }
 
 // Delete City
-function loadDeleteCityConfirm(cityId) {
+function loadDeleteSpecialtyConfirm(specialtyId) {
 
-    $.get("/City/DeleteConfirm/" + cityId, function (data) {
+    $.get("/Specialty/DeleteConfirm/" + specialtyId, function (data) {
         $("#modalContent").html(data);
-        $("#cityModal").modal("show");
+        $("#specialtyModal").modal("show");
     });
 
 }
 
 
-function deleteCity(cityId) {
+function deleteSpecialty(specialtyId) {
     //if (!confirm("Are you sure you want to delete this city?")) return;
-    $.post("/City/Delete/" + cityId, function (response) {
+    $.post("/Specialty/Delete/" + specialtyId, function (response) {
         if (response.success) {
-            $("#row-" + cityId).remove(); // Remove deleted city row
+            $("#row-" + specialtyId).remove(); // Remove deleted city row
             location.reload();  // Refresh list after delete
         } else {
-            alert("Failed to delete city.");
+            alert("Failed to delete specialty.");
         }
     });
 }

@@ -30,8 +30,8 @@ namespace Core.Services
             if (string.IsNullOrWhiteSpace(city.Name))
                 throw new ArgumentException("City name cannot be empty.");
             var existingCity = await _cityRepository.GetByNameAsync(city.Name);
-            if (existingCity!= null && existingCity.Count() > 0)
-                throw new Exception("This city already exist.");
+            if (existingCity.Any())
+                throw new InvalidOperationException("This city already exist.");
             return await _cityRepository.AddAsync(city);
         }
 

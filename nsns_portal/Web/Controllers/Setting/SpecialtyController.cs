@@ -1,183 +1,123 @@
 ﻿
-//using Core.Services;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.AspNetCore.Mvc;
-//using Core.Interfaces;
-//using Core.Models;
-
-//using System.Diagnostics;
-//using Core.Repositories;
-//using Microsoft.AspNetCore.Mvc.Rendering;
-//using Microsoft.EntityFrameworkCore;
-
-
-
-//namespace Web.Controllers.Setting
-//{
-//    [Route("Staff")]
-//    //[ApiController]
-//    public class StaffController : Controller
-//    {
-//        private readonly IStaffService _staffService;
-//        private readonly IRepository<City> _cityRepository;
-//        private readonly IRepository<Specialty> _specialtyRepository;
-
-//        public StaffController(IStaffService staffService)
-//        {
-//            _staffService = staffService;
-
-//        }
+using Core.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Core.Interfaces;
+using Core.Models;
+using Core.Contexts;
+using System.Diagnostics;
+using Core.Repositories;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis;
 
 
 
+namespace Web.Controllers.Setting
+{
+    [Route("Specialty")]
+    public class SpecialtyController : Controller
+    {
+        //private readonly AppDbContext _context;
+        private ISpecialtyService _specialtyService;
+        public SpecialtyController(ISpecialtyService specialtyService)
+        {
+            _specialtyService = specialtyService;
+        }
 
-//        // POST: Add Staff Action
-//        [HttpPost("Add")]
-//        //[HttpPost]
-//        public async Task<IActionResult> Add(string name, string email, string password, string phone, string wechat)
-//        {
+        // ✅ Load City List
+        [HttpGet("List")]
+        public async Task<IActionResult> List()
+        {
+            //var cities = await _context.Cities.ToListAsync();
+            var specialties = await _specialtyService.GetAllAsync();
+            return View(specialties);
+        }
 
-//            if (!ModelState.IsValid)
-//            {
-//                return View();
-//            }
-
-
-//            try
-//            {
-//                var result = await _staffService.AddAsync(name, email, password, phone, wechat);
-//                if (!result)
-//                {
-//                    ModelState.AddModelError(string.Empty, "Failed in adding the staff info.");
-//                    return View();
-//                }
-
-//                TempData["SuccessMessage"] = "Staff info has been added successfully.";
-//                return RedirectToAction("List"); // Redirect to the staff list page
-
-
-//            }
-//            catch (Exception ex)
-//            {
-//                ModelState.AddModelError(string.Empty, $"Error: {ex.Message}");
-//                return View();
-
-//            }
+        // ✅ Load Partial View for Add/Edit Form
+        [HttpGet("Add")]
+        public async Task<IActionResult> Add()
+        {
+            return PartialView("_Add", new Specialty { Title = string.Empty, Description = string.Empty });
+        }
 
 
-//        }
-
-//        // GET: Add View
-//        [HttpGet("Add")]
-//        //[HttpGet]
-//        public async Task<IActionResult> Add()
-//        {
-//            return View();
-
-//        }
-
-//        // GET: Staff/Delete/{userId}
-//        [HttpGet("ConfirmDelete/{userId}")]
-//        public async Task<IActionResult> ConfirmDelete(int userId)
-//        {
-//            // Fetch the staff details from the database
-//            var staff = await _staffService.GetAsync(userId);
-//            if (staff == null)
-//            {
-//                return NotFound();
-//            }
-
-//            // Pass the staff details to the Delete.cshtml view
-//            return View(staff);
-//        }
+        [HttpGet("Edit/{specialtyId}")]
+        public async Task<IActionResult> Edit(int specialtyId)
+        {
 
 
-//        [HttpPost("DeleteConfirmed")]
-//        public async Task<IActionResult> DeleteConfirmed(int userId)
-//        {
-//            try
-//            {
-//                var result = await _staffService.RemoveAsync(userId);
+            //var city = await _context.Cities.FindAsync(cityId);
+            var specialty = await _specialtyService.GetAsync(specialtyId);
+            if (specialty == null) return NotFound();
 
-//                if (!result)
-//                {
-//                    TempData["ErrorMessage"] = "The staff member could not be deleted.";
-//                    return RedirectToAction("List");
-//                }
-
-//                TempData["SuccessMessage"] = "Staff member has been deleted successfully.";
-//                return RedirectToAction("List"); // Redirect to the staff list page
-//            }
-//            catch (Exception ex)
-//            {
-//                TempData["ErrorMessage"] = $"Error: {ex.Message}";
-//                return RedirectToAction("List"); // Redirect to the staff list page
-//            }
-//        }
+            return PartialView("_Edit", specialty);
+        }
 
 
 
 
-//        // GET: Add View
-//        [HttpGet("List")]
-//        //[HttpGet]
-//        public async Task<IActionResult> List()
-//        {
 
-//            var staffList = await _staffService.GetAllAsync();
-//            return View(staffList); // Ensure there is a corresponding List.cshtml in Views/Staff
+        // ✅ Save Specialty (Add / Edit)
+        [HttpPost("Save")]
+        public async Task<IActionResult> Save(Specialty specialty)
+        {
 
-//        }
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid data");
+            specialty.CreatedBy = 1;  //temparaly set it to 1
+            try
+            {
+                var result = false;
+                if (specialty.SpecialtyID == 0)
+                    result = await _specialtyService.AddAsync(specialty);
+                else
+                    result = await _specialtyService.UpdateAsync(specialty);
 
-
-//        // GET: Edit View
-//        [HttpGet("Edit/{userId}")]
-//        //[HttpGet]
-//        public async Task<IActionResult> Edit(int userId)
-//        {
-//            // Fetch the staff details from the database
-//            var staff = await _staffService.GetAsync(userId);
-//            if (staff == null)
-//            {
-//                return NotFound();
-//            }
-
-//            // Pass the staff details to the Delete.cshtml view
-//            return View(staff);
-
-//        }
+                if (result)
+                    return Json(new { success = true });
+                else
+                    return Json(new { success = false });
 
 
-//        [HttpPost("Edit/{userId}")]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/ string phone, string wechat)
-//        {
+            }
+
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }); // ✅ Return error message
+            }
 
 
-//            try
-//            {
-//                var result = await _staffService.UpdateAsync(userId, name, email, /*password,*/ phone, wechat);
+        }
 
 
-//                if (!result)
-//                {
-//                    ModelState.AddModelError(string.Empty, "Failed to update staff information.");
-//                    var staff = await _staffService.GetAsync(userId);
-//                    return View(staff);
-//                }
+        // ✅ Load Partial View for Add/Edit Form
+        [HttpGet("DeleteConfirm/{specialtyId}")]
+        public async Task<IActionResult> DeleteConfirm(int specialtyId)
+        {
+           
+            var specialty = await _specialtyService.GetAsync(specialtyId);
+            if (specialty == null) return NotFound();
 
-//                TempData["SuccessMessage"] = "Staff information updated successfully.";
-//                return RedirectToAction("List");
-//            }
-//            catch (Exception ex)
-//            {
-//                TempData["ErrorMessage"] = $"Error: {ex.Message}";
-//                var staff = await _staffService.GetAsync(userId);
-//                return View(staff);
-//            }
+            return PartialView("_DeleteConfirm", specialty);
+        }
 
+        // ✅ Delete Specialty
+        [HttpPost("Delete/{specialtyId}")]
+        public async Task<IActionResult> Delete(int specialtyId)
+        {
+            //var city = await _context.Cities.FindAsync(cityId);
+            var result = await _specialtyService.DeleteAsync(specialtyId);
+            //if (city == null) return NotFound();
 
-//        }
+            //_context.Cities.Remove(city);
+            //await _context.SaveChangesAsync();
+            if (result)
+                return Json(new { success = true });
+            else
+                return Json(new { success = false });
 
-//    }
-//}
+        }
+    }
+
+}

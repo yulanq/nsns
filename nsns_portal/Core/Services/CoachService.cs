@@ -20,7 +20,7 @@ namespace Core.Services
     public class CoachService : ICoachService
     {
         private readonly ICoachRepository _coachRepository;
-        private readonly IRepository<Specialty> _specialtyRepository;
+        private readonly ISpecialtyRepository _specialtyRepository;
         private readonly ICityRepository _cityRepository;
         private readonly IPasswordHasher<Coach> _passwordHasher;
         private readonly JwtOptions _jwtOptions;
@@ -28,7 +28,7 @@ namespace Core.Services
 
 
 
-        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, IRepository<Specialty> specialtyRepository, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions)
+        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, ISpecialtyRepository specialtyRepository, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions)
         {
             _coachRepository = coachRepository;
             _cityRepository = cityRepository;
@@ -90,21 +90,21 @@ namespace Core.Services
 
         public async Task<bool> RemoveAsync(int id)
         {
-            // Find the staff by ID
+            // Find the coach by ID
             var staff = await _coachRepository.GetAsync(id);
             if (staff == null)
             {
                 throw new Exception("Coach not found.");
             }
 
-            // Remove the staff
+            // Remove the coach
             return await _coachRepository.RemoveAsync(staff);
         }
 
 
         public async Task<bool> UpdateAsync(int id, string name,string email, /*string password,*/ int specialtyId, string gender, string phone, string wechat, int cityId)
         {
-            // Find the staff by ID
+            // Find the coach by ID
             var coach = await _coachRepository.GetAsync(id);
             if (coach == null)
             {

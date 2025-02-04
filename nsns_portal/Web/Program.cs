@@ -52,7 +52,8 @@ builder.Services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ICityService, CityService>();
 
-builder.Services.AddScoped<IRepository<Specialty>, SpecialtyRepository>();
+builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
+builder.Services.AddScoped<ISpecialtyService, SpecialtyService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql( builder.Configuration.GetConnectionString("DefaultConnection"),  new MySqlServerVersion(new Version(8, 0, 39)) // Replace with your MySQL version
 
@@ -121,26 +122,16 @@ app.UseEndpoints(endpoints =>
     );
 });
 
-app.UseEndpoints(endpoints =>
-{
-    // Map controller routes
-    endpoints.MapControllerRoute(
-        name: "admin_add",
-        pattern: "{controller=User}/{action=AddAdmin}/{id?}" // Default route points to User/AddAdmin
-    );
-});
+//app.UseEndpoints(endpoints =>
+//{
+//    // Map controller routes
+//    endpoints.MapControllerRoute(
+//        name: "admin_add",
+//        pattern: "{controller=User}/{action=AddAdmin}/{id?}" // Default route points to User/AddAdmin
+//    );
+//});
 
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "User/AddAdmin",
-//    defaults: new { controller = "User", action = "AddAdmin" }
-//);
 
-//app.MapControllerRoute(
-//    name: "staff_list",
-//    pattern: "Staff/List",
-//    defaults: new { controller = "Staff", action = "List" }
-//);
 
 
 

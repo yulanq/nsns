@@ -17,14 +17,14 @@ namespace Web.Controllers.Courses
 
         private readonly ICourseService _courseService;
         private readonly ICoachService _coachService;
-        private readonly IRepository<Specialty> _specialtyRepository;
+        private readonly ISpecialtyService _specialtyService;
 
 
-        public CourseController(ICourseService courseService, ICoachService coachService, IRepository<Specialty> specialtyRepository)
+        public CourseController(ICourseService courseService, ICoachService coachService, ISpecialtyService specialtyService)
         {
             _courseService = courseService;
             _coachService = coachService;
-            _specialtyRepository = specialtyRepository;
+            _specialtyService = specialtyService;
 
         }
 
@@ -99,7 +99,7 @@ namespace Web.Controllers.Courses
         [HttpGet("Add")]
         public async Task<IActionResult> Add()
         {
-            var specialties = await _specialtyRepository.GetAllAsync();
+            var specialties = await _specialtyService.GetAllAsync();
             ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
             {
                 Value = s.SpecialtyID.ToString(),
@@ -114,7 +114,7 @@ namespace Web.Controllers.Courses
         {
             if (!ModelState.IsValid)
             {
-                var specialties = await _specialtyRepository.GetAllAsync();
+                var specialties = await _specialtyService.GetAllAsync();
                 ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                 {
                     Value = s.SpecialtyID.ToString(),
@@ -130,7 +130,7 @@ namespace Web.Controllers.Courses
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed in adding the course info.");
-                    var specialties = await _specialtyRepository.GetAllAsync();
+                    var specialties = await _specialtyService.GetAllAsync();
                     ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                     {
                         Value = s.SpecialtyID.ToString(),
@@ -146,7 +146,7 @@ namespace Web.Controllers.Courses
             {
                
                 ModelState.AddModelError(string.Empty, $"Error: {ex.Message}");
-                var specialties = await _specialtyRepository.GetAllAsync();
+                var specialties = await _specialtyService.GetAllAsync();
                 ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                 {
                     Value = s.SpecialtyID.ToString(),

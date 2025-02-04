@@ -18,6 +18,7 @@
             <td style="padding: 8px; width: 40%"><label for="name">City Name:</label></td>
             <td style="padding: 8px; width: 60%">
                 <input type="text" name="Name" placeholder="City Name" value="@Model.Name"  style="width: 100%;" required />
+                <input type="hidden" asp-for="CityID" />
             </td>
         </tr>
         <tr>

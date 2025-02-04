@@ -20,6 +20,7 @@ namespace Core.Models
         [StringLength(255)]
         public required string Title { get; set; }
 
+        [Required]
         public required string Description { get; set; }
 
         [Required]

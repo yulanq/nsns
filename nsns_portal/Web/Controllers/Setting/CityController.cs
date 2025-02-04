@@ -61,31 +61,31 @@ namespace Web.Controllers.Setting
         [HttpPost("Save")]
         public async Task<IActionResult> Save(City city)
         {
-            try
-            {
+            
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid data");
                 city.CreatedBy = 1;  //temparaly set it to 1
-                var result = false;
-                if (city.CityID == 0)
-                    //_context.Cities.Add(city); // Add new city
-                    result = await _cityService.AddAsync(city);
-                else
-                    //_context.Cities.Update(city); // Edit existing city
-                    result = await _cityService.UpdateAsync(city);
+                try
+                {
+                   var result = false;
+                    if (city.CityID == 0)
+                         result = await _cityService.AddAsync(city);
+                    else
+                         result = await _cityService.UpdateAsync(city);
 
-                //await _context.SaveChangesAsync();
-                if (result)
-                    return Json(new { success = true });
-                else
-                    return Json(new { success = false });
+                    if (result)
+                        return Json(new { success = true });
+                    else
+                        return Json(new { success = false });
+               
 
-            }
-                
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = ex.Message });
-            }
+                }
+
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = ex.Message }); // ✅ Return error message
+                }
+
             
         }
 

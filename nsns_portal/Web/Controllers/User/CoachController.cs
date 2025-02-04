@@ -20,13 +20,13 @@ namespace Web.Controllers.User
     {
         private readonly ICoachService _coachService;
         private readonly ICityService _cityService;
-        private readonly IRepository<Specialty> _specialtyRepository;
+        private readonly ISpecialtyService _specialtyService;
 
-        public CoachController(ICoachService coachService, ICityService cityService, IRepository<Specialty> specialtyRepository)
+        public CoachController(ICoachService coachService, ICityService cityService, ISpecialtyService specialtyService)
         {
             _coachService = coachService;
             _cityService = cityService;
-            _specialtyRepository = specialtyRepository;
+            _specialtyService = specialtyService;
         }
 
 
@@ -62,7 +62,7 @@ namespace Web.Controllers.User
                         Text = c.Name
                     }).ToList();
 
-                    var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+                    var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
                     ViewBag.SpecialtyList = specialties.Select(c => new SelectListItem
                     {
                         Value = c.SpecialtyID.ToString(),
@@ -90,7 +90,7 @@ namespace Web.Controllers.User
                     Text = c.Name
                 }).ToList();
 
-                var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+                var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
                 ViewBag.SpecialtyList = specialties.Select(c => new SelectListItem
                 {
                     Value = c.SpecialtyID.ToString(),
@@ -118,7 +118,7 @@ namespace Web.Controllers.User
                 Text = c.Name
             }).ToList();
 
-            var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+            var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
             ViewBag.SpecialtyList = specialties.Select(c => new SelectListItem
             {
                 Value = c.SpecialtyID.ToString(),
@@ -220,7 +220,7 @@ namespace Web.Controllers.User
             }).ToList();
 
 
-            var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+            var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
 
             ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
             {
@@ -271,7 +271,7 @@ namespace Web.Controllers.User
                     }).ToList();
 
 
-                    var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+                    var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
 
                     ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                     {
@@ -309,7 +309,7 @@ namespace Web.Controllers.User
                 }).ToList();
 
 
-                var specialties = await _specialtyRepository.GetAllAsync(); // Replace with your data fetching logic
+                var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
 
                 ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                 {
