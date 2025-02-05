@@ -289,7 +289,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                //TempData["ErrorMessage"] = $"Error: {ex.Message}";
                 var coach = await _coachService.GetAsync(userId);
 
                 if (coach == null)

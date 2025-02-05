@@ -91,14 +91,14 @@ namespace Core.Services
         public async Task<bool> RemoveAsync(int id)
         {
             // Find the coach by ID
-            var staff = await _coachRepository.GetAsync(id);
-            if (staff == null)
+            var coach = await _coachRepository.GetAsync(id);
+            if (coach == null)
             {
                 throw new Exception("Coach not found.");
             }
 
             // Remove the coach
-            return await _coachRepository.RemoveAsync(staff);
+            return await _coachRepository.RemoveAsync(coach);
         }
 
 

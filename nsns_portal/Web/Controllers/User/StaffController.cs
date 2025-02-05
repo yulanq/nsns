@@ -170,7 +170,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                //TempData["ErrorMessage"] = $"Error: {ex.Message}";
                 var staff = await _staffService.GetAsync(userId);
                 return View(staff);
             }

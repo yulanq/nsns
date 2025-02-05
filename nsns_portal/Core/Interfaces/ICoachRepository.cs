@@ -24,6 +24,7 @@ namespace Core.Interfaces
 
         // Remove a User from the database asynchronously
        Task<bool> RemoveAsync(Coach entity);
+       
 
 
         // Update an existing User in the database asynchronously

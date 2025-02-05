@@ -1,0 +1,70 @@
+﻿@*
+    Child List Page - Follows the same format as Coach List
+*@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage Children";
+}
+
+@model IEnumerable<Child>
+
+<h1>Manage Children</h1>
+
+<a href="/Child/Add" style="display: inline-block; margin-bottom: 20px;">Add Child</a>
+
+<table style="border-collapse: collapse; width: 100%; text-align: left;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="padding: 8px; border: 1px solid #ddd;">#</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Name</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Birth Date</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Gender</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">City</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int index = 1;
+
+            foreach (var child in Model)
+            {
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@index</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@child.Name</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@(child.BirthDate.HasValue ? child.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@child.Gender</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@(child.City != null ? child.City.Name : "N/A")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">
+                        <a href="/Child/Edit/@child.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                        <a href="/Child/ConfirmDelete/@child.UserID" style="margin-left: 10px; color: red; text-decoration: none;">Delete</a>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <tr>
+                <td colspan="6">
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                </td>
+            </tr>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <tr>
+                <td colspan="6">
+                    <div class="alert alert-danger">
+                        @TempData["ErrorMessage"]
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

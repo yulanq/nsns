@@ -30,7 +30,7 @@ namespace Core.Models
         [Column(TypeName = "decimal(10, 2)")]
         public decimal? Cost { get; set; }
 
-        public bool Active { get; set; } = true;
+        public bool IsActive { get; set; } = true;
 
         public int? ContactID { get; set; }
 

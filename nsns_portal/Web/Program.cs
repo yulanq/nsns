@@ -40,6 +40,12 @@ builder.Services.AddScoped<ICoachService, CoachService>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
+
+builder.Services.AddScoped<IChildService, ChildService>();
+builder.Services.AddScoped<IChildRepository, ChildRepository>();
+
 
 
 // Add UserService
