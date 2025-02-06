@@ -42,6 +42,13 @@ namespace Core.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
+        public async Task<int> AddAndReturnIdAsync(Parent parent)
+        {
+            await _context.Parents.AddAsync(parent);
+            await _context.SaveChangesAsync();
+            return parent.ParentID; // ✅ Return the new ParentID after insertion
+        }
+
         // ✅ Update an existing parent
         public async Task<bool> UpdateAsync(Parent parent)
         {

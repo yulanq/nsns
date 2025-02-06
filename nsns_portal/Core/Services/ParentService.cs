@@ -47,6 +47,11 @@ namespace Core.Services
             return await _parentRepository.AddAsync(parent);
         }
 
+        public async Task<int> AddAndReturnIdAsync(Parent parent)
+        {
+            return await _parentRepository.AddAndReturnIdAsync(parent);
+        }
+
         // ✅ Update an existing parent
         public async Task<bool> UpdateAsync(Parent parent)
         {

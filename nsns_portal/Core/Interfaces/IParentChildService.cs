@@ -12,7 +12,7 @@ namespace Core.Interfaces
     public interface IParentChildService
     {
   
-        Task<bool> AddParentToChild(int parentId, int childId, string relationship, int createdBy);
+        Task<bool> AddParentToChild(int parentId, Parent parent, int childId, string relationship, int createdBy);
 
         Task<IEnumerable<ParentChild>> GetParentsByChildIdAsync(int childId);
 

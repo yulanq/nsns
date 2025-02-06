@@ -33,10 +33,13 @@ namespace Core.Repositories
         // ✅ Get all parents for a specific child
         public async Task<IEnumerable<ParentChild>> GetByChildIdAsync(int childId)
         {
-            return await _context.ParentChild
-                .Include(pc => pc.Parent)
-                .Where(pc => pc.ChildID == childId)
-                .ToListAsync();
+           
+                return await _context.ParentChild
+               .Include(pc => pc.Parent)
+               .Where(pc => pc.ChildID == childId)
+               .ToListAsync();
+           
+           
         }
 
         // ✅ Get all children for a specific parent

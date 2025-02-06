@@ -26,7 +26,7 @@ namespace Core.Services
             _parentChildRepository = parentChildRepository;
         }
 
-        public async Task<bool> AddParentToChild(int parentId, int childId, string relationship, int createdBy)
+        public async Task<bool> AddParentToChild(int parentId, Parent parent, int childId, string relationship, int createdBy)
         {
             if (parentId <= 0 || childId <= 0)
                 throw new ArgumentException("Invalid Parent or Child ID.");
@@ -41,6 +41,8 @@ namespace Core.Services
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             };
+
+            //newRelation.Parent = parent;
 
             return await _parentChildRepository.AddAsync(newRelation);
         }

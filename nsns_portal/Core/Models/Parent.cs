@@ -19,16 +19,16 @@ namespace Core.Models
         public string Name { get; set; } // Parent Name
 
         [StringLength(50)]
-        public string Phone { get; set; } // Phone Number (nullable)
+        public string? Phone { get; set; } // Phone Number (nullable)
 
         [StringLength(255)]
-        public string Email { get; set; } // Email (nullable)
+        public string? Email { get; set; } // Email (nullable)
 
         [StringLength(100)]
-        public string Wechat { get; set; } // WeChat ID (nullable)
+        public string? Wechat { get; set; } // WeChat ID (nullable)
 
-        [Required]
-        public string Gender { get; set; }
+        //[Required]
+        //public string Gender { get; set; }
 
         public int? CreatedBy { get; set; } // Created By User ID (nullable)
 

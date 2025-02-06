@@ -27,7 +27,7 @@
             <td style="padding: 8px;"><label for="gender">Gender:</label></td>
             <td style="padding: 8px;">
                 <select name="gender" class="form-control" style="width: 100%;">
-                    <option value="" >Select Gender</option>
+                    <option value="" >-- Select Gender --</option>
                     <option value="Male" selected="@(Model.Gender == "Male" ? "selected" : null)">Male</option>
                     <option value="Female" selected="@(Model.Gender == "Female" ? "selected" : null)">Female</option>
                     <option value="N/A">N/A</option>
@@ -39,7 +39,7 @@
             <td style="padding: 8px;"><label for="specialtyId">Specialty:</label></td>
             <td style="padding: 8px;">
                 <select name="specialtyId" class="form-control" style="width: 100%;">
-                    <option value="" >Select Specialty</option>
+                    <option value="" >-- Select Specialty --</option>
                     @foreach (var specialty in ViewBag.SpecialtyList)
                     {
                         <option value="@specialty.Value" selected="@(specialty.Selected ? "selected" : null)">@specialty.Text</option>
@@ -53,7 +53,7 @@
             <td style="padding: 8px;"><label for="cityId">City:</label></td>
             <td style="padding: 8px;">
                 <select name="cityId" class="form-control" style="width: 100%;">
-                    <option value="" >Select City</option>
+                    <option value="" >-- Select City --</option>
                     @foreach (var city in ViewBag.CityList)
                     {
                         <option value="@city.Value" selected="@(city.Selected ? "selected" : null)">@city.Text</option>

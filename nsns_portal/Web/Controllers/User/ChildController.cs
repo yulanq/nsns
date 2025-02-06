@@ -229,7 +229,7 @@ namespace Web.Controllers.User
 
 
 
-        [HttpGet("ManageParents")]
+        [HttpGet("ManageParents/{childId}")]
         public async Task<IActionResult> ManageParents(int childId)
         {
             var child = await _childService.GetChildByIdAsync(childId);
@@ -240,9 +240,7 @@ namespace Web.Controllers.User
             }
 
             var parents = await _parentChildService.GetParentsByChildIdAsync(childId);
-            ViewBag.ParentList = (await _parentService.GetAllParentsAsync())
-                .Select(p => new SelectListItem { Value = p.ParentID.ToString(), Text = p.Name })
-                .ToList();
+
 
             var model = new ManageParentsViewModel
             {
@@ -255,11 +253,28 @@ namespace Web.Controllers.User
 
 
         [HttpPost("AddParentToChild")]
-        public async Task<IActionResult> AddParentToChild(int parentId, int childId, string relationship)
+        public async Task<IActionResult> AddParentToChild(int childId, string parentName, string relationship)
         {
             try
             {
-                var success = await _parentChildService.AddParentToChild(parentId, childId, relationship, 1); // Assuming CreatedBy = 1
+                // ✅ 1. Create a new Parent object
+                var newParent = new Parent
+                {
+                    Name = parentName,
+                    CreatedBy = 1, // Assume the user ID of admin/creator
+                    CreatedDate = DateTime.UtcNow
+                };
+
+                // ✅ 2. Save the parent in the database
+                var parentId = await _parentService.AddAndReturnIdAsync(newParent);
+                if (parentId == 0)
+                {
+                    TempData["ErrorMessage"] = "Failed to add parent.";
+                    return RedirectToAction("ManageParents", new { childId });
+                }
+
+
+                var success = await _parentChildService.AddParentToChild(parentId, newParent, childId, relationship, 1); // Assuming CreatedBy = 1
                 if (!success)
                 {
                     TempData["ErrorMessage"] = "Failed to add parent to child.";
@@ -278,12 +293,14 @@ namespace Web.Controllers.User
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> RemoveParentFromChild(int parentChildId, int childId)
+        [HttpPost("RemoveParentFromChild")]
+        public async Task<IActionResult> RemoveParentFromChild(int parentChildId, int childId, int parentId)
         {
             try
             {
+                
                 var success = await _parentChildService.RemoveParentFromChild(parentChildId);
+                success = await _parentService.DeleteAsync(parentId);
                 if (!success)
                 {
                     TempData["ErrorMessage"] = "Failed to remove parent.";
@@ -292,6 +309,8 @@ namespace Web.Controllers.User
                 {
                     TempData["SuccessMessage"] = "Parent removed successfully.";
                 }
+
+                
             }
             catch (Exception ex)
             {

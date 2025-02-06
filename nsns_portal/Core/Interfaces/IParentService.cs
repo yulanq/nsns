@@ -22,6 +22,8 @@ namespace Core.Interfaces
         // ✅ Add a new parent
         Task<bool> AddAsync(Parent parent);
 
+        Task<int> AddAndReturnIdAsync(Parent parent);
+
 
         // ✅ Update an existing parent
         Task<bool> UpdateAsync(Parent parent);
