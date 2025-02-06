@@ -28,7 +28,7 @@ namespace Core.Models
         public string Wechat { get; set; } // WeChat ID (nullable)
 
         [Required]
-        public Gender Gender { get; set; } // Gender (Male, Female, Other)
+        public string Gender { get; set; }
 
         public int? CreatedBy { get; set; } // Created By User ID (nullable)
 
@@ -44,13 +44,11 @@ namespace Core.Models
 
         [ForeignKey("UpdatedBy")]
         public virtual User UpdatedByUser { get; set; }
+
+        // ✅ New: List of related children
+        public virtual ICollection<ParentChild> ParentChildren { get; set; } = new List<ParentChild>();
     }
 
-    // Enum for Gender
-    public enum Gender
-    {
-        Male,
-        Female,
-        Other
-    }
+
+   
 }

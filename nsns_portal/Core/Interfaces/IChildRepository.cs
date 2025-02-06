@@ -15,6 +15,8 @@ namespace Core.Interfaces
     {
         Task<IEnumerable<Child>> GetAllAsync();
         Task<Child?> GetAsync(int userId);
+
+        Task<Child?> GetChildByIdAsync(int childId);
         Task<bool> AddAsync(Child entity);
         Task<bool> UpdateAsync(Child entity);
         //Task<bool> RemoveAsync(int userId);

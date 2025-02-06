@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces;
 using Core.Models;
+using Core.ViewModels;
 
 using System.Diagnostics;
 using Core.Repositories;
@@ -19,12 +20,16 @@ namespace Web.Controllers.User
     public class ChildController : Controller
     {
         private readonly IChildService _childService;
+        private readonly IParentService _parentService;
         private readonly ICityService _cityService;
+        private readonly IParentChildService _parentChildService;
 
-        public ChildController(IChildService childService, ICityService cityService)
+        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService)
         {
             _childService = childService;
+            _parentService = parentService;
             _cityService = cityService;
+            _parentChildService = parentChildService;
         }
 
         // ✅ Helper method to get City List
@@ -56,6 +61,15 @@ namespace Web.Controllers.User
         {
             var children = await _childService.GetAllAsync();
             return View(children);
+
+
+            //var children = await _childService.GetAllAsync();
+            //ViewBag.ParentList = (await _parentService.GetAllParentsAsync())
+            //    .Select(p => new SelectListItem { Value = p.ParentID.ToString(), Text = p.Name })
+            //    .ToList();
+
+            //return View(children);
+
         }
 
 
@@ -182,27 +196,6 @@ namespace Web.Controllers.User
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // ✅ GET: Confirm delete page
         [HttpGet("ConfirmDelete/{userId}")]
         public async Task<IActionResult> ConfirmDelete(int userId)
@@ -236,199 +229,83 @@ namespace Web.Controllers.User
 
 
 
+        [HttpGet("ManageParents")]
+        public async Task<IActionResult> ManageParents(int childId)
+        {
+            var child = await _childService.GetChildByIdAsync(childId);
+            if (child == null)
+            {
+                TempData["ErrorMessage"] = "Child not found.";
+                return RedirectToAction("List");
+            }
+
+            var parents = await _parentChildService.GetParentsByChildIdAsync(childId);
+            ViewBag.ParentList = (await _parentService.GetAllParentsAsync())
+                .Select(p => new SelectListItem { Value = p.ParentID.ToString(), Text = p.Name })
+                .ToList();
+
+            var model = new ManageParentsViewModel
+            {
+                Child = child,
+                Parents = parents
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost("AddParentToChild")]
+        public async Task<IActionResult> AddParentToChild(int parentId, int childId, string relationship)
+        {
+            try
+            {
+                var success = await _parentChildService.AddParentToChild(parentId, childId, relationship, 1); // Assuming CreatedBy = 1
+                if (!success)
+                {
+                    TempData["ErrorMessage"] = "Failed to add parent to child.";
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "Parent added to child successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("ManageParents", new { childId });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveParentFromChild(int parentChildId, int childId)
+        {
+            try
+            {
+                var success = await _parentChildService.RemoveParentFromChild(parentChildId);
+                if (!success)
+                {
+                    TempData["ErrorMessage"] = "Failed to remove parent.";
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "Parent removed successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("ManageParents", new { childId });
+        }
+
+
+
     }
 
 
-    // GET: Staff/Delete/{userId}
-    //[HttpGet("ConfirmDelete/{userId}")]
-    //    public async Task<IActionResult> ConfirmDelete(int userId)
-    //    {
-    //        // Fetch the staff details from the database
-    //        var coach = await _coachService.GetAsync(userId);
-    //        if (coach == null)
-    //        {
-    //            return NotFound();
-    //        }
-
-    //        // Pass the staff details to the Delete.cshtml view
-    //        return View(coach);
-    //    }
-
-
-    //    [HttpPost("DeleteConfirmed")]
-    //    public async Task<IActionResult> DeleteConfirmed(int userId)
-    //    {
-    //        try
-    //        {
-    //            var result = await _coachService.RemoveAsync(userId);
-
-    //            if (!result)
-    //            {
-    //                TempData["ErrorMessage"] = "The coach member could not be deleted.";
-    //                return RedirectToAction("List");
-    //            }
-
-    //            TempData["SuccessMessage"] = "Coach member has been deleted successfully.";
-    //            return RedirectToAction("List"); // Redirect to the coach list page
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            TempData["ErrorMessage"] = $"Error: {ex.Message}";
-    //            return RedirectToAction("List");
-    //        }
-    //    }
-
-
-
-
-
-    //    // GET: Add View
-    //    [HttpGet("List")]
-    //    //[HttpGet]
-    //    public async Task<IActionResult> List()
-    //    {
-
-    //        var coachList = await _coachService.GetAllAsync();
-    //        return View(coachList); // Ensure there is a corresponding List.cshtml in Views/Staff
-
-
-    //    }
-
-
-
-    //    // GET: Edit View
-    //    [HttpGet("Edit/{userId}")]
-    //    //[HttpGet]
-    //    public async Task<IActionResult> Edit(int userId)
-    //    {
-    //        //Fetch the staff details from the database
-
-
-    //       var coach = await _coachService.GetAsync(userId);
-
-    //        if (coach == null)
-    //        {
-    //            return NotFound();
-    //        }
-
-    //        var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
-
-
-
-    //        ViewBag.CityList = cities.Select(c => new SelectListItem
-    //        {
-    //            Value = c.CityID.ToString(),
-    //            Text = c.Name,
-    //            Selected = c.CityID == coach.CityID
-    //        }).ToList();
-
-
-    //        var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
-
-    //        ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
-    //        {
-    //            Value = s.SpecialtyID.ToString(),
-    //            Text = s.Title,
-    //            Selected = s.SpecialtyID == coach.SpecialtyID
-    //        }).ToList();
-
-    //        // Pass the coach details to the Edit.cshtml view
-    //        return View(coach);
-    //        //return LoadPageForEdit(userId);
-
-    //    }
-
-
-    //    [HttpPost("Edit/{userId}")]
-    //    [ValidateAntiForgeryToken]
-
-
-    //    public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/int specialtyId, string gender, string phone, string wechat, int cityId)
-    //    {
-
-
-    //        try
-    //        {
-    //            var result = await _coachService.UpdateAsync(userId, name, email, /*password,*/specialtyId, gender, phone, wechat, cityId);
-
-
-    //            if (!result)
-    //            {
-    //                ModelState.AddModelError(string.Empty, "Failed to update coach information.");
-    //                var coach = await _coachService.GetAsync(userId);
-
-    //                if (coach == null)
-    //                {
-    //                    return NotFound();
-    //                }
-
-    //                var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
-
-
-
-    //                ViewBag.CityList = cities.Select(c => new SelectListItem
-    //                {
-    //                    Value = c.CityID.ToString(),
-    //                    Text = c.Name,
-    //                    Selected = c.CityID == coach.CityID
-    //                }).ToList();
-
-
-    //                var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
-
-    //                ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
-    //                {
-    //                    Value = s.SpecialtyID.ToString(),
-    //                    Text = s.Title,
-    //                    Selected = s.SpecialtyID == coach.SpecialtyID
-    //                }).ToList();
-
-    //                // Pass the coach details to the Edit.cshtml view
-    //                return View(coach);
-    //            }
-
-    //            TempData["SuccessMessage"] = "coach information updated successfully.";
-    //            return RedirectToAction("List");
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            TempData["ErrorMessage"] = $"Error: {ex.Message}";
-    //            var coach = await _coachService.GetAsync(userId);
-
-    //            if (coach == null)
-    //            {
-    //                return NotFound();
-    //            }
-
-    //            var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
-
-
-
-    //            ViewBag.CityList = cities.Select(c => new SelectListItem
-    //            {
-    //                Value = c.CityID.ToString(),
-    //                Text = c.Name,
-    //                Selected = c.CityID == coach.CityID
-    //            }).ToList();
-
-
-    //            var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
-
-    //            ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
-    //            {
-    //                Value = s.SpecialtyID.ToString(),
-    //                Text = s.Title,
-    //                Selected = s.SpecialtyID == coach.SpecialtyID
-    //            }).ToList();
-
-    //            // Pass the coach details to the Edit.cshtml view
-    //            return View(coach);
-    //        }
-    //    }
-
-
-
-
-    //}
+ 
 }
 

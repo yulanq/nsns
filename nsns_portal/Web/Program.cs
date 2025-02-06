@@ -46,6 +46,12 @@ builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IChildService, ChildService>();
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
 
+builder.Services.AddScoped<IParentService, ParentService>();
+builder.Services.AddScoped<IParentRepository, ParentRepository>();
+
+builder.Services.AddScoped<IParentChildRepository, ParentChildRepository>();
+builder.Services.AddScoped<IParentChildService, ParentChildService>();
+
 
 
 // Add UserService

@@ -42,9 +42,6 @@ namespace Web.Controllers.User
                 return View();
             }
 
-
-            
-
             try
             {
                 var result = await _coachService.AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId);
@@ -136,7 +133,7 @@ namespace Web.Controllers.User
 
 
 
-        // GET: Staff/Delete/{userId}
+        // GET: Coach/Delete/{userId}
         [HttpGet("ConfirmDelete/{userId}")]
         public async Task<IActionResult> ConfirmDelete(int userId)
         {

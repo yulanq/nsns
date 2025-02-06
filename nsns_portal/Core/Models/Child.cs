@@ -30,6 +30,8 @@ namespace Core.Models
         [ForeignKey("CityID")]
         public virtual required City City { get; set; } // Navigation property to Speical table (SpecialID)
 
-     
+        // ✅ New: List of related parents
+        public virtual ICollection<ParentChild> ParentChildren { get; set; } = new List<ParentChild>();
+
     }
 }

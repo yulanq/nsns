@@ -34,6 +34,10 @@ namespace Core.Services
             return await _childRepository.GetAsync(userId);
         }
 
+        public async Task<Child?> GetChildByIdAsync(int childId)
+        {
+            return await _childRepository.GetChildByIdAsync(childId);
+        }
         public async Task<bool> AddAsync(Child child)
         {
             if (string.IsNullOrWhiteSpace(child.Name))

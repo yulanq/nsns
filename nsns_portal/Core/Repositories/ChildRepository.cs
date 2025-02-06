@@ -36,6 +36,13 @@ namespace Core.Repositories
                 .FirstOrDefaultAsync(c => c.UserID == userId);
         }
 
+        public async Task<Child?> GetChildByIdAsync(int childId)
+        {
+            return await _context.Children
+                .Include(c => c.City)
+                .FirstOrDefaultAsync(c => c.ChildID == childId);
+        }
+
         public async Task<bool> AddAsync(Child entity)
         {
             await _context.Children.AddAsync(entity);
