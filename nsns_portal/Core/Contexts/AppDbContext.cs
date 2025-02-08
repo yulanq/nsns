@@ -79,7 +79,7 @@ namespace Core.Contexts
 
 
             modelBuilder.Entity<CourseEnrollment>()
-          .ToTable("course_enrollment"); // Explicitly map to the table name
+          .ToTable("course_enrollments"); // Explicitly map to the table name
 
             modelBuilder.Entity<CourseNotification>()
           .ToTable("course_notifications"); // Explicitly map to the table name

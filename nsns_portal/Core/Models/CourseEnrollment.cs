@@ -24,9 +24,9 @@ namespace Core.Models
         [ForeignKey("CourseID")]
         public virtual Course Course { get; set; } // Navigation property to Course table (CourseID)
 
-        public DateTime ScheduledAt { get; set; }
+        public DateTime? ScheduledAt { get; set; }
 
-        public decimal ScheduledHours { get; set; }
+        public decimal? ScheduledHours { get; set; }
 
         public decimal? ActualHours { get; set; }
 

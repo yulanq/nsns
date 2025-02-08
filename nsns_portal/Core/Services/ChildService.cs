@@ -12,16 +12,23 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Core.Repositories;
+using System.Numerics;
+using System.Xml.Linq;
 
 namespace Core.Services
 {
     public class ChildService : IChildService
     {
+       
+        private readonly IPasswordHasher<Child> _passwordHasher;
+        private readonly JwtOptions _jwtOptions;
         private readonly IChildRepository _childRepository;
 
-        public ChildService(IChildRepository childRepository)
+        public ChildService(IChildRepository childRepository, IPasswordHasher<Child> password, IOptions<JwtOptions> jwtOptions)
         {
             _childRepository = childRepository;
+            _passwordHasher = password;
+            _jwtOptions = jwtOptions.Value;
         }
 
         public async Task<IEnumerable<Child>> GetAllAsync()
@@ -43,7 +50,24 @@ namespace Core.Services
             if (string.IsNullOrWhiteSpace(child.Name))
                 throw new ArgumentException("Child name cannot be empty.");
 
+            var childUser = new Child
+            {
+                Name = child.Name,
+                Email = child.Email,
+                Password = child.Password,
+                Role = "Child",
+                Gender = child.Gender,
+                CityID = child.CityID,
+                City = child.City,
+                BirthDate = child.BirthDate,
+                CreatedDate = DateTime.UtcNow
+            };
+            child.Password = _passwordHasher.HashPassword(childUser, child.Password);
+
             return await _childRepository.AddAsync(child);
+
+
+            
         }
 
         public async Task<bool> UpdateAsync(Child child)

@@ -23,13 +23,19 @@ namespace Web.Controllers.User
         private readonly IParentService _parentService;
         private readonly ICityService _cityService;
         private readonly IParentChildService _parentChildService;
+        private readonly ICourseService _courseService;
+        private readonly ICourseEnrollmentService _courseEnrollmentService;
+        private readonly ISpecialtyService _specialtyService;
 
-        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService)
+        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService)
         {
             _childService = childService;
             _parentService = parentService;
             _cityService = cityService;
             _parentChildService = parentChildService;
+            _courseService = courseService;
+            _specialtyService = specialtyService;
+            _courseEnrollmentService = courseEnrollmentService;
         }
 
         // ✅ Helper method to get City List
@@ -318,6 +324,88 @@ namespace Web.Controllers.User
             }
 
             return RedirectToAction("ManageParents", new { childId });
+        }
+
+        [HttpGet("ManageEnrollments/{childId}")]
+        public async Task<IActionResult> ManageEnrollments(int childId)
+        {
+            var child = await _childService.GetChildByIdAsync(childId);
+            if (child == null)
+            {
+                TempData["ErrorMessage"] = "Child not found.";
+                return RedirectToAction("List"); // Redirect to child list page if not found
+            }
+
+            var courseEnrollments = await _courseEnrollmentService.GetRegisteredEnrollmentsByChildAsync(childId);
+            var specialties = await _specialtyService.GetAllAsync();
+
+            ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+            {
+                Value = s.SpecialtyID.ToString(),
+                Text = s.Title
+            }).ToList();
+
+            return View("ManageEnrollments", new ManageEnrollmentsViewModel
+            {
+                Child = child,
+                CourseEnrollments = courseEnrollments
+            });
+        }
+
+
+        [HttpGet("GetCoursesBySpecialty")]
+        public async Task<IActionResult> GetActiveCoursesBySpecialty(int specialtyId)
+        {
+            var courses = await _courseService.GetActiveCoursesBySpecialtyAsync(specialtyId);
+            return Json(courses.Select(c => new { c.CourseID, c.Title }));
+        }
+
+        [HttpPost("Enroll")]
+        public async Task<IActionResult> Enroll(int childId, int courseId, decimal scheduledHours)
+        {
+            try
+            {
+                var success = await _courseEnrollmentService.AddEnrollmentAsync(childId, courseId, scheduledHours, 1, "Registered");
+                if (!success)
+                {
+                    TempData["ErrorMessage"] = "Enrollment failed.";
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "Child enrolled successfully!";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("ManageEnrollments", new { childId });
+        }
+
+
+        [HttpPost("RemoveEnrollment")]
+        public async Task<IActionResult> RemoveEnrollment(int enrollmentId, int childId)
+        {
+            try
+            {
+                var success = await _courseEnrollmentService.RemoveRegisteredEnrollmentAsync(enrollmentId);
+
+                if (!success)
+                {
+                    TempData["ErrorMessage"] = "Failed to remove enrollment.";
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "Enrollment removed successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("ManageEnrollments", new { childId });
         }
 
 

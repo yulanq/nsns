@@ -52,6 +52,8 @@ builder.Services.AddScoped<IParentRepository, ParentRepository>();
 builder.Services.AddScoped<IParentChildRepository, ParentChildRepository>();
 builder.Services.AddScoped<IParentChildService, ParentChildService>();
 
+builder.Services.AddScoped<ICourseEnrollmentRepository, CourseEnrollmentRepository>();
+builder.Services.AddScoped<ICourseEnrollmentService, CourseEnrollmentService>();
 
 
 // Add UserService
