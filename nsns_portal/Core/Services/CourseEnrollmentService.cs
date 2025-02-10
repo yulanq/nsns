@@ -30,26 +30,40 @@ namespace Core.Services
             _childRepository = childRepository;
         }
 
-        public async Task<bool> AddEnrollmentAsync(int childId, int courseId, decimal scheduledHours, int createdBy, string status)
+        public async Task<bool> IsChildEnrolledInCourse(int userId, int courseId)
         {
-            if (childId <= 0 || courseId <= 0 || scheduledHours < 0)
+            var enrollments = await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Registered");
+            return enrollments.Any(e => e.CourseID == courseId);
+        }
+
+
+        public async Task<bool> AddEnrollmentAsync(int userId, int courseId, decimal scheduledHours, int createdBy, string status)
+        {
+            if (userId <= 0 || courseId <= 0 || scheduledHours < 0)
                 throw new ArgumentException("Invalid child, course, or hours.");
 
             // ✅ Retrieve Course and Child from the database
-            var child = await _childRepository.GetChildByIdAsync(childId);
+            var child = await _childRepository.GetAsync(userId);
             var course = await _courseRepository.GetAsync(courseId);
 
             if (child == null || course == null)
                 throw new ArgumentException("Invalid child or course.");
 
+
+
+
+            if(await IsChildEnrolledInCourse(userId, courseId))
+                throw new ArgumentException("This course has already been registered.");
+
+
             try
             {
                 var enrollment = new CourseEnrollment
                 {
-                    ChildID = childId,
+                    //ChildID = childId,
                     CourseID = courseId,
                     ScheduledHours = scheduledHours,
-                    //Child = child,
+                    Child = child,
                     Course = course,
                     CreatedBy = createdBy,
                     CreatedDate = DateTime.UtcNow,
@@ -69,14 +83,14 @@ namespace Core.Services
         {
             //Enrollment removal is only allowed for courses that have not started.
             var enrollment = await _enrollmentRepository.GetAsync(enrollmentId);
-            var childId = enrollment.ChildID;
+            var userId = enrollment.UserID;
             var courseId = enrollment.CourseID;
             var course_enrollment = await _enrollmentRepository.GetEnrollmentsByCourseAsync(courseId);
             if (course_enrollment.Any())
             {
                 foreach (var e in course_enrollment)
                 {
-                    if (e.ChildID == childId && e.Status != "Registered")
+                    if (e.UserID == userId && e.Status != "Registered")
                         throw new Exception("Enrollment removal is only allowed for courses that have not started.");
                 }
                   
@@ -84,9 +98,9 @@ namespace Core.Services
             return await _enrollmentRepository.RemoveAsync(enrollmentId);
         }
 
-        public async Task<IEnumerable<CourseEnrollment>> GetRegisteredEnrollmentsByChildAsync(int childId)
+        public async Task<IEnumerable<CourseEnrollment>> GetRegisteredEnrollmentsByChildAsync(int userId)
         {
-            return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Registered");
+            return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Registered");
         }
     }
 

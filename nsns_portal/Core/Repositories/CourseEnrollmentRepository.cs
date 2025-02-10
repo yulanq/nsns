@@ -48,21 +48,24 @@ namespace Core.Repositories
                 .FirstOrDefaultAsync(e => e.EnrollmentID == enrollmentId);
         }
 
-        public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByChildAsync(int childId, string status)
+        public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByChildAsync(int userId, string status)
         {
             return await _context.CourseEnrollments
                 .Include(e => e.Course)
                 .Include(e => e.Course.Coach)
-                .Where(e => e.ChildID == childId && e.Status == status)
+                .Where(e => e.UserID == userId && e.Status == status)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCourseAsync(int courseId)
         {
             return await _context.CourseEnrollments
-                //.Include(e => e.Child)
+                .Include(e => e.Child)
                 .Where(e => e.CourseID == courseId)
                 .ToListAsync();
         }
+
+
+       
     }
 }

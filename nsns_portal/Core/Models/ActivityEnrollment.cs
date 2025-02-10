@@ -14,9 +14,9 @@ namespace Core.Models
         public int EnrollmentID { get; set; } // Primary key
 
         // Foreign key referencing the children table
-        public int? ChildID { get; set; }
+        public int? UserID { get; set; }
 
-        [ForeignKey(nameof(ChildID))]
+        [ForeignKey(nameof(UserID))]
         public virtual Child? Child { get; set; }
 
         // Foreign key referencing the activities table

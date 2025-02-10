@@ -20,21 +20,36 @@ namespace Core.Services
     public class ActivityEnrollmentService : IActivityEnrollmentService
     {
         private readonly IActivityEnrollmentRepository _enrollmentRepository;
+        private readonly IChildRepository _childRepository;
 
-        public ActivityEnrollmentService(IActivityEnrollmentRepository enrollmentRepository)
+        public ActivityEnrollmentService(IActivityEnrollmentRepository enrollmentRepository, IChildRepository childRepository)
         {
             _enrollmentRepository = enrollmentRepository;
-        }        
-        
-        public async Task<bool> AddEnrollmentAsync(int childId, int activityId, string status)
+            _childRepository = childRepository;
+        }
+
+
+        public async Task<bool> IsChildEnrolledInActivity(int userId, int activityId)
         {
-            if (childId <= 0 || activityId <= 0)
+            var enrollments = await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Registered");
+            return enrollments.Any(e => e.ActivityID == activityId);
+        }
+
+        public async Task<bool> AddEnrollmentAsync(int userId, int activityId, string status)
+        {
+            if (userId <= 0 || activityId <= 0)
                 throw new ArgumentException("Invalid child or activity.");
+
+            var child = await _childRepository.GetAsync(userId);
+
+            if (await IsChildEnrolledInActivity(userId, activityId))
+                throw new ArgumentException("This activity has already been registered.");
 
             var enrollment = new ActivityEnrollment
             {
-                ChildID = childId,
+                //ChildID = childId,
                 ActivityID = activityId,
+                Child = child,
                 Status = status,
                 CreatedBy = 1, // Temporary user ID
                 CreatedDate = DateTime.UtcNow
@@ -64,9 +79,9 @@ namespace Core.Services
 
       
 
-        public async Task<IEnumerable<ActivityEnrollment>> GetRegisteredEnrollmentsByChildAsync(int childId)
+        public async Task<IEnumerable<ActivityEnrollment>> GetRegisteredEnrollmentsByChildAsync(int userId)
         {
-            return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Registered");
+            return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Registered");
         }
 
         public async Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId)

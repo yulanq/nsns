@@ -45,7 +45,7 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Child/RemoveCourseEnrollment">
                             <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentID" />
-                            <input type="hidden" name="childId" value="@enrollment.ChildID" />
+                            <input type="hidden" name="userId" value="@enrollment.UserID" />
                             <button type="submit" style="background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; cursor: pointer;">
                                 Remove
                             </button>
@@ -76,7 +76,7 @@
         {
             <tr>
                 <td colspan="6">
-                    <div class="alert alert-success">
+                    <div class="alert alert-danger">
                         @TempData["ErrorMessage1"]
                     </div>
                 </td>
@@ -93,7 +93,7 @@
 <b>Enroll @Model.Child.Name in Course</b>
 <div style="margin-bottom: 10px;"></div>
 <form method="post" action="/Child/EnrollCourse">
-    <input type="hidden" name="childId" value="@Model.Child.ChildID" />
+    <input type="hidden" name="userId" value="@Model.Child.UserID" />
 
     <!-- Select Specialty First -->
     <label for="specialtyId">Select Specialty:</label>
@@ -152,7 +152,7 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Child/RemoveActivityEnrollment">
                             <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentID" />
-                            <input type="hidden" name="childId" value="@enrollment.ChildID" />
+                            <input type="hidden" name="userId" value="@enrollment.UserID" />
                             <button type="submit" style="background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; cursor: pointer;">
                                 Remove
                             </button>
@@ -199,7 +199,7 @@
 <div style="margin-bottom: 10px;"></div>
 
 <form method="post" action="/Child/EnrollActivity">
-    <input type="hidden" name="childId" value="@Model.Child.ChildID" />
+    <input type="hidden" name="userId" value="@Model.Child.UserID" />
 
     <label for="activityId">Select Activity:</label>
     <select id="activityId" name="activityId" required>

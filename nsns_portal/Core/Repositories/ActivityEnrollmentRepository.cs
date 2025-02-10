@@ -22,6 +22,15 @@ namespace Core.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<ActivityEnrollment>> GetEnrollmentsByChildAsync(int userId, string status)
+        {
+            return await _context.ActivityEnrollments
+                .Include(e => e.Activity)
+                //.Include(e => e.Child)
+                .Where(e => e.UserID == userId && e.Status == status)
+                .ToListAsync();
+        }
+
         public async Task<bool> AddAsync(ActivityEnrollment enrollment)
         {
             //_context.Attach(enrollment.Child);
@@ -48,15 +57,15 @@ namespace Core.Repositories
                 .FirstOrDefaultAsync(e => e.EnrollmentID == enrollmentId);
         }
 
-        public async Task<IEnumerable<ActivityEnrollment>> GetEnrollmentsByChildAsync(int childId, string status)
-        {
+        //public async Task<IEnumerable<ActivityEnrollment>> GetEnrollmentsByChildAsync(int childId, string status)
+        //{
             
-            return await _context.ActivityEnrollments
-                .Include(e => e.Activity)
-                //.Include(e => e.Course.Coach)
-                .Where(e => e.ChildID == childId && e.Status == status)
-                .ToListAsync();
-        }
+        //    return await _context.ActivityEnrollments
+        //        .Include(e => e.Activity)
+        //        //.Include(e => e.Course.Coach)
+        //        .Where(e => e.ChildID == childId && e.Status == status)
+        //        .ToListAsync();
+        //}
 
         //public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCourseAsync(int courseId)
         //{

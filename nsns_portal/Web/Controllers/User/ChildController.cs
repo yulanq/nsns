@@ -242,7 +242,7 @@ namespace Web.Controllers.User
         [HttpGet("ManageParents/{childId}")]
         public async Task<IActionResult> ManageParents(int childId)
         {
-            var child = await _childService.GetChildByIdAsync(childId);
+            var child = await _childService.GetAsync(childId);
             if (child == null)
             {
                 TempData["ErrorMessage"] = "Child not found.";
@@ -330,17 +330,17 @@ namespace Web.Controllers.User
             return RedirectToAction("ManageParents", new { childId });
         }
 
-        [HttpGet("ManageEnrollments/{childId}")]
-        public async Task<IActionResult> ManageEnrollments(int childId)
+        [HttpGet("ManageEnrollments/{userId}")]
+        public async Task<IActionResult> ManageEnrollments(int userId)
         {
-            var child = await _childService.GetChildByIdAsync(childId);
+            var child = await _childService.GetAsync(userId);
             if (child == null)
             {
                 TempData["ErrorMessage"] = "Child not found.";
                 return RedirectToAction("List"); // Redirect to child list page if not found
             }
 
-            var courseEnrollments = await _courseEnrollmentService.GetRegisteredEnrollmentsByChildAsync(childId);
+            var courseEnrollments = await _courseEnrollmentService.GetRegisteredEnrollmentsByChildAsync(userId);
             var specialties = await _specialtyService.GetAllAsync();
 
             ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
@@ -349,7 +349,7 @@ namespace Web.Controllers.User
                 Text = s.Title
             }).ToList();
 
-            var activityEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(childId);
+            var activityEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(userId);
             var activities = await _activityService.GetAllActiveAsync();
 
             ViewBag.ActivityList = activities.Select(a => new SelectListItem
@@ -375,11 +375,11 @@ namespace Web.Controllers.User
         }
 
         [HttpPost("EnrollCourse")]
-        public async Task<IActionResult> EnrollCourse(int childId, int courseId, decimal scheduledHours)
+        public async Task<IActionResult> EnrollCourse(int userId, int courseId, decimal scheduledHours)
         {
             try
             {
-                var success = await _courseEnrollmentService.AddEnrollmentAsync(childId, courseId, scheduledHours, 1, "Registered");
+                var success = await _courseEnrollmentService.AddEnrollmentAsync(userId, courseId, scheduledHours, 1, "Registered");
                 if (!success)
                 {
                     TempData["ErrorMessage1"] = "Enrollment failed.";
@@ -394,12 +394,12 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage1"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { childId });
+            return RedirectToAction("ManageEnrollments", new { userId });
         }
 
 
         [HttpPost("RemoveCourseEnrollment")]
-        public async Task<IActionResult> RemoveCourseEnrollment(int enrollmentId, int childId)
+        public async Task<IActionResult> RemoveCourseEnrollment(int enrollmentId, int userId)
         {
             try
             {
@@ -419,17 +419,17 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage1"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { childId });
+            return RedirectToAction("ManageEnrollments", new { userId });
         }
 
 
 
         [HttpPost("EnrollActivity")]
-        public async Task<IActionResult> EnrollActivity(int childId, int activityId)
+        public async Task<IActionResult> EnrollActivity(int userId, int activityId)
         {
             try
             {
-                var success = await _activityEnrollmentService.AddEnrollmentAsync(childId, activityId, "Registered");
+                var success = await _activityEnrollmentService.AddEnrollmentAsync(userId, activityId, "Registered");
 
                 if (!success)
                 {
@@ -445,11 +445,11 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage2"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { childId });
+            return RedirectToAction("ManageEnrollments", new { userId });
         }
 
         [HttpPost("RemoveActivityEnrollment")]
-        public async Task<IActionResult> RemoveActivityEnrollment(int enrollmentId, int childId)
+        public async Task<IActionResult> RemoveActivityEnrollment(int enrollmentId, int userId)
         {
             try
             {
@@ -469,7 +469,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage2"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { childId });
+            return RedirectToAction("ManageEnrollments", new { userId });
         }
 
 

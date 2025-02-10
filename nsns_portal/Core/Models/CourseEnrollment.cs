@@ -15,8 +15,8 @@ namespace Core.Models
         public int EnrollmentID { get; set; }
 
         [Required]
-        public int ChildID { get; set; }
-        [ForeignKey("ChildID")]
+        public int UserID { get; set; }
+        [ForeignKey("UserID")]
         public virtual Child Child { get; set; } // Navigation property to Child table (ChildID)
 
         [Required]
