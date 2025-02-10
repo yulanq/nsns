@@ -21,6 +21,8 @@ namespace Core.Interfaces
 
         Task<IEnumerable<Activity>> GetAllAsync();
 
+        Task<IEnumerable<Activity>> GetAllActiveAsync();
+
 
     }
 

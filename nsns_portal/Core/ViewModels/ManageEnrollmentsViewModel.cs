@@ -13,5 +13,7 @@ namespace Core.ViewModels
     {
         public Child Child { get; set; }
         public IEnumerable<CourseEnrollment> CourseEnrollments { get; set; }
+
+        public IEnumerable<ActivityEnrollment> ActivityEnrollments { get; set; }
     }
 }

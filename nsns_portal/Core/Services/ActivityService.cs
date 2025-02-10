@@ -123,6 +123,24 @@ namespace Core.Services
             }
         }
 
+        public async Task<IEnumerable<Activity>> GetAllActiveAsync()
+        {
+            try
+            {
+                // Fetch all staff records from the repository
+                var activityList = await _activityRepository.GetAllActiveAsync();
+
+                // You can add additional logic or transformations here if necessary
+                return activityList;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions as needed (e.g., logging)
+                throw new Exception("An error occurred while retrieving activity records.", ex);
+            }
+        }
+
+
 
 
     }

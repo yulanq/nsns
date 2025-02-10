@@ -65,8 +65,6 @@ namespace Core.Services
             child.Password = _passwordHasher.HashPassword(childUser, child.Password);
 
             return await _childRepository.AddAsync(child);
-
-
             
         }
 

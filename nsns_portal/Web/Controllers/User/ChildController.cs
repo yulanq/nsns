@@ -26,8 +26,10 @@ namespace Web.Controllers.User
         private readonly ICourseService _courseService;
         private readonly ICourseEnrollmentService _courseEnrollmentService;
         private readonly ISpecialtyService _specialtyService;
+        private readonly IActivityEnrollmentService _activityEnrollmentService;
+        private readonly IActivityService _activityService;
 
-        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService)
+        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, IActivityService activityService, ICourseEnrollmentService courseEnrollmentService, IActivityEnrollmentService activityEnrollmentService)
         {
             _childService = childService;
             _parentService = parentService;
@@ -36,6 +38,8 @@ namespace Web.Controllers.User
             _courseService = courseService;
             _specialtyService = specialtyService;
             _courseEnrollmentService = courseEnrollmentService;
+            _activityService = activityService;
+            _activityEnrollmentService = activityEnrollmentService;
         }
 
         // ✅ Helper method to get City List
@@ -345,10 +349,20 @@ namespace Web.Controllers.User
                 Text = s.Title
             }).ToList();
 
+            var activityEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(childId);
+            var activities = await _activityService.GetAllActiveAsync();
+
+            ViewBag.ActivityList = activities.Select(a => new SelectListItem
+            {
+                Value = a.ActivityID.ToString(),
+                Text = a.Title
+            }).ToList();
+
             return View("ManageEnrollments", new ManageEnrollmentsViewModel
             {
                 Child = child,
-                CourseEnrollments = courseEnrollments
+                CourseEnrollments = courseEnrollments,
+                ActivityEnrollments = activityEnrollments
             });
         }
 
@@ -360,32 +374,32 @@ namespace Web.Controllers.User
             return Json(courses.Select(c => new { c.CourseID, c.Title }));
         }
 
-        [HttpPost("Enroll")]
-        public async Task<IActionResult> Enroll(int childId, int courseId, decimal scheduledHours)
+        [HttpPost("EnrollCourse")]
+        public async Task<IActionResult> EnrollCourse(int childId, int courseId, decimal scheduledHours)
         {
             try
             {
                 var success = await _courseEnrollmentService.AddEnrollmentAsync(childId, courseId, scheduledHours, 1, "Registered");
                 if (!success)
                 {
-                    TempData["ErrorMessage"] = "Enrollment failed.";
+                    TempData["ErrorMessage1"] = "Enrollment failed.";
                 }
                 else
                 {
-                    TempData["SuccessMessage"] = "Child enrolled successfully!";
+                    TempData["SuccessMessage1"] = "Child enrolled successfully!";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage1"] = $"Error: {ex.Message}";
             }
 
             return RedirectToAction("ManageEnrollments", new { childId });
         }
 
 
-        [HttpPost("RemoveEnrollment")]
-        public async Task<IActionResult> RemoveEnrollment(int enrollmentId, int childId)
+        [HttpPost("RemoveCourseEnrollment")]
+        public async Task<IActionResult> RemoveCourseEnrollment(int enrollmentId, int childId)
         {
             try
             {
@@ -393,16 +407,16 @@ namespace Web.Controllers.User
 
                 if (!success)
                 {
-                    TempData["ErrorMessage"] = "Failed to remove enrollment.";
+                    TempData["ErrorMessage1"] = "Failed to remove enrollment.";
                 }
                 else
                 {
-                    TempData["SuccessMessage"] = "Enrollment removed successfully.";
+                    TempData["SuccessMessage1"] = "Enrollment removed successfully.";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage1"] = $"Error: {ex.Message}";
             }
 
             return RedirectToAction("ManageEnrollments", new { childId });
@@ -410,9 +424,60 @@ namespace Web.Controllers.User
 
 
 
+        [HttpPost("EnrollActivity")]
+        public async Task<IActionResult> EnrollActivity(int childId, int activityId)
+        {
+            try
+            {
+                var success = await _activityEnrollmentService.AddEnrollmentAsync(childId, activityId, "Registered");
+
+                if (!success)
+                {
+                    TempData["ErrorMessage2"] = "Failed to enroll in activity.";
+                }
+                else
+                {
+                    TempData["SuccessMessage2"] = "Successfully enrolled in activity.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage2"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("ManageEnrollments", new { childId });
+        }
+
+        [HttpPost("RemoveActivityEnrollment")]
+        public async Task<IActionResult> RemoveActivityEnrollment(int enrollmentId, int childId)
+        {
+            try
+            {
+                var success = await _activityEnrollmentService.RemoveEnrollmentAsync(enrollmentId);
+
+                if (!success)
+                {
+                    TempData["ErrorMessage2"] = "Failed to remove enrollment.";
+                }
+                else
+                {
+                    TempData["SuccessMessage2"] = "Enrollment removed successfully.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage2"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("ManageEnrollments", new { childId });
+        }
+
+
+
+
     }
 
 
- 
+
 }
 

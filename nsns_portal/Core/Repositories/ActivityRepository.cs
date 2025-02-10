@@ -83,6 +83,14 @@ namespace Core.Repositories
             return await _context.Activities.ToListAsync();  // Retrieves all activities asynchronously
         }
 
+        public async Task<IEnumerable<Activity>> GetAllActiveAsync()
+        {
+            return await _context.Activities
+                .Where(a => a.IsActive) // ✅ Only fetch active activities
+                .ToListAsync();
+        }
+
+
 
 
 

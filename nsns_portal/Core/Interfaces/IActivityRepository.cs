@@ -32,5 +32,7 @@ namespace Core.Interfaces
         // Get all Activity from the database asynchronously
         Task<IEnumerable<Activity>> GetAllAsync();
 
+        Task<IEnumerable<Activity>> GetAllActiveAsync();
+
     }
 }
