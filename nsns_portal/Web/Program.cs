@@ -61,6 +61,9 @@ builder.Services.AddScoped<IActivityEnrollmentRepository, ActivityEnrollmentRepo
 builder.Services.AddScoped<IPaymentPackageRepository, PaymentPackageRepository>();
 builder.Services.AddScoped<IPaymentPackageService, PaymentPackageService>();
 
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
 // Add UserService
 
 

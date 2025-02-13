@@ -1,0 +1,64 @@
+﻿@model Payment
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Model.PaymentID == 0 ? "Add Payment" : "Edit Payment";
+}
+
+<script src="/js/payment.js"></script>
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" action="/Payment/Save">
+    <input type="hidden" name="PaymentID" value="@Model.PaymentID" />
+
+    <table style="border-collapse: collapse; width: 50%; text-align: left;">
+        <tr>
+            <td style="padding: 8px;"><label for="ChildID">Child Name:</label></td>
+            <td style="padding: 8px;">
+               
+                <p> @ViewBag.ChildName</p>
+
+                <!-- ✅ Store ChildID as a Hidden Input -->
+                <input type="hidden" name="ChildID" value="@ViewBag.ChildID" />
+
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 8px;"><label for="ParentID">Select Parent:</label></td>
+            <td style="padding: 8px;">
+                <select id="ParentID" name="ParentID" required>
+                    <option value="">-- Select Parent --</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 8px;"><label for="PaymentPackageID">Select Payment Package:</label></td>
+            <td style="padding: 8px;">
+                <select id="PaymentPackageID" name="PaymentPackageID" required>
+                    <option value="">-- Select Package --</option>
+                    @foreach (var package in ViewBag.PaymentPackages)
+                    {
+                        <option value="@package.Value" selected="@(package.Selected ? "selected" : null)">@package.Text</option>
+                    }
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 8px;"><label for="Amount">Amount ($):</label></td>
+            <td style="padding: 8px;"><input type="number" name="Amount" value="@Model.Amount" step="0.01" required style="width: 100%;" /></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align: left; padding: 16px;">
+                <button type="submit" style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                    Save
+                </button>
+                <a href="/Payment/List" style="background-color: #ddd; color: black; text-decoration: none; padding: 5px 10px; border: 1px solid #ccc;">Cancel</a>
+            </td>
+        </tr>
+    </table>
+</form>

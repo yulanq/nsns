@@ -242,7 +242,7 @@ namespace Web.Controllers.User
         [HttpGet("ManageParents/{childId}")]
         public async Task<IActionResult> ManageParents(int childId)
         {
-            var child = await _childService.GetAsync(childId);
+            var child = await _childService.GetChildByIdAsync(childId);
             if (child == null)
             {
                 TempData["ErrorMessage"] = "Child not found.";

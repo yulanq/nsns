@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Payment>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage Payments";
+}
+
+<h2>Manage Payments</h2>
+
+<!-- ✅ Add New Payment Button -->
+<a href="/Payment/AddEdit" style="display: inline-block; margin-bottom: 20px;">Add Payment</a>
+
+<!-- ✅ Table Showing Payments -->
+<table style="border-collapse: collapse; width: 100%; text-align: left;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="padding: 8px; border: 1px solid #ddd;">Child</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Parent</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Package</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Amount</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Payment Date</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payment in Model)
+        {
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">@payment.Parent.Name</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@payment.Parent.Name</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@payment.PaymentPackage.Title</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">$@payment.Amount</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@payment.PaymentDate?.ToString("yyyy-MM-dd")</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">
+                    <a href="/Payment/AddEdit/@payment.PaymentID" style="margin-right: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                    <a href="/Payment/ConfirmDelete/@payment.PaymentID" style="color: red; text-decoration: none;">Delete</a>
+                </td>
+            </tr>
+        }
+
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 10px;">No payments found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
