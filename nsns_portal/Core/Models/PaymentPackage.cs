@@ -23,7 +23,7 @@ namespace Core.Models
         [Column(TypeName = "decimal(10, 2)")]
         public decimal? Amount { get; set; } // Package Amount
 
-        public bool Active { get; set; } = true; // Active status (default is 1)
+        public bool IsActive { get; set; } = true; // Active status (default is 1)
 
         public int CreatedBy { get; set; } // Created By User
 

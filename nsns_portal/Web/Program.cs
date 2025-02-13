@@ -58,6 +58,9 @@ builder.Services.AddScoped<ICourseEnrollmentService, CourseEnrollmentService>();
 builder.Services.AddScoped<IActivityEnrollmentService, ActivityEnrollmentService>();
 builder.Services.AddScoped<IActivityEnrollmentRepository, ActivityEnrollmentRepository>();
 
+builder.Services.AddScoped<IPaymentPackageRepository, PaymentPackageRepository>();
+builder.Services.AddScoped<IPaymentPackageService, PaymentPackageService>();
+
 // Add UserService
 
 
