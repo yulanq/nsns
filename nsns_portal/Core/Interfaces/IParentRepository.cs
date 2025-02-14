@@ -15,13 +15,13 @@ namespace Core.Interfaces
     {
 
         Task<IEnumerable<Parent>> GetAllAsync();
-        Task<Parent?> GetByIdAsync(int id);
+        Task<Parent?> GetByIdAsync(int parentId);
         Task<bool> AddAsync(Parent parent);
 
         Task<int> AddAndReturnIdAsync(Parent parent);
         
         Task<bool> UpdateAsync(Parent parent);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(int parentId);
 
 
     }

@@ -33,9 +33,9 @@ namespace Core.Services
         }
 
         // ✅ Get a parent by ID
-        public async Task<Parent?> GetParentByIdAsync(int id)
+        public async Task<Parent?> GetParentByIdAsync(int parentId)
         {
-            return await _parentRepository.GetByIdAsync(id);
+            return await _parentRepository.GetByIdAsync(parentId);
         }
 
        
@@ -64,13 +64,13 @@ namespace Core.Services
         }
 
         // ✅ Delete a parent
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int parentId)
         {
-            var parent = await _parentRepository.GetByIdAsync(id);
+            var parent = await _parentRepository.GetByIdAsync(parentId);
             if (parent == null)
                 throw new Exception("Parent not found.");
 
-            return await _parentRepository.DeleteAsync(id);
+            return await _parentRepository.DeleteAsync(parentId);
         }
     }
 

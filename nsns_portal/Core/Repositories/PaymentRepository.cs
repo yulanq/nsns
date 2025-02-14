@@ -83,7 +83,7 @@ namespace Core.Repositories
                 await _context.Payments.AddAsync(payment);
                 return await _context.SaveChangesAsync() > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }

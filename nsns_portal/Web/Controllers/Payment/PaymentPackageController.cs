@@ -98,5 +98,19 @@ namespace Web.Controllers.Payment
                 return RedirectToAction("List");
             }
         }
+
+
+        [HttpGet("GetPackageAmount")]
+        public async Task<IActionResult> GetPackageAmount(int packageId)
+        {
+            if (packageId <= 0)
+                return BadRequest(new { success = false, message = "Invalid package ID" });
+
+            var package = await _paymentPackageService.GetByIdAsync(packageId);
+            if (package == null)
+                return NotFound(new { success = false, message = "Payment package not found" });
+
+            return Ok(new { success = true, amount = package.Amount });
+        }
     }
 }

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Core.Repositories;
 using System.Numerics;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Core.Services
 {
@@ -21,10 +22,16 @@ namespace Core.Services
     {
 
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IUserRepository<User> _userRepository;
+        private readonly IChildRepository _childRepository;
+        private readonly IParentRepository _parentRepository;
 
-        public PaymentService(IPaymentRepository paymentRepository)
+        public PaymentService(IPaymentRepository paymentRepository, IUserRepository<User> userRepository, IChildRepository childRepository, IParentRepository parentRepository)
         {
             _paymentRepository = paymentRepository;
+            _userRepository = userRepository;
+            _childRepository = childRepository;
+            _parentRepository = parentRepository;
         }
 
         // 🔹 Get all payments
@@ -45,10 +52,10 @@ namespace Core.Services
         }
 
 
-        public async Task<Child> GetChildByIdAsync(int childId)
-        {
-            return await _paymentRepository.GetChildByIdAsync(childId);
-        }
+        //public async Task<Child> GetChildByIdAsync(int childId)
+        //{
+        //    return await _paymentRepository.GetChildByIdAsync(childId);
+        //}
 
 
         public async Task<IEnumerable<Parent>> GetParentsByChildAsync(int childId)
@@ -62,15 +69,53 @@ namespace Core.Services
         }
 
         // 🔹 Add a new payment
-        public async Task<bool> AddAsync(Payment payment)
+        public async Task<bool> AddAsync(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate)
         {
-            if (payment.ParentID == null || payment.PaymentPackageID == null)
-                throw new ArgumentException("Parent and Payment Package must be selected.");
+            
+            var createdBy = 1;
+           
 
-            if (payment.Amount <= 0)
-                throw new ArgumentException("Amount must be greater than zero.");
+            var child = await _childRepository.GetChildByIdAsync(childId);
+            if (child == null)
+            {
+                throw new Exception("Child is not found.");
+            }
 
-            return await _paymentRepository.AddAsync(payment);
+            var parent = await _parentRepository.GetByIdAsync(parentId);
+            if (parent == null)
+            {
+                throw new Exception("Parent is not found.");
+            }
+
+            var createdByUser = await _userRepository.GetAsync(createdBy);
+            if (createdByUser == null)
+            {
+                throw new Exception("No createdBy is added.");
+            }
+
+            var payment = new Payment
+            {
+                //ChildID = childId,
+                ParentID = parentId,
+                CreatedBy = createdBy,
+                PaymentPackageID = packageId,
+                Amount = amount,
+                Parent = parent,
+                Child = child,
+                PaymentDate = paymentDate,
+                CreatedByUser = createdByUser
+            };
+
+            // Add the course to the repository
+            try
+            {
+                return await _paymentRepository.AddAsync(payment);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No payment is added.");
+            }
+            
         }
 
         // 🔹 Update an existing payment
@@ -84,13 +129,13 @@ namespace Core.Services
         }
 
         // 🔹 Delete a payment
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(int paymentId)
         {
-            var payment = await GetByIdAsync(id);
+            var payment = await GetByIdAsync(paymentId);
             if (payment == null)
                 throw new Exception("Payment not found.");
 
-            return await _paymentRepository.RemoveAsync(id);
+            return await _paymentRepository.RemoveAsync(paymentId);
         }
     }
 }

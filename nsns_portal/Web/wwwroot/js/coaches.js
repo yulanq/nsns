@@ -1,6 +1,6 @@
 ﻿function fetchCoaches(specialtyId) {
     if (!specialtyId) {
-        document.getElementById('CoachID').innerHTML = '<option value="">-- Select Coach --</option>';
+        document.getElementById('UserID').innerHTML = '<option value="">-- Select Coach --</option>';
         return;
     }
 

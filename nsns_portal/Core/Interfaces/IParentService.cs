@@ -16,7 +16,7 @@ namespace Core.Interfaces
 
 
         // ✅ Get a parent by ID
-        Task<Parent?> GetParentByIdAsync(int id);
+        Task<Parent?> GetParentByIdAsync(int parentId);
 
 
         // ✅ Add a new parent
@@ -30,7 +30,7 @@ namespace Core.Interfaces
 
 
         // ✅ Delete a parent
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(int parentId);
      
 
 

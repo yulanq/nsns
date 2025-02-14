@@ -28,8 +28,9 @@ namespace Web.Controllers.User
         private readonly ISpecialtyService _specialtyService;
         private readonly IActivityEnrollmentService _activityEnrollmentService;
         private readonly IActivityService _activityService;
+        private readonly IPaymentService _paymentService;
 
-        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, IActivityService activityService, ICourseEnrollmentService courseEnrollmentService, IActivityEnrollmentService activityEnrollmentService)
+        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, IActivityService activityService, ICourseEnrollmentService courseEnrollmentService, IActivityEnrollmentService activityEnrollmentService, IPaymentService paymentService)
         {
             _childService = childService;
             _parentService = parentService;
@@ -40,6 +41,7 @@ namespace Web.Controllers.User
             _courseEnrollmentService = courseEnrollmentService;
             _activityService = activityService;
             _activityEnrollmentService = activityEnrollmentService;
+            _paymentService = paymentService;
         }
 
         // ✅ Helper method to get City List
@@ -473,6 +475,146 @@ namespace Web.Controllers.User
         }
 
 
+
+        [HttpGet("ManagePayments/{childId}")]
+        public async Task<IActionResult> ManagePayments(int childId)
+        {
+            // ✅ Pass ChildID to View
+            //ViewBag.ChildID = childId;
+
+
+            var payments = await _paymentService.GetByChildAsync(childId);
+            var child = await _childService.GetChildByIdAsync(childId);
+            if (child == null)
+            {
+                TempData["ErrorMessage"] = "Child not found.";
+                return RedirectToAction("List"); // Redirect to child list page if not found
+            }
+            ManagePaymentsViewModel payment = new ManagePaymentsViewModel
+            {
+                Payments = payments,
+                Child = child
+            };
+
+            var parents = await _paymentService.GetParentsByChildAsync(childId);
+
+            // ✅ Populate Parent dropdown
+            ViewBag.ParentList = parents.Select(p => new SelectListItem
+            {
+                Value = p.ParentID.ToString(),
+                Text = p.Name
+            }).ToList();
+
+            // ✅ Fetch all active payment packages
+            var packages = await _paymentService.GetAllActivePackagesAsync();
+
+            // ✅ Populate ViewBag for dropdown
+            ViewBag.PaymentPackages = packages.Select(p => new SelectListItem
+            {
+                Value = p.PackageID.ToString(),
+                Text = p.Title
+            }).ToList();
+
+            return View("ManagePayments", payment);
+        }
+
+
+        [HttpPost("AddPayment")]
+        
+        public async Task<IActionResult> AddPayment(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate)
+        {
+
+            try
+            {
+                var result = await _paymentService.AddAsync(childId, parentId, packageId, amount, paymentDate);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Payment info has been added successfully.";
+                    //return RedirectToAction("ManagePayments");
+                    return RedirectToAction("ManagePayments", new { childId });
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Payment info was not added.";
+                    return RedirectToAction("ManagePayments", new { childId });
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                return RedirectToAction("ManagePayments", new { childId });
+            }
+        }
+
+
+        [HttpPost("RemovePayment")]
+        public async Task<IActionResult> RemovePayment(int paymentID, int childId)
+        {
+            try
+            {
+                var result = await _paymentService.RemoveAsync(paymentID);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Payment info has been deleted.";
+                    return RedirectToAction("ManagePayments", new { childId });
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Payment info is not deleted.";
+                    return RedirectToAction("ManagePayments", new { childId });
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                return RedirectToAction("ManagePayments", new { childId });
+            }
+            
+            
+        }
+
+        //[HttpGet("EditPayment/{paymentId}")]
+        //public async Task<IActionResult> EditPayment(int paymentId)
+        //{
+
+
+        //    // ✅ Fetch Payment Details
+        //    var payment = await _paymentService.GetByIdAsync(paymentId);
+        //    if (payment == null)
+        //    {
+        //        TempData["ErrorMessage"] = "Payment not found.";
+        //        return RedirectToAction("List");
+        //    }
+
+        //    var child = await _childService.GetChildByIdAsync(payment.ChildID);
+        //    // ✅ Pass child details to View
+        //    ViewBag.ChildID = child.ChildID;
+        //    ViewBag.ChildName = child.Name;
+
+        //    // ✅ Fetch Parents linked to the Child from ParentChild table
+        //    var parents = await _paymentService.GetParentsByChildAsync(payment.ChildID);
+
+        //    // ✅ Populate Parent dropdown
+        //    ViewBag.ParentList = parents.Select(p => new SelectListItem
+        //    {
+        //        Value = p.ParentID.ToString(),
+        //        Text = p.Name,
+        //        Selected = (payment.ParentID == p.ParentID)
+        //    }).ToList();
+
+        //    // ✅ Fetch all active payment packages
+        //    var packages = await _paymentService.GetAllActivePackagesAsync();
+
+        //    // ✅ Populate ViewBag for dropdown
+        //    ViewBag.PaymentPackages = packages.Select(p => new SelectListItem
+        //    {
+        //        Value = p.PackageID.ToString(),
+        //        Text = p.Title,
+        //        Selected = (payment.PaymentPackageID.HasValue && payment.PaymentPackageID.Value == p.PackageID)
+        //    }).ToList();
+
+        //    return View("Edit", payment);
+        //}
 
 
     }
