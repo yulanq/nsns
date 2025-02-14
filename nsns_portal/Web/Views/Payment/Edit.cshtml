@@ -9,7 +9,7 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form method="post" action="/Payment/Save">
+<form method="post" action="/Payment/Edit">
     <input type="hidden" name="PaymentID" value="@Model.PaymentID" />
 
     <table style="border-collapse: collapse; width: 50%; text-align: left;">
@@ -30,6 +30,10 @@
             <td style="padding: 8px;">
                 <select id="ParentID" name="ParentID" required>
                     <option value="">-- Select Parent --</option>
+                    @foreach (var parent in ViewBag.ParentList)
+                    {
+                        <option value="@parent.Value">@parent.Text</option>
+                    }
                 </select>
             </td>
         </tr>

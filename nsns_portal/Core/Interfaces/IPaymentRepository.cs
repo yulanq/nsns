@@ -11,6 +11,8 @@ namespace Core.Interfaces
     public interface IPaymentRepository
     {
         Task<IEnumerable<Payment>> GetAllAsync();
+
+        Task<IEnumerable<Payment>> GetByChildAsync(int childId);
         Task<Payment> GetByIdAsync(int id);
         Task<bool> AddAsync(Payment payment);
 

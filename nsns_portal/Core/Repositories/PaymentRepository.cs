@@ -31,6 +31,17 @@ namespace Core.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Payment>> GetByChildAsync(int childId)
+        {
+            return await _context.Payments
+                .Include(p => p.Parent)
+                .Include(p => p.PaymentPackage)
+                .Include(p => p.Parent.ParentChild) // ✅ Include ParentChild relationship
+                .ThenInclude(pc => pc.Child) // ✅ Include Child entity
+                .Where(p => _context.ParentChild.Any(pc => pc.ChildID == childId && pc.ParentID == p.ParentID)) // ✅ Filters by childId using ParentChild
+                .ToListAsync();
+        }
+
         // 🔹 Get payment by ID
         public async Task<Payment> GetByIdAsync(int id)
         {

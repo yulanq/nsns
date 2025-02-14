@@ -46,7 +46,7 @@ namespace Core.Models
         public virtual User UpdatedByUser { get; set; }
 
         // ✅ New: List of related children
-        public virtual ICollection<ParentChild> ParentChildren { get; set; } = new List<ParentChild>();
+        public virtual ICollection<ParentChild> ParentChild { get; set; } = new List<ParentChild>();
     }
 
 

@@ -23,19 +23,23 @@ namespace Web.Controllers.Payment
         {
             _paymentService = paymentService;
         }
-        [HttpGet("List")]
-        public async Task<IActionResult> List()
+
+        [HttpGet("List/{childId}")]
+        public async Task<IActionResult> List(int childId)
         {
-            var payments = await _paymentService.GetAllAsync();
+            // ✅ Pass ChildID to View
+            ViewBag.ChildID = childId;
+
+            var payments = await _paymentService.GetByChildAsync(childId);
             return View("List", payments);
         }
 
 
 
-        [HttpGet("AddEdit/{paymentId?}")]
-        public async Task<IActionResult> AddEdit(int childId, int? paymentId)
+        [HttpGet("Add/{childId}")]
+        public async Task<IActionResult> AddEdit(int childId)
         {
-            var payment = paymentId.HasValue ? await _paymentService.GetByIdAsync(paymentId.Value) : new Core.Models.Payment();
+           // var payment = new Core.Models.Payment();
 
             
             // ✅ Fetch Child Details
@@ -57,8 +61,51 @@ namespace Web.Controllers.Payment
             ViewBag.ParentList = parents.Select(p => new SelectListItem
             {
                 Value = p.ParentID.ToString(),
+                Text = p.Name
+            }).ToList();
+
+            // ✅ Fetch all active payment packages
+            var packages = await _paymentService.GetAllActivePackagesAsync();
+
+            // ✅ Populate ViewBag for dropdown
+            ViewBag.PaymentPackages = packages.Select(p => new SelectListItem
+            {
+                Value = p.PackageID.ToString(),
+                Text = p.Title
+            }).ToList();
+
+            return View("Add", new Core.Models.Payment());
+        }
+
+
+
+        [HttpGet("Edit/{paymentId}")]
+        public async Task<IActionResult> Edit(int paymentId)
+        {
+            
+
+            // ✅ Fetch Payment Details
+            var payment = await _paymentService.GetByIdAsync(paymentId);
+            if (payment == null)
+            {
+                TempData["ErrorMessage"] = "Payment not found.";
+                return RedirectToAction("List");
+            }
+
+            var child = await _paymentService.GetChildByIdAsync(payment.ChildID);
+            // ✅ Pass child details to View
+            ViewBag.ChildID = child.ChildID;
+            ViewBag.ChildName = child.Name;
+
+            // ✅ Fetch Parents linked to the Child from ParentChild table
+            var parents = await _paymentService.GetParentsByChildAsync(payment.ChildID);
+
+            // ✅ Populate Parent dropdown
+            ViewBag.ParentList = parents.Select(p => new SelectListItem
+            {
+                Value = p.ParentID.ToString(),
                 Text = p.Name,
-                Selected = (payment.ParentID.HasValue && payment.ParentID.Value == p.ParentID)
+                Selected = (payment.ParentID == p.ParentID)
             }).ToList();
 
             // ✅ Fetch all active payment packages
@@ -72,7 +119,7 @@ namespace Web.Controllers.Payment
                 Selected = (payment.PaymentPackageID.HasValue && payment.PaymentPackageID.Value == p.PackageID)
             }).ToList();
 
-            return View("AddEdit", payment);
+            return View("Edit", payment);
         }
 
 
@@ -89,15 +136,25 @@ namespace Web.Controllers.Payment
             return Json(parentList);
         }
 
-        [HttpPost("Save")]
-        public async Task<IActionResult> Save(Core.Models.Payment payment)
+        [HttpPost("Add")]
+        public async Task<IActionResult> Add(Core.Models.Payment payment)
         {
-            if (!ModelState.IsValid) return View("AddEdit", payment);
+            if (!ModelState.IsValid) return View("Add", payment);
 
-            if (payment.PaymentID == 0)
-                await _paymentService.AddAsync(payment);
-            else
-                await _paymentService.UpdateAsync(payment);
+           
+            await _paymentService.AddAsync(payment);
+         
+
+            return RedirectToAction("List");
+        }
+
+        [HttpPost("Edit")]
+        public async Task<IActionResult> Edit(Core.Models.Payment payment)
+        {
+            if (!ModelState.IsValid) return View("Edit", payment);
+
+           
+             await _paymentService.UpdateAsync(payment);
 
             return RedirectToAction("List");
         }

@@ -24,6 +24,7 @@
             <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Parents</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Enrollments</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Payments</th>
             
         </tr>
     </thead>
@@ -51,6 +52,9 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <a href="/Child/ManageEnrollments/@child.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
                     </td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">
+                        <a href="/Payment/List/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
+                    </td>
                    
                 </tr>
                 index++;
@@ -60,7 +64,7 @@
         @if (TempData["SuccessMessage"] != null)
         {
             <tr>
-                <td colspan="8">
+                <td colspan="9">
                     <div class="alert alert-success">
                         @TempData["SuccessMessage"]
                     </div>
@@ -71,7 +75,7 @@
         @if (TempData["ErrorMessage"] != null)
         {
             <tr>
-                <td colspan="8">
+                <td colspan="9">
                     <div class="alert alert-danger">
                         @TempData["ErrorMessage"]
                     </div>

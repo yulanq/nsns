@@ -33,6 +33,11 @@ namespace Core.Services
             return await _paymentRepository.GetAllAsync();
         }
 
+        public async Task<IEnumerable<Payment>> GetByChildAsync(int childId)
+        {
+            return await _paymentRepository.GetByChildAsync(childId);
+        }
+
         // 🔹 Get payment by ID
         public async Task<Payment> GetByIdAsync(int id)
         {
