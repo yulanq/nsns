@@ -69,7 +69,7 @@ namespace Core.Services
         }
 
         // 🔹 Add a new payment
-        public async Task<bool> AddAsync(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate)
+        public async Task<bool> AddAsync(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate, string receiptPath)
         {
             
             var createdBy = 1;
@@ -103,7 +103,8 @@ namespace Core.Services
                 Parent = parent,
                 Child = child,
                 PaymentDate = paymentDate,
-                CreatedByUser = createdByUser
+                CreatedByUser = createdByUser,
+                Receipt = receiptPath
             };
 
             // Add the course to the repository

@@ -37,7 +37,7 @@ namespace Core.Models
         public virtual Parent? Parent { get; set; } // Navigation property for Parent
 
         [ForeignKey(nameof(UserID))]
-        public virtual Child? Child { get; set; } // Navigation property for Parent
+        public virtual Child? Child { get; set; } // Navigation property for Child
 
         [ForeignKey(nameof(PaymentPackageID))]
         public virtual PaymentPackage? PaymentPackage { get; set; } // Navigation property for PaymentPackage

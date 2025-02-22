@@ -21,6 +21,7 @@
   <ItemGroup>
     <Folder Include="Controllers\Report\" />
     <Folder Include="Views\Parent\" />
+    <Folder Include="wwwroot\receipts\" />
   </ItemGroup>
 
   <ItemGroup>

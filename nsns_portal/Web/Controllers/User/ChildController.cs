@@ -521,12 +521,31 @@ namespace Web.Controllers.User
 
         [HttpPost("AddPayment")]
         
-        public async Task<IActionResult> AddPayment(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate)
+        public async Task<IActionResult> AddPayment(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate, IFormFile receiptFile)
         {
 
             try
             {
-                var result = await _paymentService.AddAsync(childId, parentId, packageId, amount, paymentDate);
+                string receiptPath = null;
+
+                // ✅ Save the receipt file
+                if (receiptFile != null && receiptFile.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/receipts");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    string uniqueFileName = $"{Guid.NewGuid()}_{receiptFile.FileName}";
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await receiptFile.CopyToAsync(fileStream);
+                    }
+
+                    receiptPath = $"/receipts/{uniqueFileName}";
+                }
+
+                var result = await _paymentService.AddAsync(childId, parentId, packageId, amount, paymentDate, receiptPath);
                 if (result)
                 {
                     TempData["SuccessMessage"] = "Payment info has been added successfully.";

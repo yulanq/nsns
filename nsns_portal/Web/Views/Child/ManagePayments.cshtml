@@ -25,6 +25,8 @@
             <th style="padding: 8px; border: 1px solid #ddd;">Payment Package</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Amount</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Payment Date</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Receipt</th>
+            
             <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
         </tr>
     </thead>
@@ -41,6 +43,21 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">@payment.PaymentPackage.Title</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">$@payment.Amount</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@payment.PaymentDate?.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(payment.Receipt))
+
+                        {
+                            <a href="@payment.Receipt" target="_blank">
+                                <img src="@payment.Receipt" alt="Receipt" width="100">
+                            </a>
+                        }
+
+                        else
+
+                        {
+                            <span>No Receipt</span>
+                        }
+                    </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
                        @*  <a href="/Payment/Edit/@payment.PaymentID" style="margin-right: 10px; color: #007bff; text-decoration: none;">Edit</a>
                         <a href="/Payment/ConfirmDelete/@payment.PaymentID" style="color: red; text-decoration: none;">Delete</a>
@@ -63,7 +80,7 @@
 
         {
             <tr>
-                <td colspan="5" style="text-align: center; padding: 10px;">No payments found.</td>
+                <td colspan="6" style="text-align: center; padding: 10px;">No payments found.</td>
             </tr>
         }
 
@@ -71,7 +88,7 @@
 
         {
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     <div class="alert alert-success">
                         @TempData["SuccessMessage"]
                     </div>
@@ -83,7 +100,7 @@
 
         {
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     <div class="alert alert-danger">
                         @TempData["ErrorMessage"]
                     </div>
@@ -98,7 +115,7 @@
 <div style="margin: 30px 0; padding: 20px; background-color: #f2f2f2">
     <b>Add Payment for @Model.Child.Name</b>
     <div style="margin-bottom: 10px;"></div>
-    <form method="post" action="/Child/AddPayment">
+    <form method="post" action="/Child/AddPayment" enctype="multipart/form-data">
         <input type="hidden" name="childId" value="@Model.Child.ChildID" />
 
         <label for="parentId">Select Parent:</label>
@@ -109,6 +126,8 @@
                 <option value="@parent.Value">@parent.Text</option>
             }
         </select>
+
+        <div style="padding-top: 5px"></div>
 
         <label for="packageId">Select Payment Package:</label>
         <select id="packageId" name="packageId" required onchange="fetchPackageAmount(this.value)">
@@ -122,8 +141,17 @@
         <label for="amount">Amount:</label>
         <input type="number" name="amount" min="1" required />
 
+        <div style="padding-top: 5px"></div>
+
+        <label for="receiptFile">Upload Receipt:</label>
+        <input type="file" name="receiptFile" accept="image/*" required />
+
+        <div style="padding-top: 5px"></div>
+
         <label for="paymentDate">Payment Date:</label>
         <input type="date" name="paymentDate" required />
+
+        <div style="padding-top: 5px"></div>
 
         <button type="submit" style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer;">Add Payment</button>
     </form>
