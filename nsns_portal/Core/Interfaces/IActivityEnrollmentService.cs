@@ -23,9 +23,9 @@ namespace Core.Interfaces
 
 
 
-        Task<bool> AddEnrollmentAsync(int childId, int activityId, string status);
+        Task<bool> AddRegisteredEnrollmentAsync(int childId, int activityId, string status);
 
-        Task<bool> RemoveEnrollmentAsync(int enrollmentId);
+        Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId);
 
         Task<IEnumerable<ActivityEnrollment>> GetRegisteredEnrollmentsByChildAsync(int childId);
 

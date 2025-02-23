@@ -35,7 +35,7 @@ namespace Core.Services
             return enrollments.Any(e => e.ActivityID == activityId);
         }
 
-        public async Task<bool> AddEnrollmentAsync(int userId, int activityId, string status)
+        public async Task<bool> AddRegisteredEnrollmentAsync(int userId, int activityId, string status)
         {
             if (userId <= 0 || activityId <= 0)
                 throw new ArgumentException("Invalid child or activity.");
@@ -58,7 +58,7 @@ namespace Core.Services
             return await _enrollmentRepository.AddAsync(enrollment);
         }
 
-        public async Task<bool> RemoveEnrollmentAsync(int enrollmentId)
+        public async Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId)
         {
             //Enrollment removal is only allowed for courses that have not started.
             //var enrollment = await _enrollmentRepository.GetAsync(enrollmentId);
@@ -84,24 +84,24 @@ namespace Core.Services
             return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Registered");
         }
 
-        public async Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId)
-        {
-            //Enrollment removal is only allowed for courses that have not started.
-            //var enrollment = await _enrollmentRepository.GetAsync(enrollmentId);
-            //var childId = enrollment.ChildID;
-            //var courseId = enrollment.CourseID;
-            //var course_enrollment = await _enrollmentRepository.GetEnrollmentsByCourseAsync(courseId);
-            //if (course_enrollment.Any())
-            //{
-            //    foreach (var e in course_enrollment)
-            //    {
-            //        if (e.ChildID == childId && e.Status != "Registered")
-            //            throw new Exception("Enrollment removal is only allowed for courses that have not started.");
-            //    }
+        //public async Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId)
+        //{
+        //    //Enrollment removal is only allowed for courses that have not started.
+        //    //var enrollment = await _enrollmentRepository.GetAsync(enrollmentId);
+        //    //var childId = enrollment.ChildID;
+        //    //var courseId = enrollment.CourseID;
+        //    //var course_enrollment = await _enrollmentRepository.GetEnrollmentsByCourseAsync(courseId);
+        //    //if (course_enrollment.Any())
+        //    //{
+        //    //    foreach (var e in course_enrollment)
+        //    //    {
+        //    //        if (e.ChildID == childId && e.Status != "Registered")
+        //    //            throw new Exception("Enrollment removal is only allowed for courses that have not started.");
+        //    //    }
 
-            //}
-            return await _enrollmentRepository.RemoveAsync(enrollmentId);
-        }
+        //    //}
+        //    return await _enrollmentRepository.RemoveAsync(enrollmentId);
+        //}
 
     }
 }

@@ -37,7 +37,7 @@ namespace Core.Services
         }
 
 
-        public async Task<bool> AddEnrollmentAsync(int userId, int courseId, decimal scheduledHours, int createdBy, string status)
+        public async Task<bool> AddRegisteredEnrollmentAsync(int userId, int courseId, decimal scheduledHours, int createdBy, string status)
         {
             if (userId <= 0 || courseId <= 0 || scheduledHours < 0)
                 throw new ArgumentException("Invalid child, course, or hours.");

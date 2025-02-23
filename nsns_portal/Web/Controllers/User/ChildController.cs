@@ -376,12 +376,12 @@ namespace Web.Controllers.User
             return Json(courses.Select(c => new { c.CourseID, c.Title }));
         }
 
-        [HttpPost("EnrollCourse")]
-        public async Task<IActionResult> EnrollCourse(int userId, int courseId, decimal scheduledHours)
+        [HttpPost("RegisterCourse")]
+        public async Task<IActionResult> RegisterCourse(int userId, int courseId, decimal scheduledHours)
         {
             try
             {
-                var success = await _courseEnrollmentService.AddEnrollmentAsync(userId, courseId, scheduledHours, 1, "Registered");
+                var success = await _courseEnrollmentService.AddRegisteredEnrollmentAsync(userId, courseId, scheduledHours, 1, "Registered");
                 if (!success)
                 {
                     TempData["ErrorMessage1"] = "Enrollment failed.";
@@ -400,8 +400,8 @@ namespace Web.Controllers.User
         }
 
 
-        [HttpPost("RemoveCourseEnrollment")]
-        public async Task<IActionResult> RemoveCourseEnrollment(int enrollmentId, int userId)
+        [HttpPost("UnregisterCourse")]
+        public async Task<IActionResult> UnregisterCourse(int enrollmentId, int userId)
         {
             try
             {
@@ -426,12 +426,12 @@ namespace Web.Controllers.User
 
 
 
-        [HttpPost("EnrollActivity")]
-        public async Task<IActionResult> EnrollActivity(int userId, int activityId)
+        [HttpPost("RegisterActivity")]
+        public async Task<IActionResult> RegisterActivity(int userId, int activityId)
         {
             try
             {
-                var success = await _activityEnrollmentService.AddEnrollmentAsync(userId, activityId, "Registered");
+                var success = await _activityEnrollmentService.AddRegisteredEnrollmentAsync(userId, activityId, "Registered");
 
                 if (!success)
                 {
@@ -450,12 +450,12 @@ namespace Web.Controllers.User
             return RedirectToAction("ManageEnrollments", new { userId });
         }
 
-        [HttpPost("RemoveActivityEnrollment")]
-        public async Task<IActionResult> RemoveActivityEnrollment(int enrollmentId, int userId)
+        [HttpPost("UnregisterActivity")]
+        public async Task<IActionResult> UnregisterActivity(int enrollmentId, int userId)
         {
             try
             {
-                var success = await _activityEnrollmentService.RemoveEnrollmentAsync(enrollmentId);
+                var success = await _activityEnrollmentService.RemoveRegisteredEnrollmentAsync(enrollmentId);
 
                 if (!success)
                 {
