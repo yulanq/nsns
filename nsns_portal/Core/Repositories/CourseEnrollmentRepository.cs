@@ -54,6 +54,7 @@ namespace Core.Repositories
                 .Include(e => e.Course)
                 .Include(e => e.Course.Coach)
                 .Where(e => e.UserID == userId && e.Status == status)
+                .OrderBy(e => e.ScheduledAt)
                 .ToListAsync();
         }
 
@@ -65,7 +66,23 @@ namespace Core.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCourseChildAsync(int courseId, int userId, string status)
+        {
+            return await _context.CourseEnrollments
+                .Include(e => e.Child)
+                .Include(e => e.Course)
+                .Where(e => e.CourseID == courseId && e.UserID == userId && e.Status == status)
+                .ToListAsync();
+        }
 
-       
+        public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCoachAsync(int coachId, string status)
+        {
+            return await _context.CourseEnrollments
+                .Include(e => e.Child)
+                .Include(e => e.Course.Coach)
+                .Where(e => e.Course.Coach.CoachID == coachId && e.Status == status)
+                .ToListAsync();
+        }
+
     }
 }

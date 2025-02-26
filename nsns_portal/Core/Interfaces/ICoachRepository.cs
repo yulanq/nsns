@@ -35,14 +35,14 @@ namespace Core.Interfaces
         Task<Coach> GetAsync(int userId);
 
         //Task<Coach> GetByCoachIdAsync(int coachId);
-
+        Task<Coach?> GetCoachByIdAsync(int coachId);
 
         // Get all Users from the database asynchronously
         Task<IEnumerable<Coach>> GetAllAsync();
 
         Task<IEnumerable<Coach>> GetCoachesBySpecialtyAsync(int specialtyId);
 
-
+       // Task<IEnumerable<Course>> GetActiveCoursesByCoachAsync(int coachId);
 
     }
 }

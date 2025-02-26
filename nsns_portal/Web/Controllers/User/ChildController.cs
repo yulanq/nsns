@@ -332,8 +332,8 @@ namespace Web.Controllers.User
             return RedirectToAction("ManageParents", new { childId });
         }
 
-        [HttpGet("ManageEnrollments/{userId}")]
-        public async Task<IActionResult> ManageEnrollments(int userId)
+        [HttpGet("ManageRegistrations/{userId}")]
+        public async Task<IActionResult> ManageRegistrations(int userId)
         {
             var child = await _childService.GetAsync(userId);
             if (child == null)
@@ -360,7 +360,7 @@ namespace Web.Controllers.User
                 Text = a.Title
             }).ToList();
 
-            return View("ManageEnrollments", new ManageEnrollmentsViewModel
+            return View("ManageRegistrations", new ManageRegisterationsViewModel
             {
                 Child = child,
                 CourseEnrollments = courseEnrollments,
@@ -396,7 +396,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage1"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { userId });
+            return RedirectToAction("ManageRegistrations", new { userId });
         }
 
 
@@ -421,7 +421,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage1"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { userId });
+            return RedirectToAction("ManageRegistrations", new { userId });
         }
 
 
@@ -447,7 +447,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage2"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { userId });
+            return RedirectToAction("ManageRegistrations", new { userId });
         }
 
         [HttpPost("UnregisterActivity")]
@@ -471,7 +471,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage2"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { userId });
+            return RedirectToAction("ManageRegistrations", new { userId });
         }
 
 

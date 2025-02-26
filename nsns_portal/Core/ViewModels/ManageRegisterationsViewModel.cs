@@ -9,7 +9,7 @@ using Core.Models;
 
 namespace Core.ViewModels
 {
-    public class ManageEnrollmentsViewModel
+    public class ManageRegisterationsViewModel
     {
         public Child Child { get; set; }
         public IEnumerable<CourseEnrollment> CourseEnrollments { get; set; }

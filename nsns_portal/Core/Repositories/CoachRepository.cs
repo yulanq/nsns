@@ -92,8 +92,14 @@ namespace Core.Repositories
             
         }
 
-       
-        
+        public async Task<Coach?> GetCoachByIdAsync(int coachId)
+        {
+            return await _context.Coaches
+                .Include(c => c.City)
+                .Include(c => c.Specialty)
+                .FirstOrDefaultAsync(c => c.CoachID == coachId);
+        }
+
 
         // Get all Users from the database asynchronously
         public async Task<IEnumerable<Coach>> GetAllAsync()

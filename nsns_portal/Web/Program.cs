@@ -16,6 +16,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// ? Add session services
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout (adjust as needed)
+    options.Cookie.HttpOnly = true; // Security: Prevents client-side script from accessing cookies
+    options.Cookie.IsEssential = true; // Required for session to work
+});
+
+// ? Add distributed memory cache (required for session to work)
+builder.Services.AddDistributedMemoryCache();
+
+
 // Add JWT configuration to the dependency injection container
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
@@ -102,6 +115,10 @@ builder.Services.AddAuthentication(options =>
 });
 var app = builder.Build();
 
+// ? Enable session middleware
+app.UseSession();
+
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -129,7 +146,7 @@ app.Use(async (context, next) =>
 
 app.UseRouting();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 //app.MapControllerRoute(
 //    name: "default",

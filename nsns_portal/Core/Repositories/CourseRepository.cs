@@ -141,5 +141,14 @@ namespace Core.Repositories
                 .Where(c => c.Coach.SpecialtyID == specialtyId && c.IsActive == true)  // ✅ Filter by Specialty
                 .ToListAsync();
         }
+
+
+        public async Task<Course> GetActiveCourseByCoachAsync(int coachId)
+        {
+            return await _context.Courses
+               .Include(c => c.Coach)
+               .Where(c => c.Coach.CoachID == coachId && c.IsActive == true)  // ✅ Filter by Specialty
+               .FirstOrDefaultAsync();
+        }
     }
 }

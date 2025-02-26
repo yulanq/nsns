@@ -11,14 +11,14 @@ namespace Core.Models
 {
     public class Coach: User
     {
-        
-      
+
+
 
         //[Required]
         //public int UserID { get; set; }
         //[ForeignKey("UserID")]
         //public virtual User User { get; set; } // Navigation property to User table (UserID)
-
+        public int CoachID { get; set; } // Primary key
 
         [MaxLength(255)]
         public required string Name { get; set; }
