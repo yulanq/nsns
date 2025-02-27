@@ -24,14 +24,16 @@ namespace Web.Controllers.User
         private readonly ISpecialtyService _specialtyService;
         private readonly ICourseEnrollmentService _courseEnrollmentService;
         private readonly ICourseService _courseService;
+        private readonly IChildService _childService;
 
-        public CoachController(ICoachService coachService, ICityService cityService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService)
+        public CoachController(ICoachService coachService, ICityService cityService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService)
         {
             _coachService = coachService;
             _cityService = cityService;
             _specialtyService = specialtyService;
             _courseEnrollmentService = courseEnrollmentService;
             _courseService = courseService;
+            _childService = childService;
         }
 
 
@@ -136,8 +138,6 @@ namespace Web.Controllers.User
        
 
 
-
-
         // GET: Coach/Delete/{userId}
         [HttpGet("ConfirmDelete/{userId}")]
         public async Task<IActionResult> ConfirmDelete(int userId)
@@ -233,7 +233,7 @@ namespace Web.Controllers.User
 
             // Pass the coach details to the Edit.cshtml view
             return View(coach);
-            //return LoadPageForEdit(userId);
+            
 
         }
 
@@ -325,38 +325,50 @@ namespace Web.Controllers.User
             }
         }
 
-        [HttpGet("ManageSchedules")]
-        public async Task<IActionResult> ManageSchedules()
+
+        [HttpGet("ManageCourse")]
+        public async Task<IActionResult> ManageCourse()
+        {
+            int coachId = 10; // Replace with actual coach ID retrieval logic
+
+            // Get all children registered in the coach's course
+            var children = await _courseEnrollmentService.GetRegisterationByCoachAsync(coachId);
+
+            // Get enrollment details
+            var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
+
+            var model = new ManageCourseViewModel
+            {
+               Course = course,
+               RegisteredChildren = (List<RegisteredChild>)children
+            };
+
+            return View(model);
+        }
+
+
+
+        [HttpGet("ManageSchedules/{userId}")]
+        public async Task<IActionResult> ManageSchedules(int userId)
         {
             int coachId = 10;  //GetLoggedInCoachId();
             // ✅ Get children who are enrolled in the coach's courses
-            var children = await _courseEnrollmentService.GetRegisteredChildrenByCoachAsync(coachId);
-            
+            //var children = await _courseEnrollmentService.GetRegisteredChildrenByCoachAsync(coachId);
+            var child = await _childService.GetAsync(userId);
            
             // ✅ Get courses assigned to the coach
             var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
 
-            // ✅ Check if SelectedChildId exists in session
-            int? selectedChildId = HttpContext.Session.GetInt32("SelectedChildId");
 
-            // ✅ If session is empty, don't select any child at first
-            if (!selectedChildId.HasValue && children.Any())
-            {
-                selectedChildId = null; // No child is preselected
-            }
-
-            // ✅ Get schedules only if a child is selected
-            List<CourseEnrollment> schedules = new List<CourseEnrollment>();
-            if (selectedChildId.HasValue)
-            {
-                schedules = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, selectedChildId.Value);
-            }
+            // ✅ Get schedules for the child and course
+         
+            List<CourseEnrollment> schedules = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, child.ChildID);
+            
 
 
             var model = new ManageSchedulesViewModel
             {
-                SelectedChildId = selectedChildId,
-                Children = children.Select(c => new SelectListItem { Value = c.ChildID.ToString(), Text = c.Name }).ToList(),
+                Child =child,
                 Course = course,
                 Schedules = schedules
             };
@@ -369,14 +381,13 @@ namespace Web.Controllers.User
         public async Task<IActionResult> ScheduleCourse(int childId, int courseId, DateTime scheduledAt, decimal scheduledHours)
         {
             int coachId = 10; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
-            if (childId == 0)
-            {
-                TempData["ValidationMessage"] = "Please select a child before scheduling a course.";
-                return RedirectToAction("ManageSchedules");
-            }
+           
 
-            //Store the SelectedChildId into session
-            HttpContext.Session.SetInt32("SelectedChildId", childId);
+            Child? child = await _childService.GetChildByIdAsync(childId);
+            if (child == null)
+            {
+                throw new ArgumentException("Child not found");
+            }
 
             bool result = await _courseEnrollmentService.ScheduleCourseAsync(childId, courseId, scheduledAt, scheduledHours, coachId);
 
@@ -389,26 +400,13 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = "Failed to schedule the course.";
             }
 
-            return RedirectToAction("ManageSchedules");
+            return RedirectToAction("ManageSchedules", new { child.UserID });
         }
 
-        [HttpGet("GetSchedules")]
-        public async Task<IActionResult> GetSchedules(int courseId, int childId)
-        {
-            var schedules = await _courseEnrollmentService.GetSchedulesByCourseChildAsync(courseId, childId);
-            var response = schedules.Select(s => new
-            {
-                enrollmentID = s.EnrollmentID,
-                courseTitle = s.Course.Title,
-                scheduledAt = s.ScheduledAt?.ToString("yyyy-MM-dd HH:mm"),
-                scheduledHours = s.ScheduledHours
-            }).ToList();
-
-            return Json(response);
-        }
+        
 
         [HttpPost("DeleteSchedule")]
-        public async Task<IActionResult> DeleteSchedule(int enrollmentId)
+        public async Task<IActionResult> DeleteSchedule(int enrollmentId, int userId)
         {
             bool result = await _courseEnrollmentService.RemoveScheduleAsync(enrollmentId);
 
@@ -421,7 +419,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = "Failed to delete the schedule.";
             }
 
-            return RedirectToAction("ManageSchedules");
+            return RedirectToAction("ManageSchedules", new { userId });
         }
 
 

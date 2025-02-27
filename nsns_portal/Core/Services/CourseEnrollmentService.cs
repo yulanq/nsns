@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Core.Models;
+using Core.ViewModels;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
@@ -111,6 +112,22 @@ namespace Core.Services
             
             return course_enrollments.Select(e => e.Child).ToList();
            
+        }
+
+        public async Task<IEnumerable<Core.ViewModels.RegisteredChild>> GetRegisterationByCoachAsync(int coachId)
+        {
+            var course_enrollments = await _enrollmentRepository.GetEnrollmentsByCoachAsync(coachId, "Registered");
+
+            return course_enrollments.Select(e => new RegisteredChild
+            {
+                UserID = e.Child.UserID,
+                Name = e.Child.Name,
+                Gender = e.Child.Gender,
+                City = e.Child.City,
+                BirthDate = e.Child.BirthDate,
+                RegisteredDate = e.CreatedDate // Ensure CreatedDate maps to RegisteredDate
+            }).ToList();
+
         }
 
         public async Task<bool> ScheduleCourseAsync(int childId, int courseId, DateTime scheduledAt, decimal scheduledHours, int coachId)

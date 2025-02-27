@@ -10,9 +10,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Core.ViewModels
 {
-    public class ManageSchedulesViewModel
+    public class ManageSchedulesViewModel_old
     {
-        public Child Child { get; set; }
+        public int? SelectedChildId { get; set; }
+        public List<SelectListItem> Children { get; set; }
         public Course Course { get; set; }
         public List<CourseEnrollment> Schedules { get; set; }
     }

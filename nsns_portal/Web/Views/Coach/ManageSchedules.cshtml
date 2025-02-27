@@ -4,7 +4,7 @@
 
  @model Core.ViewModels.ManageSchedulesViewModel
 
-<h2>Schedule a Course for a Child</h2>
+<h2>Schedule Course</h2>
 
 <!-- Course Scheduling Form -->
 <div style="margin: 30px 0; padding: 20px; background-color: #f2f2f2">
@@ -13,27 +13,19 @@
     <strong>Course:</strong> @Model.Course.Title  
     <div style="padding-top: 10px"></div>
    
-        <strong>Child:</strong> @Model.SelectedChildId
-       @*  <select id="childId" name="childId" required onchange="loadSchedules(this.value, @Model.Course.CourseID)">
+        <strong>Child:</strong> @Model.Child.Name
+     
+      @*   <select id="childId" name="childId" required onchange="saveSelectedChild(this.value, @Model.Course.CourseID)">
             <option value="">-- Select Child --</option>
             @foreach (var child in Model.Children)
             {
-                <option value="@child.Value" selected="@(child.Value == Model.SelectedChildId.ToString() ? "selected" : "")">@child.Text</option>
-            }
-        </select> *@
-        <select id="childId" name="childId" required onchange="saveSelectedChild(this.value, @Model.Course.CourseID)">
-            <option value="">-- Select Child --</option>
-            @foreach (var child in Model.Children)
-            {
-                @* <option value="@child.Value" selected="@(child.Value == Model.SelectedChildId.ToString() ? "selected" : "")">@child.Text</option> *@
-                @* <option value="@child.Value" selected ="@(child.Value == Model.SelectedChildId.ToString() ? "selected" : null)">@child.Text - @Model.SelectedChildId.ToString() - @child.Value - @(child.Value == Model.SelectedChildId.ToString() ? "selected" : null)</option> *@
                 <option value="@child.Value" selected="@(child.Value == Model.SelectedChildId.ToString() ? "selected" : null)">@child.Text</option>
             }
-        </select>
+        </select> *@
     <div style="padding-top: 10px"></div>
 
    
-       @*  <input type="hidden" id="selectedChildId" name="childId" /> *@
+        <input type="hidden" id="childId" name="childId" value="@Model.Child.ChildID" />
         <input type="hidden" id="courseId" name="courseId" value="@Model.Course.CourseID" />
 
         <strong>Scheduled Date:</strong>
@@ -45,12 +37,7 @@
         <button type="submit" style="background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; cursor: pointer;">Schedule</button>
     </form>
 
-    @if (TempData["ValidationMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ValidationMessage"]
-        </div>
-    }
+
   
     
 </div>
@@ -84,6 +71,7 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Coach/DeleteSchedule">
                             <input type="hidden" name="enrollmentId" value="@schedule.EnrollmentID" />
+                            <input type="hidden" name="userId" value="@Model.Child.UserID" />
                             <button type="submit" style="background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; cursor: pointer;">
                                 Remove
                             </button>

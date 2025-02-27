@@ -1,0 +1,48 @@
+﻿
+ @model Core.ViewModels.ManageCourseViewModel
+
+<h2>Manage Course</h2>
+
+<strong>Course Name:</strong> @Model.Course.Title
+
+
+<table style="border-collapse: collapse; width: 100%; text-align: left;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="padding: 8px; border: 1px solid #ddd;">Child Name</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Gender</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">City</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Birthday</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Registration Date</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Schedules</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Enrollments</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.RegisteredChildren.Any())
+        {
+            foreach (var child in Model.RegisteredChildren)
+            {
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@child.Name</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@child.Gender</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@child.City.Name</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@(child.BirthDate?.ToString("yyyy-MM-dd") ?? "N/A")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@child.RegisteredDate.ToString("yyyy-MM-dd")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">
+                        <a href="/Coach/ManageSchedules/@child.UserID">Manage</a>
+                    </td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">
+                        <a href="/Coach/ManageEnrollment/@child.UserID">Manage</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 10px;">No registered children.</td>
+            </tr>
+        }
+    </tbody>
+</table>

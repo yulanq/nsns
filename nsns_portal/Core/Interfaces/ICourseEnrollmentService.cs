@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Core.ViewModels;
 using Core.Repositories;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -18,7 +19,8 @@ namespace Core.Interfaces
 
         Task<IEnumerable<Child>> GetRegisteredChildrenByCoachAsync(int coachId);
 
-        
+        Task<IEnumerable<Core.ViewModels.RegisteredChild>> GetRegisterationByCoachAsync(int coachId);
+
         Task<bool> ScheduleCourseAsync(int childId, int courseId, DateTime scheduledAt, decimal scheduledHours, int coachId);
 
         Task<bool> RemoveScheduleAsync(int enrollmentId);

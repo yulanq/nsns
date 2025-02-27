@@ -79,6 +79,7 @@ namespace Core.Repositories
         {
             return await _context.CourseEnrollments
                 .Include(e => e.Child)
+                .Include(e => e.Child.City)
                 .Include(e => e.Course.Coach)
                 .Where(e => e.Course.Coach.CoachID == coachId && e.Status == status)
                 .ToListAsync();
