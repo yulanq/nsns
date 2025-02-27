@@ -13,7 +13,7 @@
     <strong>Course:</strong> @Model.Course.Title  
     <div style="padding-top: 10px"></div>
    
-        <strong>Child:</strong>
+        <strong>Child:</strong> @Model.SelectedChildId
        @*  <select id="childId" name="childId" required onchange="loadSchedules(this.value, @Model.Course.CourseID)">
             <option value="">-- Select Child --</option>
             @foreach (var child in Model.Children)
@@ -25,14 +25,16 @@
             <option value="">-- Select Child --</option>
             @foreach (var child in Model.Children)
             {
-                <option value="@child.Value" selected="@(child.Value == Model.SelectedChildId.ToString() ? "selected" : "")">@child.Text</option>
+                @* <option value="@child.Value" selected="@(child.Value == Model.SelectedChildId.ToString() ? "selected" : "")">@child.Text</option> *@
+                @* <option value="@child.Value" selected ="@(child.Value == Model.SelectedChildId.ToString() ? "selected" : null)">@child.Text - @Model.SelectedChildId.ToString() - @child.Value - @(child.Value == Model.SelectedChildId.ToString() ? "selected" : null)</option> *@
+                <option value="@child.Value" selected="@(child.Value == Model.SelectedChildId.ToString() ? "selected" : null)">@child.Text</option>
             }
         </select>
     <div style="padding-top: 10px"></div>
 
    
        @*  <input type="hidden" id="selectedChildId" name="childId" /> *@
-        <input type="hidden" id="courseId" name="courseId" value=@Model.Course.CourseID />
+        <input type="hidden" id="courseId" name="courseId" value="@Model.Course.CourseID" />
 
         <strong>Scheduled Date:</strong>
         <input type="datetime-local" id="scheduledAt" name="scheduledAt" required />

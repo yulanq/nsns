@@ -1,10 +1,10 @@
 ﻿
-document.addEventListener("DOMContentLoaded", function () {
-    let selectedChildId = sessionStorage.getItem("SelectedChildId");
-    if (selectedChildId) {
-        document.getElementById("childId").value = selectedChildId;
-    }
-});
+//document.addEventListener("DOMContentLoaded", function () {
+//    //let selectedChildId = sessionStorage.getItem("SelectedChildId");
+//    //if (selectedChildId) {
+//    //    document.getElementById("childId").value = selectedChildId;
+//    //}
+//});
 
 window.addEventListener("beforeunload", function () {
     sessionStorage.removeItem("SelectedChildId");
@@ -16,7 +16,7 @@ function saveSelectedChild(childId, courseId) {
     } else {
         sessionStorage.removeItem("SelectedChildId");
     }
-    document.getElementById("courseId").value = courseId;
+    /*document.getElementById("courseId").value = courseId;*/
     loadSchedules(childId, courseId);
 }
 
@@ -37,8 +37,15 @@ function loadSchedules(childId, courseId) {
         .then(data => {
             const tbody = document.getElementById("scheduleTable").querySelector("tbody");
             tbody.innerHTML = "";
-            data.forEach(schedule => {
-                const row = `<tr>
+
+            if (data.length === 0) {
+                // If no schedules, show a "No scheduled courses." message
+                tbody.innerHTML = `<tr>
+                <td colspan="3" style="text-align: center; padding: 10px;">No scheduled courses.</td>
+            </tr>`;
+            } else {
+                data.forEach(schedule => {
+                    const row = `<tr>
                         <td style="padding: 8px; border: 1px solid #ddd;">${schedule.scheduledAt}</td>
                         <td style="padding: 8px; border: 1px solid #ddd;">${schedule.scheduledHours}</td>
                         <td style="padding: 8px; border: 1px solid #ddd;">
@@ -50,8 +57,9 @@ function loadSchedules(childId, courseId) {
                             </form>
                         </td>
                     </tr>`;
-                tbody.innerHTML += row;
-            });
+                    tbody.innerHTML += row;
+                });
+            }
         })
         .catch(error => console.error("Error loading schedules:", error));
 }
