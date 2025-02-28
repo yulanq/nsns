@@ -48,6 +48,20 @@ namespace Core.Repositories
                 .FirstOrDefaultAsync(e => e.EnrollmentID == enrollmentId);
         }
 
+        public async Task<bool> UpdateAsync(CourseEnrollment entity)
+        {
+            try
+            {
+                _context.CourseEnrollments.Update(entity);
+                await _context.SaveChangesAsync();  // Commit the changes asynchronously
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false; // Return failure in case of an exception
+            }
+        }
+
         public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByChildAsync(int userId, string status)
         {
             return await _context.CourseEnrollments
@@ -72,6 +86,7 @@ namespace Core.Repositories
                 .Include(e => e.Child)
                 .Include(e => e.Course)
                 .Where(e => e.CourseID == courseId && e.UserID == userId && e.Status == status)
+                .OrderBy (e => e.ScheduledAt)
                 .ToListAsync();
         }
 
@@ -82,6 +97,7 @@ namespace Core.Repositories
                 .Include(e => e.Child.City)
                 .Include(e => e.Course.Coach)
                 .Where(e => e.Course.Coach.CoachID == coachId && e.Status == status)
+                .OrderByDescending(e => e.CreatedDate)
                 .ToListAsync();
         }
 

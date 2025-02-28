@@ -423,8 +423,68 @@ namespace Web.Controllers.User
         }
 
 
+        [HttpGet("ManageEnrollments/{userId}")]
+        public async Task<IActionResult> ManageEnrollments(int userId)
+        {
+            int coachId = 10; // Replace with actual coach ID retrieval logic
+
+            // Get all children registered in the coach's course
+            //var children = await _courseEnrollmentService.GetRegisterationByCoachAsync(coachId);
+
+            // Get enrollment details
+            var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
+            Child? child = await _childService.GetAsync(userId);
+
+            if (child == null)
+            {
+                throw new ArgumentException("Child not found");
+            }
+
+            var model = new ManageEnrollmentsViewModel
+            {
+                Course = course,
+                Child = child,
+                ScheduledEnrollments = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, child.ChildID),
+                CompletedEnrollments = (List<CourseEnrollment>)await _courseEnrollmentService.GetCompletesByCourseChildAsync(course.CourseID, child.ChildID)
+
+            };
+
+            return View(model);
+        }
+
+        [HttpPost("CompleteCourse")]
+        public async Task<IActionResult> CompleteCourse(int enrollmentId, int userId, decimal actualHours)
+        {
+            int coachId = 10; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
 
 
+            Child? child = await _childService.GetAsync(userId);
+            if (child == null)
+            {
+                throw new ArgumentException("Child not found");
+            }
+
+            try
+            {
+                bool result = await _courseEnrollmentService.CompleteCourseAsync(enrollmentId, actualHours);
+
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Course Completed successfully.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Failed to complete the course.";
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("ManageEnrollments", new { child.UserID });
+        }
     }
 }
 

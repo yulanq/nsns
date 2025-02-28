@@ -3,8 +3,11 @@
 
 <h2>Manage Course</h2>
 
+<div style="padding-top: 30px"></div>
+
 <strong>Course Name:</strong> @Model.Course.Title
 
+<div style="padding-top: 50px"></div>
 
 <table style="border-collapse: collapse; width: 100%; text-align: left;">
     <thead>
@@ -33,7 +36,7 @@
                         <a href="/Coach/ManageSchedules/@child.UserID">Manage</a>
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Coach/ManageEnrollment/@child.UserID">Manage</a>
+                        <a href="/Coach/ManageEnrollments/@child.UserID">Manage</a>
                     </td>
                 </tr>
             }

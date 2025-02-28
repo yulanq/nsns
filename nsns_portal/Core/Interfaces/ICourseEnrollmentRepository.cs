@@ -15,6 +15,8 @@ namespace Core.Interfaces
         //Task<bool> RemoveRegisteredAsync(int enrollmentId);
 
         Task<CourseEnrollment> GetAsync(int enrollmentId);
+
+        Task<bool> UpdateAsync(CourseEnrollment entity);
         Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByChildAsync(int childId, string status);
         Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCourseAsync(int courseId);
         Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCoachAsync(int coachId, string status);

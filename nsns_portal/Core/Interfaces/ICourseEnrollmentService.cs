@@ -28,6 +28,10 @@ namespace Core.Interfaces
         Task<IEnumerable<CourseEnrollment>> GetSchedulesByChildAsync(int childId);
 
         Task<IEnumerable<CourseEnrollment>> GetSchedulesByCourseChildAsync(int courseId, int childId);
+
+        Task<IEnumerable<CourseEnrollment>> GetCompletesByCourseChildAsync(int courseId, int childId);
+
+        Task<bool> CompleteCourseAsync(int enrollmentId, Decimal actualHours);
     }
 
 

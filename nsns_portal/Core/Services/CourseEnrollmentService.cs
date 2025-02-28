@@ -205,6 +205,49 @@ namespace Core.Services
                 throw new ArgumentException("Invalid child.");
             return await _enrollmentRepository.GetEnrollmentsByCourseChildAsync(courseId, child.UserID, "Scheduled");
         }
+
+        public async Task<IEnumerable<CourseEnrollment>> GetCompletesByCourseChildAsync(int courseId, int childId)
+        {
+            Child? child = await _childRepository.GetChildByIdAsync(childId);
+            if (child == null)
+                throw new ArgumentException("Invalid child.");
+            return await _enrollmentRepository.GetEnrollmentsByCourseChildAsync(courseId, child.UserID, "Completed");
+        }
+
+        public async Task<bool> CompleteCourseAsync(int enrollmentId, decimal actualHours)
+        {
+            //Enrollment removal is only allowed for courses that have not started.
+            var enrollment = await _enrollmentRepository.GetAsync(enrollmentId);
+            if (enrollment == null)
+                throw new ArgumentException("Invalid scheduled course.");
+
+            if (enrollment.Status != "Scheduled")
+                throw new ArgumentException("This is not scheduled");
+
+            if (actualHours < 0)
+            {
+                throw new Exception("Actual Hours must be greater than zero.");
+            }
+
+            enrollment.Status = "Completed";
+            enrollment.ActualHours = actualHours;
+
+            if(DateTime.UtcNow < enrollment.ScheduledAt)
+            {
+                throw new Exception("You can only complete the course after the scheduled date.");
+            }
+            enrollment.UpdatedDate = DateTime.UtcNow;
+
+            try
+            {
+                return await _enrollmentRepository.UpdateAsync(enrollment);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+        }
     }
 
 
