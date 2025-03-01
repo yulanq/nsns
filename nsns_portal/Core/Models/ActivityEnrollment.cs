@@ -14,16 +14,16 @@ namespace Core.Models
         public int EnrollmentID { get; set; } // Primary key
 
         // Foreign key referencing the children table
-        public int? UserID { get; set; }
+        public int UserID { get; set; }
 
         [ForeignKey(nameof(UserID))]
-        public virtual Child? Child { get; set; }
+        public virtual Child Child { get; set; }
 
         // Foreign key referencing the activities table
-        public int? ActivityID { get; set; }
+        public int ActivityID { get; set; }
 
         [ForeignKey(nameof(ActivityID))]
-        public virtual Activity? Activity { get; set; }
+        public virtual Activity Activity { get; set; }
 
         // Status of the enrollment (e.g., Pending, Approved, Cancelled)
         [StringLength(50)]

@@ -28,6 +28,7 @@ namespace Core.Repositories
                 .Include(e => e.Activity)
                 //.Include(e => e.Child)
                 .Where(e => e.UserID == userId && e.Status == status)
+                .OrderBy(e => e.Activity.ScheduledAt)
                 .ToListAsync();
         }
 

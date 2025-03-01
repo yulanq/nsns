@@ -106,6 +106,11 @@ namespace Core.Services
             return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Registered");
         }
 
+        public async Task<IEnumerable<CourseEnrollment>> GetCompletedEnrollmentsByChildAsync(int userId)
+        {
+            return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Completed");
+        }
+
         public async Task<IEnumerable<Child>> GetRegisteredChildrenByCoachAsync(int coachId)
         {
             var course_enrollments =  await _enrollmentRepository.GetEnrollmentsByCoachAsync(coachId, "Registered");

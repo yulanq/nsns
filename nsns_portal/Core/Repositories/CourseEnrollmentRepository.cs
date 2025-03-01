@@ -68,6 +68,7 @@ namespace Core.Repositories
                 .Include(e => e.Course)
                 .Include(e => e.Course.Coach)
                 .Where(e => e.UserID == userId && e.Status == status)
+                .OrderBy(e => e.CourseID)
                 .OrderBy(e => e.ScheduledAt)
                 .ToListAsync();
         }

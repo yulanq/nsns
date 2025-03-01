@@ -23,9 +23,9 @@
             <th style="padding: 8px; border: 1px solid #ddd;">City</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Parents</th>
-            <th style="padding: 8px; border: 1px solid #ddd;">Registrations</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Payments</th>
-            
+            <th style="padding: 8px; border: 1px solid #ddd;">Registrations</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Enrollments</th>
         </tr>
     </thead>
     <tbody>
@@ -46,14 +46,16 @@
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <a href="/Child/ManageParents/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
-                       
+                    </td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">
+                        <a href="/Child/ManagePayments/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
                     </td>
                     
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <a href="/Child/ManageRegistrations/@child.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Child/ManagePayments/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
+                        <a href="/Child/EnrollmentsHistory/@child.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">View</a>
                     </td>
                    
                 </tr>
@@ -64,7 +66,7 @@
         @if (TempData["SuccessMessage"] != null)
         {
             <tr>
-                <td colspan="9">
+                <td colspan="10">
                     <div class="alert alert-success">
                         @TempData["SuccessMessage"]
                     </div>
@@ -75,7 +77,7 @@
         @if (TempData["ErrorMessage"] != null)
         {
             <tr>
-                <td colspan="9">
+                <td colspan="10">
                     <div class="alert alert-danger">
                         @TempData["ErrorMessage"]
                     </div>

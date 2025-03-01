@@ -592,6 +592,28 @@ namespace Web.Controllers.User
             
         }
 
+
+        [HttpGet("EnrollmentsHistory/{userId}")]
+
+        public async Task<IActionResult> EnrollmentsHistory(int userId)
+        {
+
+            var child = await _childService.GetAsync(userId);
+            var completedCourses = await _courseEnrollmentService.GetCompletedEnrollmentsByChildAsync(userId);
+            var completedActivities = await _activityEnrollmentService.GetCompletedEnrollmentsByChildAsync(userId);
+
+            if (child == null)
+                throw new Exception("The child can't be found");
+
+            EnrollmentsHistoryViewModel enrollmentHistory = new EnrollmentsHistoryViewModel
+            {
+                Child = child,
+                CompletedCourses = (List<CourseEnrollment>) completedCourses,
+                CompletedActivities = (List<ActivityEnrollment>)completedActivities
+            };
+
+            return View("EnrollmentsHistory", enrollmentHistory);
+        }
         //[HttpGet("EditPayment/{paymentId}")]
         //public async Task<IActionResult> EditPayment(int paymentId)
         //{

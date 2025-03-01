@@ -29,6 +29,8 @@ namespace Core.Interfaces
 
         Task<IEnumerable<ActivityEnrollment>> GetRegisteredEnrollmentsByChildAsync(int childId);
 
+        Task<IEnumerable<ActivityEnrollment>> GetCompletedEnrollmentsByChildAsync(int userId);
+
     }
 
 }

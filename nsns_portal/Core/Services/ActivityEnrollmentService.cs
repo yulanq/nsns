@@ -84,6 +84,12 @@ namespace Core.Services
             return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Registered");
         }
 
+
+        public async Task<IEnumerable<ActivityEnrollment>> GetCompletedEnrollmentsByChildAsync(int userId)
+        {
+            return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Completed");
+        }
+
         //public async Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId)
         //{
         //    //Enrollment removal is only allowed for courses that have not started.
