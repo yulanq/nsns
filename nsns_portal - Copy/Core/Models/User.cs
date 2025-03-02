@@ -1,0 +1,51 @@
+﻿
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+
+namespace Core.Models
+{
+    
+
+    public class User
+    {
+        [Key]
+        public int UserID { get; set; } // Primary Key
+
+       
+        [StringLength(45)]
+        public required string Email { get; set; } // User Email
+
+   
+        [StringLength(255)]
+        public required string Password { get; set; } // User Password
+
+
+        public required string Role { get; set; } // User Role (Admin, Staff, Coach, Child)
+
+        public int? CreatedBy { get; set; } // Created By User ID (nullable)
+
+        public int? UpdatedBy { get; set; } // Updated By User ID (nullable)
+
+        public DateTime? CreatedDate { get; set; } = DateTime.Now; // Created Timestamp (nullable)
+
+        public DateTime? UpdatedDate { get; set; } = DateTime.Now; // Updated Timestamp (nullable)
+    }
+
+    // Enum for UserRole
+    //public enum UserRole
+    //{
+    //    Admin,
+    //    Staff,
+    //    Coach,
+    //    Child
+    //}
+
+    
+}

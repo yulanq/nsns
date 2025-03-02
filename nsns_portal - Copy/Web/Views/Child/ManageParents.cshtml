@@ -1,0 +1,89 @@
+﻿@model Core.ViewModels.ManageParentsViewModel
+
+<div>
+    <p><strong>Name:</strong> @Model.Child.Name</p>
+    <p><strong>Birth Date:</strong> @(Model.Child.BirthDate.HasValue ? Model.Child.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")</p>
+    <p><strong>Gender:</strong> @Model.Child.Gender</p>
+    <p><strong>City:</strong> @(Model.Child.City != null ? Model.Child.City.Name : "N/A")</p>
+</div>
+<a href="/Child/List" style="display: inline-block; margin-top: 20px; background-color: #ddd; color: black; text-decoration: none; padding: 5px 10px; border: 1px solid #ccc;">Back to List</a>
+<div style="border-top: 2px solid #ddd; margin: 20px 0;"></div>
+
+<h2>Manage Parents</h2>
+
+<table style="border-collapse: collapse; width: 100%; text-align: left;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="padding: 8px; border: 1px solid #ddd;">Name</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Email</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Phone</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Wechat</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Relationship</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var parentChild in Model.Parents)
+        {
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">@parentChild.Parent.Name</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@parentChild.Parent.Email</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@parentChild.Parent.Phone</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@parentChild.Parent.Wechat</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@parentChild.Relationship</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">
+                    <form method="post" action="/Child/RemoveParentFromChild">
+                        <input type="hidden" name="parentChildId" value="@parentChild.ParentChildID" />
+                        <input type="hidden" name="childId" value="@Model.Child.ChildID" />
+                        <input type="hidden" name="parentId" value="@parentChild.Parent.ParentID" />
+                        <button type="submit" style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+
+           
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <tr>
+                <td colspan="6">
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                </td>
+            </tr>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <tr>
+                <td colspan="6">
+                    <div class="alert alert-danger">
+                        @TempData["ErrorMessage"]
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<div style="border-top: 2px solid #ddd; margin: 20px 0;"></div>
+<h5>Add Parent</h5>
+<form method="post" action="/Child/AddParentToChild">
+    <input type="hidden" name="childId" value="@Model.Child.ChildID" />
+
+    <label for="parentName">Parent Name:</label>
+    <input type="text" name="parentName" placeholder="Enter Parent Name" required style="margin-right: 10px;" />
+
+    <label for="relationship">Relationship:</label>
+    <select name="relationship" required style="margin-right: 10px;">
+        <option value="">-- Select Relationship --</option>
+        <option value="Father">Father</option>
+        <option value="Mother">Mother</option>
+        <option value="Guardian">Guardian</option>
+     
+    </select>
+    <button type="submit" style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer;">Add Parent</button>
+</form>
+

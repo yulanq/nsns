@@ -33,8 +33,11 @@ namespace Core.Repositories
         {
             try
             {
-                return await _context.Staff
-                .FirstOrDefaultAsync(u => u.Email == email);
+                //return await _context.Staff
+                //.FirstOrDefaultAsync(u => u.Email == email);
+                _context.Staff
+                    .FirstOrDefaultAsync(u => u.User.Email == email);
+                return null;
             }
             catch (Exception ex)
             {
@@ -93,13 +96,17 @@ namespace Core.Repositories
         // Find a User by its email asynchronously
         public async Task<Staff> GetAsync(int userId)
         {
-            return await _context.Staff.FindAsync(userId);  // Finds by ID asynchronously
+            //return await _context.Staff.FirstAsync(s => s.UserID == userId);
+            // return await _context.Staff.FirstOrDefaultAsync(s => s.User.UserID == userId);
+            return await _context.Staff.Include(s => s.User)
+                 .FirstOrDefaultAsync(s => s.UserID == userId);
         }
 
         // Get all Users from the database asynchronously
         public async Task<IEnumerable<Staff>> GetAllAsync()
         {
             return await _context.Staff
+                .Include(s=> s.User)
                 .ToListAsync();  // Retrieves all users asynchronously
         }
 

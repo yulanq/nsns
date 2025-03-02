@@ -10,7 +10,7 @@ using Core.Models;
 
 namespace Core.Interfaces
 {
-    public interface IStaffRepository:IUserRepository<Staff>
+    public interface IStaffRepository
     {
 
         //Task<Admin> GetByEmailAsync(string email);
@@ -33,6 +33,8 @@ namespace Core.Interfaces
 
         // Get all Users from the database asynchronously
         Task<IEnumerable<Staff>> GetAllAsync();
+
+        Task<Staff> GetByEmailAsync(string email);
 
     }
 }
