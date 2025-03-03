@@ -8,9 +8,9 @@ using Core.Models;
 
 namespace Core.Interfaces
 {
-    public interface IAdminRepository : IUserRepository<Admin>
+    public interface IAdminRepository 
     {
-        //Task<User> GetByEmailAsync(string email);
+        Task<Admin> GetByEmailAsync(string email);
 
 
 

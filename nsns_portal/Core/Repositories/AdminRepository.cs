@@ -34,7 +34,8 @@ namespace Core.Repositories
             try
             {
                 return await _context.Admins
-                .FirstOrDefaultAsync(u => u.Email == email);
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(u => u.User.Email == email);
             }
             catch (Exception ex)
             {
@@ -93,13 +94,14 @@ namespace Core.Repositories
         // Find a User by its email asynchronously
         public async Task<Admin> GetAsync(int userId)
         {
-            return await _context.Admins.FindAsync(userId);  // Finds by ID asynchronously
+            return await _context.Admins.Include(u=>u.User)
+                .FirstOrDefaultAsync(u=> u.UserID == userId);  // Finds by ID asynchronously
         }
 
         // Get all Users from the database asynchronously
         public async Task<IEnumerable<Admin>> GetAllAsync()
         {
-            return await _context.Admins
+            return await _context.Admins.Include(u=>u.User)
             
                 .ToListAsync();  
         }

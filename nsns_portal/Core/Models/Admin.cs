@@ -10,10 +10,15 @@ using System.Threading.Tasks;
 namespace Core.Models
 {
     
-    public class Admin:User
+    public class Admin
     {
         //[Key]
         public int AdminID { get; set; }
+
+
+        public int UserID { get; set; }
+
+        public virtual User User { get; set; }
 
 
         [MaxLength(255)]

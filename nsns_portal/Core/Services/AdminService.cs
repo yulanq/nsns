@@ -40,21 +40,23 @@ namespace Core.Services
                 throw new Exception("A admin with the same email already exists.");
             }
 
-
+            var user = new User
+            {
+                Email = email,
+                Password = password,
+                Role = "Admin",
+                CreatedDate = DateTime.UtcNow
+            };
 
             // Create the admin user
             var adminUser = new Admin
             {
+                User = user,
                 Name = name,
-                Email = email,
-                Password = password,
-                Role = "Admin",
-
                 Phone = phone,
                 Wechat = wechat,
-                CreatedDate = DateTime.UtcNow,
             };
-            adminUser.Password = _passwordHasher.HashPassword(adminUser, password);
+            //adminUser.Password = _passwordHasher.HashPassword(adminUser, password);
             // Save to the database
             return await _adminRepository.AddAsync(adminUser);
 
@@ -88,10 +90,10 @@ namespace Core.Services
 
             // Update fields
             admin.Name = name;
-            admin.Email = email;
+            admin.User.Email = email;
             admin.Phone = phone;
             admin.Wechat = wechat;
-            admin.UpdatedDate = DateTime.UtcNow;
+            admin.User.UpdatedDate = DateTime.UtcNow;
 
            
 
