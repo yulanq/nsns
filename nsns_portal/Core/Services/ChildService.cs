@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Core.Repositories;
 using System.Numerics;
 using System.Xml.Linq;
+using System.Reflection;
 
 namespace Core.Services
 {
@@ -23,10 +24,12 @@ namespace Core.Services
         private readonly IPasswordHasher<Child> _passwordHasher;
         private readonly JwtOptions _jwtOptions;
         private readonly IChildRepository _childRepository;
+        private readonly ICityRepository _cityRepository;
 
-        public ChildService(IChildRepository childRepository, IPasswordHasher<Child> password, IOptions<JwtOptions> jwtOptions)
+        public ChildService(IChildRepository childRepository, ICityRepository cityRepository, IPasswordHasher<Child> password, IOptions<JwtOptions> jwtOptions)
         {
             _childRepository = childRepository;
+            _cityRepository = cityRepository;
             _passwordHasher = password;
             _jwtOptions = jwtOptions.Value;
         }
@@ -36,33 +39,42 @@ namespace Core.Services
             return await _childRepository.GetAllAsync();
         }
 
-        public async Task<Child?> GetAsync(int userId)
+        public async Task<Child?> GetAsync(int childId)
         {
-            return await _childRepository.GetAsync(userId);
+            return await _childRepository.GetAsync(childId);
         }
 
-        public async Task<Child?> GetChildByIdAsync(int childId)
+        //public async Task<Child?> GetChildByIdAsync(int childId)
+        //{
+        //    return await _childRepository.GetChildByIdAsync(childId);
+        //}
+        //public async Task<bool> AddAsync(Child child)
+        public async Task<bool> AddAsync(string name, DateTime? birthDate, string? gender, int? cityId, string email, string password)
         {
-            return await _childRepository.GetChildByIdAsync(childId);
-        }
-        public async Task<bool> AddAsync(Child child)
-        {
-            if (string.IsNullOrWhiteSpace(child.Name))
-                throw new ArgumentException("Child name cannot be empty.");
+            //if (string.IsNullOrWhiteSpace(child.Name))
+            //    throw new ArgumentException("Child name cannot be empty.");
 
-            var childUser = new Child
+            var user = new User
             {
-                Name = child.Name,
-                Email = child.Email,
-                Password = child.Password,
+                Email = email,
+                Password = password,
                 Role = "Child",
-                Gender = child.Gender,
-                CityID = child.CityID,
-                City = child.City,
-                BirthDate = child.BirthDate,
                 CreatedDate = DateTime.UtcNow
             };
-            child.Password = _passwordHasher.HashPassword(childUser, child.Password);
+
+            City city = null;
+            if (cityId != null)
+                city = await _cityRepository.GetAsync((int)cityId);
+
+            var child = new Child
+            {
+                Name = name,
+                BirthDate = birthDate,
+                Gender = gender,
+                User = user,
+                City = city
+            };
+            //child.Password = _passwordHasher.HashPassword(childUser, child.Password);
 
             return await _childRepository.AddAsync(child);
             
@@ -79,10 +91,10 @@ namespace Core.Services
 
 
 
-        public async Task<bool> UpdateAsync(int userId, string name, DateTime birthDate, string gender, int cityId, string email/*, string password*/)
+        public async Task<bool> UpdateAsync(int childId, string name, DateTime birthDate, string gender, int cityId, string email/*, string password*/)
         {
             // Find the coach by ID
-            var child = await _childRepository.GetAsync(userId);
+            var child = await _childRepository.GetAsync(childId);
             if (child == null)
             {
                 throw new Exception("Child not found.");
@@ -90,12 +102,12 @@ namespace Core.Services
 
             // Update fields
             child.Name = name;
-            child.Email = email;
+            child.User.Email = email;
             child.BirthDate = birthDate;
             child.Gender = gender;
            
             child.CityID = cityId;
-            child.UpdatedDate = DateTime.UtcNow;
+            child.User.UpdatedDate = DateTime.UtcNow;
 
             // Update the password if provided
             //if (!string.IsNullOrWhiteSpace(password))
@@ -107,9 +119,9 @@ namespace Core.Services
             return await _childRepository.UpdateAsync(child);
         }
 
-        public async Task<bool> RemoveAsync(int userId)
+        public async Task<bool> RemoveAsync(int childId)
         {
-            var child = await _childRepository.GetAsync(userId);
+            var child = await _childRepository.GetAsync(childId);
             if (child == null)
             {
                 throw new Exception("Child not found.");

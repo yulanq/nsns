@@ -26,22 +26,24 @@ namespace Core.Repositories
         {
             return await _context.Children
                 .Include(c => c.City)
+                .Include(c => c.User)
                 .ToListAsync();
         }
 
-        public async Task<Child?> GetAsync(int userId)
+        public async Task<Child?> GetAsync(int childId)
         {
             return await _context.Children
                 .Include(c => c.City)
-                .FirstOrDefaultAsync(c => c.UserID == userId);
-        }
-
-        public async Task<Child?> GetChildByIdAsync(int childId)
-        {
-            return await _context.Children
-                .Include(c => c.City)
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.ChildID == childId);
         }
+
+        //public async Task<Child?> GetChildByIdAsync(int childId)
+        //{
+        //    return await _context.Children
+        //        .Include(c => c.City)
+        //        .FirstOrDefaultAsync(c => c.ChildID == childId);
+        //}
 
         public async Task<bool> AddAsync(Child entity)
         {

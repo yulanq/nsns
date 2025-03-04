@@ -383,7 +383,7 @@ namespace Web.Controllers.User
             int coachId = 10; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
            
 
-            Child? child = await _childService.GetChildByIdAsync(childId);
+            Child? child = await _childService.GetAsync(childId);
             if (child == null)
             {
                 throw new ArgumentException("Child not found");

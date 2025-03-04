@@ -75,7 +75,7 @@ namespace Core.Services
             var createdBy = 1;
            
 
-            var child = await _childRepository.GetChildByIdAsync(childId);
+            var child = await _childRepository.GetAsync(childId);
             if (child == null)
             {
                 throw new Exception("Child is not found.");

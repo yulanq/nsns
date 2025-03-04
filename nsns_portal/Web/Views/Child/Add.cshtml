@@ -14,21 +14,21 @@
         <tr>
             <td style="padding: 8px;"><label for="Name">Name:</label></td>
             <td style="padding: 8px;">
-                <input type="text" name="Name" placeholder="Enter child's name" style="width: 100%;" required />
+                <input type="text" name="name" placeholder="Enter child's name" style="width: 100%;" required />
             </td>
         </tr>
 
         <tr>
-            <td style="padding: 8px;"><label for="BirthDate">Birth Date:</label></td>
+            <td style="padding: 8px;"><label for="birthDate">Birth Date:</label></td>
             <td style="padding: 8px;">
-                <input type="date" name="BirthDate" style="width: 100%;" />
+                <input type="date" name="birthDate" style="width: 100%;" />
             </td>
         </tr>
 
         <tr>
-            <td style="padding: 8px;"><label for="Gender">Gender:</label></td>
+            <td style="padding: 8px;"><label for="gender">Gender:</label></td>
             <td style="padding: 8px;">
-                <select name="Gender" style="width: 100%;">
+                <select name="gender" style="width: 100%;">
                     <option value="" selected>Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -38,9 +38,9 @@
         </tr>
 
         <tr>
-            <td style="padding: 8px;"><label for="CityID">City:</label></td>
+            <td style="padding: 8px;"><label for="cityID">City:</label></td>
             <td style="padding: 8px;">
-                <select name="CityID" style="width: 100%;">
+                <select name="cityID" style="width: 100%;">
                     <option value="" selected>Select City</option>
                     @foreach (var city in ViewBag.CityList)
                     {
@@ -51,13 +51,13 @@
         </tr>
 
         <tr>
-            <td style="padding: 8px;"><label for="Email">Email:</label></td>
-            <td style="padding: 8px;"><input type="email" name="Email" placeholder="Email" style="width: 100%;" /></td>
+            <td style="padding: 8px;"><label for="email">Email:</label></td>
+            <td style="padding: 8px;"><input type="email" name="email" placeholder="Email" style="width: 100%;" /></td>
         </tr>
 
         <tr>
-            <td style="padding: 8px;"><label for="Password">Password:</label></td>
-            <td style="padding: 8px;"><input type="text" name="Password" placeholder="Password" value="12345" style="width: 100%;" /></td>
+            <td style="padding: 8px;"><label for="password">Password:</label></td>
+            <td style="padding: 8px;"><input type="text" name="password" placeholder="Password" value="12345" style="width: 100%;" /></td>
         </tr>
 
         <tr>

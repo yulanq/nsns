@@ -97,44 +97,73 @@ namespace Web.Controllers.User
 
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add(Child child)
+        public async Task<IActionResult> Add(string name, DateTime birthDate, string gender, int cityId, string email, string password)
         {
-            City city = child.CityID.HasValue ? await _cityService.GetAsync(child.CityID.Value) : null;
-            child.City = city;
-            child.Role = "Child";
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             try
             {
-                var result = await _childService.AddAsync(child);
+                var result = await _childService.AddAsync(name, birthDate, gender, cityId, email, password);
                 if (!result)
                 {
-                    ModelState.AddModelError(string.Empty, "Failed in adding the coach info.");
-
-
-                    // Repopulate CityList for the dropdown if validation fails
-
+                    ModelState.AddModelError(string.Empty, "Failed in adding the child info.");
                     ViewBag.CityList = await GetCityList();
                     return View();
                 }
+
                 TempData["SuccessMessage"] = "Child info has been added successfully.";
                 return RedirectToAction("List"); // Redirect to the child list page
 
+
             }
-            
             catch (Exception ex)
             {
                 ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
-                // Repopulate CityList for the dropdown if validation fails
                 ViewBag.CityList = await GetCityList();
                 return View();
+
             }
+
+
+            //City city = cityId.HasValue ? await _cityService.GetAsync(cityId) : null;
+            ////child.City = city;
+            ////child.Role = "Child";
+            //try
+            //{
+            //    var result = await _childService.AddAsync(child);
+            //    if (!result)
+            //    {
+            //        ModelState.AddModelError(string.Empty, "Failed in adding the coach info.");
+
+
+            //        // Repopulate CityList for the dropdown if validation fails
+
+            //        ViewBag.CityList = await GetCityList();
+            //        return View();
+            //    }
+            //    TempData["SuccessMessage"] = "Child info has been added successfully.";
+            //    return RedirectToAction("List"); // Redirect to the child list page
+
+            //}
+            
+            //catch (Exception ex)
+            //{
+            //    ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
+            //    // Repopulate CityList for the dropdown if validation fails
+            //    ViewBag.CityList = await GetCityList();
+            //    return View();
+            //}
         }
 
 
         // ✅ GET: Show Edit form with Child data
-        [HttpGet("Edit/{userId}")]
-        public async Task<IActionResult> Edit(int userId)
+        [HttpGet("Edit/{childId}")]
+        public async Task<IActionResult> Edit(int childId)
         {
-            var child = await _childService.GetAsync(userId);
+            var child = await _childService.GetAsync(childId);
             if (child == null)
             {
                 TempData["ErrorMessage"] = "Child not found.";
@@ -209,10 +238,10 @@ namespace Web.Controllers.User
 
 
         // ✅ GET: Confirm delete page
-        [HttpGet("ConfirmDelete/{userId}")]
-        public async Task<IActionResult> ConfirmDelete(int userId)
+        [HttpGet("ConfirmDelete/{childId}")]
+        public async Task<IActionResult> ConfirmDelete(int childId)
         {
-            var child = await _childService.GetAsync(userId);
+            var child = await _childService.GetAsync(childId);
             if (child == null)
             {
                 TempData["ErrorMessage"] = "Child not found.";
@@ -224,9 +253,9 @@ namespace Web.Controllers.User
 
         // ✅ POST: Delete Child
         [HttpPost("DeleteConfirmed")]
-        public async Task<IActionResult> DeleteConfirmed(int userId)
+        public async Task<IActionResult> DeleteConfirmed(int childId)
         {
-            var success = await _childService.RemoveAsync(userId);
+            var success = await _childService.RemoveAsync(childId);
             if (!success)
             {
                 TempData["ErrorMessage"] = "Failed to delete child.";
@@ -244,7 +273,7 @@ namespace Web.Controllers.User
         [HttpGet("ManageParents/{childId}")]
         public async Task<IActionResult> ManageParents(int childId)
         {
-            var child = await _childService.GetChildByIdAsync(childId);
+            var child = await _childService.GetAsync(childId);
             if (child == null)
             {
                 TempData["ErrorMessage"] = "Child not found.";
@@ -484,7 +513,7 @@ namespace Web.Controllers.User
 
 
             var payments = await _paymentService.GetByChildAsync(childId);
-            var child = await _childService.GetChildByIdAsync(childId);
+            var child = await _childService.GetAsync(childId);
             if (child == null)
             {
                 TempData["ErrorMessage"] = "Child not found.";

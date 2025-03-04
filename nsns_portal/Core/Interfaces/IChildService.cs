@@ -11,15 +11,15 @@ namespace Core.Interfaces
     public interface IChildService
     {
         Task<IEnumerable<Child>> GetAllAsync();
-        Task<Child?> GetAsync(int userId);
+        Task<Child?> GetAsync(int childId);
 
-        Task<Child?> GetChildByIdAsync(int childId);
+        //Task<Child?> GetChildByIdAsync(int childId);
 
-        Task<bool> AddAsync(Child child);
+        Task<bool> AddAsync(string name, DateTime? birthDate, string? gender, int? cityId, string email, string password);
         //Task<bool> UpdateAsync(Child child);
-        Task<bool> UpdateAsync(int userId, string name, DateTime birthDate, string gender, int cityId, string email/*, string password*/);
+        Task<bool> UpdateAsync(int childId, string name, DateTime birthDate, string gender, int cityId, string email/*, string password*/);
 
-        Task<bool> RemoveAsync(int userId);
+        Task<bool> RemoveAsync(int childId);
     }
 
 

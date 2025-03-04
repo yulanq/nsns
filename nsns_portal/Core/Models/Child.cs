@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class Child: User
+    public class Child
     {
         //[Key]
         public int ChildID { get; set; } // Primary key
 
+        public int UserID { get; set; }
+
+        public virtual User User { get; set; }
 
         // Child's name
         [MaxLength(255)]

@@ -137,7 +137,7 @@ namespace Core.Services
 
         public async Task<bool> ScheduleCourseAsync(int childId, int courseId, DateTime scheduledAt, decimal scheduledHours, int coachId)
         {
-            Child? child = await _childRepository.GetChildByIdAsync(childId);
+            Child? child = await _childRepository.GetAsync(childId);
             if (child == null)
                 throw new ArgumentException("Invalid child.");
             Coach? coach = await _coachRepository.GetCoachByIdAsync(coachId);
@@ -195,7 +195,7 @@ namespace Core.Services
             //.OrderBy(e => e.ScheduledAt)
             //.ToListAsync();
 
-            Child? child = await _childRepository.GetChildByIdAsync(childId);
+            Child? child = await _childRepository.GetAsync(childId);
             if (child == null)
                 throw new ArgumentException("Invalid child.");
 
@@ -205,7 +205,7 @@ namespace Core.Services
 
         public async Task<IEnumerable<CourseEnrollment>> GetSchedulesByCourseChildAsync(int courseId, int childId)
         {
-            Child? child = await _childRepository.GetChildByIdAsync(childId);
+            Child? child = await _childRepository.GetAsync(childId);
             if (child == null)
                 throw new ArgumentException("Invalid child.");
             return await _enrollmentRepository.GetEnrollmentsByCourseChildAsync(courseId, child.UserID, "Scheduled");
@@ -213,7 +213,7 @@ namespace Core.Services
 
         public async Task<IEnumerable<CourseEnrollment>> GetCompletesByCourseChildAsync(int courseId, int childId)
         {
-            Child? child = await _childRepository.GetChildByIdAsync(childId);
+            Child? child = await _childRepository.GetAsync(childId);
             if (child == null)
                 throw new ArgumentException("Invalid child.");
             return await _enrollmentRepository.GetEnrollmentsByCourseChildAsync(courseId, child.UserID, "Completed");

@@ -41,8 +41,8 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">@child.Gender</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@(child.City != null ? child.City.Name : "N/A")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Child/Edit/@child.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
-                        <a href="/Child/ConfirmDelete/@child.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
+                        <a href="/Child/Edit/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                        <a href="/Child/ConfirmDelete/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <a href="/Child/ManageParents/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
