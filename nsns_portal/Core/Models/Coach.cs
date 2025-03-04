@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class Coach: User
+    public class Coach
     {
 
 
@@ -19,6 +19,10 @@ namespace Core.Models
         //[ForeignKey("UserID")]
         //public virtual User User { get; set; } // Navigation property to User table (UserID)
         public int CoachID { get; set; } // Primary key
+
+        public int UserID { get; set; }
+
+        public virtual User User { get; set; }
 
         [MaxLength(255)]
         public required string Name { get; set; }

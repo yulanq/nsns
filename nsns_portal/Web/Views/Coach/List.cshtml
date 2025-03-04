@@ -39,14 +39,14 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.Name</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@(coach.Specialty != null ? coach.Specialty.Title : "N/A")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.Gender</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@coach.Email</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@coach.User.Email</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.Phone</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.Wechat</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@(coach.City != null ? coach.City.Name : "N/A")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
 
-                      <a href="/Coach/ConfirmDelete/@coach.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
-                      <a href="/Coach/Edit/@coach.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                      <a href="/Coach/ConfirmDelete/@coach.CoachID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
+                        <a href="/Coach/Edit/@coach.CoachID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
 
                     </td>
                 </tr>

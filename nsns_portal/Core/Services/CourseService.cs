@@ -51,7 +51,7 @@ namespace Core.Services
 
         // Add a new course
         
-        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool isActive, int userId, int createdBy)
+        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool isActive, int coachId, int createdBy)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -66,7 +66,7 @@ namespace Core.Services
 
             //Check for Coach/Specialty exists in course table)
             // Uncomment if needed
-             var coachExists = await _courseRepository.GetByCoachAsync(userId, true);
+             var coachExists = await _courseRepository.GetByCoachAsync(coachId, true);
             if (coachExists !=  null)
             {
                 throw new Exception("The coach already has active course in system.");
@@ -75,7 +75,7 @@ namespace Core.Services
             // Create a new course instance
 
             //Retrieve the coach entity
-            var coach = await _coachRepository.GetAsync(userId);
+            var coach = await _coachRepository.GetAsync(coachId);
             if (coach == null)
             {
                 throw new Exception("No coach is added.");

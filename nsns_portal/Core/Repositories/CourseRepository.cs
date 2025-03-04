@@ -55,13 +55,13 @@ namespace Core.Repositories
         
 
 
-        public async Task<Course> GetByCoachAsync(int userId, bool isActive)
+        public async Task<Course> GetByCoachAsync(int coachId, bool isActive)
         {
             return await _context.Courses
                 .Include(c => c.Coach)
                 .Include(c => c.CreatedByUser)
                 //.Include(c => c.UpdatedByUser)
-                .Where(c => c.UserID == userId && c.IsActive == isActive)
+                .Where(c => c.CoachID == coachId && c.IsActive == isActive)
                 .FirstOrDefaultAsync();
         }
 

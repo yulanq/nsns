@@ -31,7 +31,7 @@ namespace Core.Models
 
         // Foreign keys for related tables
         [Required]
-        public int UserID { get; set; } // Foreign key to the Coach table
+        public int CoachID { get; set; } // Foreign key to the Coach table
         public int CreatedBy { get; set; } // Foreign key to the User table for the creator
         public int? UpdatedBy { get; set; } // Foreign key to the User table for the last updater
 
@@ -40,7 +40,7 @@ namespace Core.Models
         public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        [ForeignKey(nameof(UserID))]
+        [ForeignKey(nameof(CoachID))]
         public virtual required Coach Coach { get; set; } // Correctly mapped to Coach
 
 

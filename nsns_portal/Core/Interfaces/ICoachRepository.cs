@@ -10,9 +10,9 @@ using Core.Models;
 
 namespace Core.Interfaces
 {
-    public interface ICoachRepository:IUserRepository<Coach>
+    public interface ICoachRepository
     {
-        //Task<User> GetByEmailAsync(string email);
+        Task<Coach> GetByEmailAsync(string email);
 
        
 
@@ -32,7 +32,7 @@ namespace Core.Interfaces
 
 
         // Find a User by its email asynchronously
-        Task<Coach> GetAsync(int userId);
+        Task<Coach> GetAsync(int coachId);
 
         //Task<Coach> GetByCoachIdAsync(int coachId);
         Task<Coach?> GetCoachByIdAsync(int coachId);

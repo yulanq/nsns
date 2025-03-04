@@ -28,8 +28,8 @@ namespace Core.Repositories
         {
             try
             {
-                return await _context.Coaches
-                .FirstOrDefaultAsync(u => u.Email == email);
+                return await _context.Coaches.Include(u => u.User)
+                .FirstOrDefaultAsync(u => u.User.Email == email);
             }
             catch (Exception ex)
             {
@@ -86,9 +86,11 @@ namespace Core.Repositories
         }
 
         // Find a User by its email asynchronously
-        public async Task<Coach> GetAsync(int userId)
+        public async Task<Coach> GetAsync(int coachId)
         {
-            return await _context.Coaches.FindAsync(userId);  // Finds by ID asynchronously
+            return await _context.Coaches.Include(u => u.User)
+                .FirstOrDefaultAsync(u => u.CoachID == coachId);
+               
             
         }
 
@@ -105,6 +107,7 @@ namespace Core.Repositories
         public async Task<IEnumerable<Coach>> GetAllAsync()
         {
             return await _context.Coaches
+                .Include(c => c.User)
                 .Include(c => c.City) // Eagerly load the City navigation property
                 .Include(c => c.Specialty) // Eagerly load the Specialty navigation property
                 .ToListAsync();  // Retrieves all users asynchronously
@@ -113,14 +116,10 @@ namespace Core.Repositories
         public async Task<IEnumerable<Coach>> GetCoachesBySpecialtyAsync(int specialtyId)
         {
             return await _context.Coaches
-                         .Where(c => c.SpecialtyID == specialtyId)
-                         .ToListAsync();
+                .Include(c => c.User)
+                .Where(c => c.SpecialtyID == specialtyId)
+                .ToListAsync();
         }
-
-
-
-
-
 
 
 

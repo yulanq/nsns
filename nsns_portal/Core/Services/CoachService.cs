@@ -62,13 +62,19 @@ namespace Core.Services
                 throw new Exception("No city is added.");
             }
 
-            // Create the admin user
-            var coachUser = new Coach
+            var user = new User
             {
-                Name = name,
                 Email = email,
                 Password = password,
                 Role = "Coach",
+                CreatedDate = DateTime.UtcNow
+            };
+
+            // Create the admin user
+            var coachUser = new Coach
+            {
+                User = user,
+                Name = name,
                 CityID = cityId,
                 City = city,
                 SpecialtyID = specialtyId,
@@ -76,10 +82,10 @@ namespace Core.Services
                 Gender = gender,
                 Phone = phone,
                 Wechat = wechat,
-                CreatedDate = DateTime.UtcNow,
+               
             };
 
-            coachUser.Password = _passwordHasher.HashPassword(coachUser, password);
+            //coachUser.Password = _passwordHasher.HashPassword(coachUser, password);
             // Save to the database
             return await _coachRepository.AddAsync(coachUser);
 
@@ -113,13 +119,13 @@ namespace Core.Services
 
             // Update fields
             coach.Name = name;
-            coach.Email = email;
+            coach.User.Email = email;
             coach.SpecialtyID = specialtyId;
             coach.Gender = gender;
             coach.Phone = phone;
             coach.Wechat = wechat;
             coach.CityID = cityId;
-            coach.UpdatedDate = DateTime.UtcNow;
+            coach.User.UpdatedDate = DateTime.UtcNow;
 
             // Update the password if provided
             //if (!string.IsNullOrWhiteSpace(password))
@@ -200,71 +206,71 @@ namespace Core.Services
 
         }
 
-        public async Task<bool> RegisterAsync(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId)
-        {
-            return await AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId);
-        }
+        //public async Task<bool> RegisterAsync(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId)
+        //{
+        //    return await AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId);
+        //}
 
  
 
 
-        public async Task<string?> LoginAsync(string email, string password)
-        {
-            var user = await _coachRepository.GetByEmailAsync(email);
-            if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, password) == PasswordVerificationResult.Failed)
-                return null; // Invalid username or password
+        //public async Task<string?> LoginAsync(string email, string password)
+        //{
+        //    var user = await _coachRepository.GetByEmailAsync(email);
+        //    if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, password) == PasswordVerificationResult.Failed)
+        //        return null; // Invalid username or password
 
-            return GenerateToken(user); 
-        }
+        //    return GenerateToken(user); 
+        //}
 
-        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
-        {
-            var user = await _coachRepository.GetAsync(userId);
-            if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword) == PasswordVerificationResult.Failed)
-                return false; // User not found or incorrect password
+        //public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        //{
+        //    var user = await _coachRepository.GetAsync(userId);
+        //    if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword) == PasswordVerificationResult.Failed)
+        //        return false; // User not found or incorrect password
 
-            user.Password = _passwordHasher.HashPassword(user, newPassword);
-            user.UpdatedDate = DateTime.UtcNow;
-            await _coachRepository.UpdateAsync(user);
-            return true;
-        }
+        //    user.Password = _passwordHasher.HashPassword(user, newPassword);
+        //    user.UpdatedDate = DateTime.UtcNow;
+        //    await _coachRepository.UpdateAsync(user);
+        //    return true;
+        //}
 
-        public async Task<User?> GetUserProfileAsync(int userId)
-        {
-            return await _coachRepository.GetAsync(userId);
-        }
+        //public async Task<User?> GetUserProfileAsync(int userId)
+        //{
+        //    return await _coachRepository.GetAsync(userId);
+        //}
 
         
 
-        private string GenerateToken(User user)
-        {
-            // This method should implement token generation (e.g., JWT)
-            // Define the key and signing credentials
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            List<string> roleList = new List<string> { "Admin", "Staff", "Coach#", "Child" };
+        //private string GenerateToken(User user)
+        //{
+        //    // This method should implement token generation (e.g., JWT)
+        //    // Define the key and signing credentials
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey));
+        //    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        //    List<string> roleList = new List<string> { "Admin", "Staff", "Coach#", "Child" };
 
-        // Define claims
-        var claims = new List<Claim>
-        {
-            //new Claim(JwtRegisteredClaimNames.Sub, user.Username), // Subject
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),  // Email
-            new Claim("role", user.Role),                         // Custom claim for role
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Unique identifier
-        };
+        //// Define claims
+        //var claims = new List<Claim>
+        //{
+        //    //new Claim(JwtRegisteredClaimNames.Sub, user.Username), // Subject
+        //    new Claim(JwtRegisteredClaimNames.Email, user.Email),  // Email
+        //    new Claim("role", user.Role),                         // Custom claim for role
+        //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Unique identifier
+        //};
 
-            // Create the token
-            var token = new JwtSecurityToken(
-                issuer: _jwtOptions.Issuer,          // Replace with your issuer (e.g., your app name)
-                audience: _jwtOptions.Audience,      // Replace with your audience
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtOptions.TokenExpirationMinutes),
-                signingCredentials: credentials
-            );
+        //    // Create the token
+        //    var token = new JwtSecurityToken(
+        //        issuer: _jwtOptions.Issuer,          // Replace with your issuer (e.g., your app name)
+        //        audience: _jwtOptions.Audience,      // Replace with your audience
+        //        claims: claims,
+        //        expires: DateTime.UtcNow.AddMinutes(_jwtOptions.TokenExpirationMinutes),
+        //        signingCredentials: credentials
+        //    );
 
-            // Return the serialized token
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        //    // Return the serialized token
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
     }
 }
 
