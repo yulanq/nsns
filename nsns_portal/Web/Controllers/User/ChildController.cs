@@ -622,14 +622,14 @@ namespace Web.Controllers.User
         }
 
 
-        [HttpGet("EnrollmentsHistory/{userId}")]
+        [HttpGet("EnrollmentsHistory/{childId}")]
 
-        public async Task<IActionResult> EnrollmentsHistory(int userId)
+        public async Task<IActionResult> EnrollmentsHistory(int childId)
         {
 
-            var child = await _childService.GetAsync(userId);
-            var completedCourses = await _courseEnrollmentService.GetCompletedEnrollmentsByChildAsync(userId);
-            var completedActivities = await _activityEnrollmentService.GetCompletedEnrollmentsByChildAsync(userId);
+            var child = await _childService.GetAsync(childId);
+            var completedCourses = await _courseEnrollmentService.GetCompletedEnrollmentsByChildAsync(childId);
+            var completedActivities = await _activityEnrollmentService.GetCompletedEnrollmentsByChildAsync(childId);
 
             if (child == null)
                 throw new Exception("The child can't be found");
