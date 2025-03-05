@@ -15,7 +15,7 @@ namespace Core.Interfaces
     {
 
         Task<IEnumerable<Parent>> GetAllAsync();
-        Task<Parent?> GetByIdAsync(int parentId);
+        Task<Parent?> GetAsync(int parentId);
         Task<bool> AddAsync(Parent parent);
 
         Task<int> AddAndReturnIdAsync(Parent parent);

@@ -42,7 +42,7 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">@payment.Parent.Name</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@payment.PaymentPackage.Title</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">$@payment.Amount</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@payment.PaymentDate?.ToString("yyyy-MM-dd")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@(payment.PaymentDate.HasValue? payment.PaymentDate.Value.ToString("yyyy-MM-dd") : "")</td>
                     <td>
                         @if (!string.IsNullOrEmpty(payment.Receipt))
 

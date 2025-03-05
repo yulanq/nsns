@@ -81,7 +81,7 @@ namespace Core.Services
                 throw new Exception("Child is not found.");
             }
 
-            var parent = await _parentRepository.GetByIdAsync(parentId);
+            var parent = await _parentRepository.GetAsync(parentId);
             if (parent == null)
             {
                 throw new Exception("Parent is not found.");

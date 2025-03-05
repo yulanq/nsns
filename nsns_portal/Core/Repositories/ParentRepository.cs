@@ -30,9 +30,9 @@ namespace Core.Repositories
         }
 
         // ✅ Get a parent by ID
-        public async Task<Parent?> GetByIdAsync(int id)
+        public async Task<Parent?> GetAsync(int parentId)
         {
-            return await _context.Parents.FindAsync(id);
+            return await _context.Parents.FindAsync(parentId);
         }
 
         // ✅ Add a new parent

@@ -35,7 +35,7 @@ namespace Core.Services
         // ✅ Get a parent by ID
         public async Task<Parent?> GetParentByIdAsync(int parentId)
         {
-            return await _parentRepository.GetByIdAsync(parentId);
+            return await _parentRepository.GetAsync(parentId);
         }
 
        
@@ -56,7 +56,7 @@ namespace Core.Services
         // ✅ Update an existing parent
         public async Task<bool> UpdateAsync(Parent parent)
         {
-            var existingParent = await _parentRepository.GetByIdAsync(parent.ParentID);
+            var existingParent = await _parentRepository.GetAsync(parent.ParentID);
             if (existingParent == null)
                 throw new Exception("Parent not found.");
 
@@ -66,7 +66,7 @@ namespace Core.Services
         // ✅ Delete a parent
         public async Task<bool> DeleteAsync(int parentId)
         {
-            var parent = await _parentRepository.GetByIdAsync(parentId);
+            var parent = await _parentRepository.GetAsync(parentId);
             if (parent == null)
                 throw new Exception("Parent not found.");
 

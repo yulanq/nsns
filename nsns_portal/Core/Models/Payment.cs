@@ -14,7 +14,7 @@ namespace Core.Models
         [Key]
         public int PaymentID { get; set; } // Primary key for the table
 
-        public int UserID { get; set; }  // Foreign key for Child (nullable)
+        //public int UserID { get; set; }  // Foreign key for Child (nullable)
         
         public int ParentID { get; set; } // Foreign key for Parent (nullable)
         public int? PaymentPackageID { get; set; } // Foreign key for PaymentPackage (nullable)
@@ -36,8 +36,10 @@ namespace Core.Models
         [ForeignKey(nameof(ParentID))]
         public virtual Parent? Parent { get; set; } // Navigation property for Parent
 
-        [ForeignKey(nameof(UserID))]
+        [ForeignKey(nameof(ChildID))]
+        public int ChildID { get; set; }
         public virtual Child? Child { get; set; } // Navigation property for Child
+
 
         [ForeignKey(nameof(PaymentPackageID))]
         public virtual PaymentPackage? PaymentPackage { get; set; } // Navigation property for PaymentPackage
