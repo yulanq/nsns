@@ -22,12 +22,12 @@ namespace Core.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<ActivityEnrollment>> GetEnrollmentsByChildAsync(int userId, string status)
+        public async Task<IEnumerable<ActivityEnrollment>> GetEnrollmentsByChildAsync(int childId, string status)
         {
             return await _context.ActivityEnrollments
                 .Include(e => e.Activity)
                 //.Include(e => e.Child)
-                .Where(e => e.UserID == userId && e.Status == status)
+                .Where(e => e.ChildID == childId && e.Status == status)
                 .OrderBy(e => e.Activity.ScheduledAt)
                 .ToListAsync();
         }

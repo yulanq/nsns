@@ -45,7 +45,7 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Child/UnregisterCourse">
                             <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentID" />
-                            <input type="hidden" name="userId" value="@enrollment.UserID" />
+                            <input type="hidden" name="childId" value="@enrollment.ChildID" />
                             <button type="submit" style="background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; cursor: pointer;">
                                 Remove
                             </button>
@@ -93,7 +93,7 @@
 <b>Register @Model.Child.Name in Course</b>
 <div style="margin-bottom: 10px;"></div>
     <form method="post" action="/Child/RegisterCourse">
-    <input type="hidden" name="userId" value="@Model.Child.UserID" />
+    <input type="hidden" name="childId" value="@Model.Child.ChildID" />
 
     <!-- Select Specialty First -->
     <label for="specialtyId">Select Specialty:</label>
@@ -152,7 +152,7 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Child/UnregisterActivity">
                             <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentID" />
-                            <input type="hidden" name="userId" value="@enrollment.UserID" />
+                            <input type="hidden" name="childId" value="@enrollment.ChildID" />
                             <button type="submit" style="background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; cursor: pointer;">
                                 Remove
                             </button>
@@ -199,7 +199,7 @@
 <div style="margin-bottom: 10px;"></div>
 
 <form method="post" action="/Child/RegisterActivity">
-    <input type="hidden" name="userId" value="@Model.Child.UserID" />
+    <input type="hidden" name="childId" value="@Model.Child.ChildID" />
 
     <label for="activityId">Select Activity:</label>
     <select id="activityId" name="activityId" required>

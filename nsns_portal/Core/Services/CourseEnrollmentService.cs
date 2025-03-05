@@ -86,14 +86,14 @@ namespace Core.Services
         {
             //Enrollment removal is only allowed for courses that have not started.
             var enrollment = await _enrollmentRepository.GetAsync(enrollmentId);
-            var userId = enrollment.UserID;
+            var childId = enrollment.ChildID;
             var courseId = enrollment.CourseID;
             var course_enrollment = await _enrollmentRepository.GetEnrollmentsByCourseAsync(courseId);
             if (course_enrollment.Any())
             {
                 foreach (var e in course_enrollment)
                 {
-                    if (e.UserID == userId && e.Status != "Registered")
+                    if (e.ChildID == childId && e.Status != "Registered")
                         throw new Exception("Enrollment removal is only allowed for courses that have not started.");
                 }
                   
@@ -101,14 +101,14 @@ namespace Core.Services
             return await _enrollmentRepository.RemoveAsync(enrollmentId);
         }
 
-        public async Task<IEnumerable<CourseEnrollment>> GetRegisteredEnrollmentsByChildAsync(int userId)
+        public async Task<IEnumerable<CourseEnrollment>> GetRegisteredEnrollmentsByChildAsync(int childId)
         {
-            return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Registered");
+            return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Registered");
         }
 
-        public async Task<IEnumerable<CourseEnrollment>> GetCompletedEnrollmentsByChildAsync(int userId)
+        public async Task<IEnumerable<CourseEnrollment>> GetCompletedEnrollmentsByChildAsync(int childId)
         {
-            return await _enrollmentRepository.GetEnrollmentsByChildAsync(userId, "Completed");
+            return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Completed");
         }
 
         public async Task<IEnumerable<Child>> GetRegisteredChildrenByCoachAsync(int coachId)
@@ -199,7 +199,7 @@ namespace Core.Services
             if (child == null)
                 throw new ArgumentException("Invalid child.");
 
-            return await _enrollmentRepository.GetEnrollmentsByChildAsync(child.UserID, "Scheduled");
+            return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Scheduled");
         }
 
 
@@ -208,7 +208,7 @@ namespace Core.Services
             Child? child = await _childRepository.GetAsync(childId);
             if (child == null)
                 throw new ArgumentException("Invalid child.");
-            return await _enrollmentRepository.GetEnrollmentsByCourseChildAsync(courseId, child.UserID, "Scheduled");
+            return await _enrollmentRepository.GetEnrollmentsByCourseChildAsync(courseId, childId, "Scheduled");
         }
 
         public async Task<IEnumerable<CourseEnrollment>> GetCompletesByCourseChildAsync(int courseId, int childId)
@@ -216,7 +216,7 @@ namespace Core.Services
             Child? child = await _childRepository.GetAsync(childId);
             if (child == null)
                 throw new ArgumentException("Invalid child.");
-            return await _enrollmentRepository.GetEnrollmentsByCourseChildAsync(courseId, child.UserID, "Completed");
+            return await _enrollmentRepository.GetEnrollmentsByCourseChildAsync(courseId, childId, "Completed");
         }
 
         public async Task<bool> CompleteCourseAsync(int enrollmentId, decimal actualHours)
