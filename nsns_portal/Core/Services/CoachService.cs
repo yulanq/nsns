@@ -94,10 +94,10 @@ namespace Core.Services
 
 
 
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(int coachId)
         {
             // Find the coach by ID
-            var coach = await _coachRepository.GetAsync(id);
+            var coach = await _coachRepository.GetAsync(coachId);
             if (coach == null)
             {
                 throw new Exception("Coach not found.");
@@ -108,10 +108,10 @@ namespace Core.Services
         }
 
 
-        public async Task<bool> UpdateAsync(int id, string name,string email, /*string password,*/ int specialtyId, string gender, string phone, string wechat, int cityId)
+        public async Task<bool> UpdateAsync(int coachId, string name,string email, /*string password,*/ int specialtyId, string gender, string phone, string wechat, int cityId)
         {
             // Find the coach by ID
-            var coach = await _coachRepository.GetAsync(id);
+            var coach = await _coachRepository.GetAsync(coachId);
             if (coach == null)
             {
                 throw new Exception("Coach not found.");
@@ -137,10 +137,10 @@ namespace Core.Services
             return await _coachRepository.UpdateAsync(coach);
         }
 
-        public async Task<Coach> GetAsync(int id)
+        public async Task<Coach> GetAsync(int coachId)
         {
             // Retrieve the staff by ID
-            var coach = await _coachRepository.GetAsync(id);
+            var coach = await _coachRepository.GetAsync(coachId);
             if(coach.CityID!= null)
             {
                 var city = await _cityRepository.GetAsync(coach.CityID);

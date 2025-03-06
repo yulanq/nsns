@@ -139,11 +139,11 @@ namespace Web.Controllers.User
 
 
         // GET: Coach/Delete/{userId}
-        [HttpGet("ConfirmDelete/{userId}")]
-        public async Task<IActionResult> ConfirmDelete(int userId)
+        [HttpGet("ConfirmDelete/{coachId}")]
+        public async Task<IActionResult> ConfirmDelete(int coachId)
         {
             // Fetch the staff details from the database
-            var coach = await _coachService.GetAsync(userId);
+            var coach = await _coachService.GetAsync(coachId);
             if (coach == null)
             {
                 return NotFound();
@@ -155,11 +155,11 @@ namespace Web.Controllers.User
 
 
         [HttpPost("DeleteConfirmed")]
-        public async Task<IActionResult> DeleteConfirmed(int userId)
+        public async Task<IActionResult> DeleteConfirmed(int coachId)
         {
             try
             {
-                var result = await _coachService.RemoveAsync(userId);
+                var result = await _coachService.RemoveAsync(coachId);
 
                 if (!result)
                 {

@@ -18,11 +18,11 @@ namespace Core.Interfaces
         
         Task<bool> AddAsync(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId);
 
-        Task<bool> RemoveAsync(int userId);
+        Task<bool> RemoveAsync(int coachId);
 
-        Task<bool> UpdateAsync(int id, string name, string email, /*string password, */int specialtyId, string gender, string phone, string wechat, int cityId);
+        Task<bool> UpdateAsync(int coachId, string name, string email, /*string password, */int specialtyId, string gender, string phone, string wechat, int cityId);
 
-        Task<Coach> GetAsync(int courseId);
+        Task<Coach> GetAsync(int coachId);
 
         
         Task<IEnumerable<Coach>> GetAllAsync();
