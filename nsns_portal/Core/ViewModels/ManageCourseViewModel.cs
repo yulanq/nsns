@@ -13,7 +13,7 @@ namespace Core.ViewModels
 {
     public class RegisteredChild
     {
-        public int UserID { get; set; }
+        public int ChildID { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
         public City City { get; set; }

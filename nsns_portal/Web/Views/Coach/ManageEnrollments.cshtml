@@ -34,7 +34,7 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Coach/CompleteCourse">
                             <input type="hidden" name="enrollmentId" value="@schedule.EnrollmentID" />
-                            <input type="hidden" name="userId" value="@Model.Child.UserID" />
+                            <input type="hidden" name="childId" value="@Model.Child.ChildID" />
                             <input name="actualHours" value="@schedule.ActualHours" type="number" step="0.5" min="0" required />
                             <button type="submit" style="background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; cursor: pointer;">
                                 Complete

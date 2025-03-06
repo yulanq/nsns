@@ -329,7 +329,7 @@ namespace Web.Controllers.User
         [HttpGet("ManageCourse")]
         public async Task<IActionResult> ManageCourse()
         {
-            int coachId = 10; // Replace with actual coach ID retrieval logic
+            int coachId = 16; // Replace with actual coach ID retrieval logic
 
             // Get all children registered in the coach's course
             var children = await _courseEnrollmentService.GetRegisterationByCoachAsync(coachId);
@@ -348,13 +348,13 @@ namespace Web.Controllers.User
 
 
 
-        [HttpGet("ManageSchedules/{userId}")]
-        public async Task<IActionResult> ManageSchedules(int userId)
+        [HttpGet("ManageSchedules/{childId}")]
+        public async Task<IActionResult> ManageSchedules(int childId)
         {
-            int coachId = 10;  //GetLoggedInCoachId();
+            int coachId = 16;  //GetLoggedInCoachId();
             // ✅ Get children who are enrolled in the coach's courses
             //var children = await _courseEnrollmentService.GetRegisteredChildrenByCoachAsync(coachId);
-            var child = await _childService.GetAsync(userId);
+            var child = await _childService.GetAsync(childId);
            
             // ✅ Get courses assigned to the coach
             var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
@@ -362,7 +362,7 @@ namespace Web.Controllers.User
 
             // ✅ Get schedules for the child and course
          
-            List<CourseEnrollment> schedules = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, child.ChildID);
+            List<CourseEnrollment> schedules = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, childId);
             
 
 
@@ -380,7 +380,7 @@ namespace Web.Controllers.User
         [HttpPost("ScheduleCourse")]
         public async Task<IActionResult> ScheduleCourse(int childId, int courseId, DateTime scheduledAt, decimal scheduledHours)
         {
-            int coachId = 10; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
+            int coachId = 16; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
            
 
             Child? child = await _childService.GetAsync(childId);
@@ -400,13 +400,13 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = "Failed to schedule the course.";
             }
 
-            return RedirectToAction("ManageSchedules", new { child.UserID });
+            return RedirectToAction("ManageSchedules", new { childId });
         }
 
         
 
         [HttpPost("DeleteSchedule")]
-        public async Task<IActionResult> DeleteSchedule(int enrollmentId, int userId)
+        public async Task<IActionResult> DeleteSchedule(int enrollmentId, int childId)
         {
             bool result = await _courseEnrollmentService.RemoveScheduleAsync(enrollmentId);
 
@@ -419,21 +419,21 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = "Failed to delete the schedule.";
             }
 
-            return RedirectToAction("ManageSchedules", new { userId });
+            return RedirectToAction("ManageSchedules", new { childId });
         }
 
 
-        [HttpGet("ManageEnrollments/{userId}")]
-        public async Task<IActionResult> ManageEnrollments(int userId)
+        [HttpGet("ManageEnrollments/{childId}")]
+        public async Task<IActionResult> ManageEnrollments(int childId)
         {
-            int coachId = 10; // Replace with actual coach ID retrieval logic
+            int coachId = 16; // Replace with actual coach ID retrieval logic
 
             // Get all children registered in the coach's course
             //var children = await _courseEnrollmentService.GetRegisterationByCoachAsync(coachId);
 
             // Get enrollment details
             var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
-            Child? child = await _childService.GetAsync(userId);
+            Child? child = await _childService.GetAsync(childId);
 
             if (child == null)
             {
@@ -444,8 +444,8 @@ namespace Web.Controllers.User
             {
                 Course = course,
                 Child = child,
-                ScheduledEnrollments = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, child.ChildID),
-                CompletedEnrollments = (List<CourseEnrollment>)await _courseEnrollmentService.GetCompletesByCourseChildAsync(course.CourseID, child.ChildID)
+                ScheduledEnrollments = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, childId),
+                CompletedEnrollments = (List<CourseEnrollment>)await _courseEnrollmentService.GetCompletesByCourseChildAsync(course.CourseID, childId)
 
             };
 
@@ -453,12 +453,12 @@ namespace Web.Controllers.User
         }
 
         [HttpPost("CompleteCourse")]
-        public async Task<IActionResult> CompleteCourse(int enrollmentId, int userId, decimal actualHours)
+        public async Task<IActionResult> CompleteCourse(int enrollmentId, int childId, decimal actualHours)
         {
-            int coachId = 10; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
+            int coachId = 16; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
 
 
-            Child? child = await _childService.GetAsync(userId);
+            Child? child = await _childService.GetAsync(childId);
             if (child == null)
             {
                 throw new ArgumentException("Child not found");
@@ -483,7 +483,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { child.UserID });
+            return RedirectToAction("ManageEnrollments", new { childId });
         }
     }
 }

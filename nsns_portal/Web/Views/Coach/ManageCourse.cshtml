@@ -33,10 +33,10 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">@(child.BirthDate?.ToString("yyyy-MM-dd") ?? "N/A")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@child.RegisteredDate.ToString("yyyy-MM-dd")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Coach/ManageSchedules/@child.UserID">Manage</a>
+                        <a href="/Coach/ManageSchedules/@child.ChildID">Manage</a>
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Coach/ManageEnrollments/@child.UserID">Manage</a>
+                        <a href="/Coach/ManageEnrollments/@child.ChildID">Manage</a>
                     </td>
                 </tr>
             }

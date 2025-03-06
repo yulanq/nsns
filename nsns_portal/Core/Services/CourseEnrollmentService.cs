@@ -125,7 +125,7 @@ namespace Core.Services
 
             return course_enrollments.Select(e => new RegisteredChild
             {
-                UserID = e.Child.UserID,
+                ChildID = e.Child.ChildID,
                 Name = e.Child.Name,
                 Gender = e.Child.Gender,
                 City = e.Child.City,
