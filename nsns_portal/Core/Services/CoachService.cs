@@ -65,7 +65,7 @@ namespace Core.Services
             var user = new User
             {
                 Email = email,
-                Password = password,
+                //Password = password,
                 Role = "Coach",
                 CreatedDate = DateTime.UtcNow
             };

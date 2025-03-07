@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Serialization;
 using Core.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 
 
@@ -17,11 +19,25 @@ using Core.Models;
 
 namespace Core.Contexts
 {
-   
 
-    public class AppDbContext : DbContext
+
+    //public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int> //DbContext
+    public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int,
+        IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>,
+        IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    base.OnModelCreating(builder);
+
+        //    // Explicitly define the primary key for Identity tables
+        //    builder.Entity<IdentityUserLogin<int>>().HasKey(x => new { x.LoginProvider, x.ProviderKey });
+        //    builder.Entity<IdentityUserRole<int>>().HasKey(x => new { x.UserId, x.RoleId });
+        //    builder.Entity<IdentityUserToken<int>>().HasKey(x => new { x.UserId, x.LoginProvider, x.Name });
+        //}
+
 
         public DbSet<User> Users { get; set; }
         public DbSet<Admin> Admins { get; set; }
@@ -30,7 +46,38 @@ namespace Core.Contexts
 
         
         public DbSet<Child> Children { get; set; }
-        public DbSet<Course> Courses { get; set; }
+
+
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<User>()
+        //        .HasOne(a => a.Admin)
+        //        .WithOne(a => a.User)
+        //        .HasForeignKey<Admin>(a => a.UserId);
+
+        //    modelBuilder.Entity<User>()
+        //        .HasOne(s => s.Staff)
+        //        .WithOne(s => s.User)
+        //        .HasForeignKey<Staff>(s => s.UserId);
+
+        //    modelBuilder.Entity<User>()
+        //        .HasOne(c => c.Coach)
+        //        .WithOne(c => c.User)
+        //        .HasForeignKey<Coach>(c => c.UserId);
+
+        //    modelBuilder.Entity<User>()
+        //        .HasOne(ch => ch.Child)
+        //        .WithOne(ch => ch.User)
+        //        .HasForeignKey<Child>(ch => ch.UserId);
+        //}
+    //}
+
+
+
+
+
+    public DbSet<Course> Courses { get; set; }
         public DbSet<Core.Models.Activity> Activities { get; set; }
         public DbSet<Parent> Parents { get; set; }
         public DbSet<ParentChild> ParentChild { get; set; }
@@ -49,6 +96,13 @@ namespace Core.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            // Explicitly define the primary key for Identity tables
+            modelBuilder.Entity<IdentityUserLogin<int>>().HasKey(x => new { x.LoginProvider, x.ProviderKey });
+            modelBuilder.Entity<IdentityUserRole<int>>().HasKey(x => new { x.UserId, x.RoleId });
+            modelBuilder.Entity<IdentityUserToken<int>>().HasKey(x => new { x.UserId, x.LoginProvider, x.Name });
+
             modelBuilder.Entity<Core.Models.Activity>()
             .ToTable("activities"); // Explicitly map to the table name
 

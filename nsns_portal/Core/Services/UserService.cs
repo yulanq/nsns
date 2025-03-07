@@ -54,12 +54,12 @@ namespace Core.Services
             {
                 Email = email,
                 Role = "Child",
-                Password = password,
+                PasswordHash = password,
                 CreatedDate = DateTime.UtcNow,
                 
             };
 
-            newUser.Password = _passwordHasher.HashPassword(newUser, password);
+            newUser.PasswordHash = _passwordHasher.HashPassword(newUser, password);
             await _userRepository.AddAsync(newUser);
             return true;
         }
@@ -70,7 +70,7 @@ namespace Core.Services
         public async Task<string?> LoginAsync(string email, string password)
         {
             var user = await _userRepository.GetByEmailAsync(email);
-            if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, password) == PasswordVerificationResult.Failed)
+            if (user == null || _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password) == PasswordVerificationResult.Failed)
                 return null; // Invalid username or password
 
             return GenerateToken(user); 
@@ -79,10 +79,10 @@ namespace Core.Services
         public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
         {
             var user = await _userRepository.GetAsync(userId);
-            if (user == null || _passwordHasher.VerifyHashedPassword(user, user.Password, currentPassword) == PasswordVerificationResult.Failed)
+            if (user == null || _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, currentPassword) == PasswordVerificationResult.Failed)
                 return false; // User not found or incorrect password
 
-            user.Password = _passwordHasher.HashPassword(user, newPassword);
+            user.PasswordHash = _passwordHasher.HashPassword(user, newPassword);
             user.UpdatedDate = DateTime.UtcNow;
             await _userRepository.UpdateAsync(user);
             return true;

@@ -455,7 +455,7 @@ namespace Web.Controllers.User
         [HttpPost("CompleteCourse")]
         public async Task<IActionResult> CompleteCourse(int enrollmentId, int childId, decimal actualHours)
         {
-            int coachId = 16; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
+            //int coachId = 16; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
 
 
             Child? child = await _childService.GetAsync(childId);
