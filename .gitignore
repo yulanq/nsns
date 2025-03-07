@@ -23,3 +23,9 @@
 /nsns_portal/Core/obj/Debug/net8.0/Core.genruntimeconfig.cache
 /nsns_portal/Core/obj/Core.csproj.nuget.dgspec.json
 /nsns_portal/Core/obj/project.nuget.cache
+/nsns_portal/Core/obj/project.assets.json
+/nsns_portal/Core/obj/Core.csproj.nuget.g.targets
+/nsns_portal/Core/obj/Debug/net8.0/Core.csproj.FileListAbsolute.txt
+/nsns_portal/Core/obj/Debug/net8.0/Core.csproj.CoreCompileInputs.cache
+/nsns_portal/Core/obj/Debug/net8.0/Core.csproj.AssemblyReference.cache
+*.targets
