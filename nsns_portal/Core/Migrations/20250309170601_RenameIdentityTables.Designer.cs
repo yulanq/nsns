@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250307181439_UpdateUserTable")]
-    partial class UpdateUserTable
+    [Migration("20250309170601_RenameIdentityTables")]
+    partial class RenameIdentityTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -241,7 +241,8 @@ namespace Core.Migrations
 
                     b.HasKey("AdminID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("admins", (string)null);
                 });
@@ -275,7 +276,8 @@ namespace Core.Migrations
 
                     b.HasIndex("CityID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("children", (string)null);
                 });
@@ -411,7 +413,8 @@ namespace Core.Migrations
 
                     b.HasIndex("SpecialtyID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("coaches", (string)null);
                 });
@@ -859,7 +862,8 @@ namespace Core.Migrations
 
                     b.HasKey("StaffID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("staff", (string)null);
                 });
@@ -973,7 +977,7 @@ namespace Core.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -997,7 +1001,7 @@ namespace Core.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("roleclaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -1021,7 +1025,7 @@ namespace Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("userclaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
@@ -1042,7 +1046,7 @@ namespace Core.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("userlogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
@@ -1057,7 +1061,7 @@ namespace Core.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("userroles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -1076,7 +1080,7 @@ namespace Core.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("usertokens", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Activity", b =>
@@ -1196,8 +1200,8 @@ namespace Core.Migrations
             modelBuilder.Entity("Core.Models.Admin", b =>
                 {
                     b.HasOne("Core.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
+                        .WithOne()
+                        .HasForeignKey("Core.Models.Admin", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1211,8 +1215,8 @@ namespace Core.Migrations
                         .HasForeignKey("CityID");
 
                     b.HasOne("Core.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
+                        .WithOne()
+                        .HasForeignKey("Core.Models.Child", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1286,8 +1290,8 @@ namespace Core.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
+                        .WithOne()
+                        .HasForeignKey("Core.Models.Coach", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1499,8 +1503,8 @@ namespace Core.Migrations
             modelBuilder.Entity("Core.Models.Staff", b =>
                 {
                     b.HasOne("Core.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
+                        .WithOne()
+                        .HasForeignKey("Core.Models.Staff", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

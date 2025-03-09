@@ -77,7 +77,7 @@ namespace Core.Contexts
 
 
 
-    public DbSet<Course> Courses { get; set; }
+        public DbSet<Course> Courses { get; set; }
         public DbSet<Core.Models.Activity> Activities { get; set; }
         public DbSet<Parent> Parents { get; set; }
         public DbSet<ParentChild> ParentChild { get; set; }
@@ -98,10 +98,32 @@ namespace Core.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<User>()
+        .ToTable("users"); // Explicitly map to the table name
+
+
+            modelBuilder.Entity<IdentityRole<int>>().ToTable("roles");
+            modelBuilder.Entity<IdentityUserRole<int>>().ToTable("userroles");
+            modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("userclaims");
+            modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("userlogins");
+            modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("roleclaims");
+            modelBuilder.Entity<IdentityUserToken<int>>().ToTable("usertokens");
             // Explicitly define the primary key for Identity tables
             modelBuilder.Entity<IdentityUserLogin<int>>().HasKey(x => new { x.LoginProvider, x.ProviderKey });
             modelBuilder.Entity<IdentityUserRole<int>>().HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<IdentityUserToken<int>>().HasKey(x => new { x.UserId, x.LoginProvider, x.Name });
+
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .ToTable("users"); // Explicitly map to "users" table
+
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .HasKey(u => u.Id); // Set primary key
+
+            // Ensure relationships between User and your custom tables
+            modelBuilder.Entity<Admin>().HasOne(a => a.User).WithOne().HasForeignKey<Admin>(a => a.UserID);
+            modelBuilder.Entity<Staff>().HasOne(s => s.User).WithOne().HasForeignKey<Staff>(s => s.UserID);
+            modelBuilder.Entity<Coach>().HasOne(c => c.User).WithOne().HasForeignKey<Coach>(c => c.UserID);
+            modelBuilder.Entity<Child>().HasOne(c => c.User).WithOne().HasForeignKey<Child>(c => c.UserID);
 
             modelBuilder.Entity<Core.Models.Activity>()
             .ToTable("activities"); // Explicitly map to the table name
@@ -154,8 +176,7 @@ namespace Core.Contexts
             modelBuilder.Entity<Staff>()
          .ToTable("staff"); // Explicitly map to the table name
 
-            modelBuilder.Entity<User>()
-         .ToTable("users"); // Explicitly map to the table name
+           
 
             modelBuilder.Entity<Specialty>()
         .ToTable("specialties"); // Explicitly map to the table name

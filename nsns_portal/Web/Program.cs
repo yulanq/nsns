@@ -90,9 +90,31 @@ builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 builder.Services.AddScoped<ISpecialtyService, SpecialtyService>();
 
+builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
+
 builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql( builder.Configuration.GetConnectionString("DefaultConnection"),  new MySqlServerVersion(new Version(8, 0, 39)) // Replace with your MySQL version
 
     ));
+
+
+// Add Identity
+builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
+{
+    options.Password.RequiredLength = 6;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = false;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
+
+
+
 
 
 //builder.Services.AddAuthentication(options =>
@@ -145,6 +167,8 @@ app.Use(async (context, next) =>
 });
 
 app.UseRouting();
+
+app.MapControllers();
 
 //app.UseAuthorization();
 
