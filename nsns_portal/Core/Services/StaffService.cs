@@ -22,17 +22,17 @@ namespace Core.Services
         private readonly IStaffRepository _staffRepository;
         //private readonly IRepository<Specialty> _specialtyRepository;
         //private readonly IRepository<City> _cityRepository;
-        private readonly IPasswordHasher<Staff> _passwordHasher;
-        private readonly JwtOptions _jwtOptions;
+        //private readonly IPasswordHasher<Staff> _passwordHasher;
+        //private readonly JwtOptions _jwtOptions;
         //private const int TokenExpirationMinutes = 60; // Token validity duration
 
 
 
-        public StaffService(IStaffRepository staffRepository,IPasswordHasher<Staff> password, IOptions<JwtOptions> jwtOptions)
+        public StaffService(IStaffRepository staffRepository)
         {
             _staffRepository = staffRepository;
-            _passwordHasher = password;
-            _jwtOptions = jwtOptions.Value;
+            //_passwordHasher = password;
+            //_jwtOptions = jwtOptions.Value;
 
         }
 

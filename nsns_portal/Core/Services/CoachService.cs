@@ -28,13 +28,13 @@ namespace Core.Services
 
 
 
-        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, ISpecialtyRepository specialtyRepository, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions)
+        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, ISpecialtyRepository specialtyRepository/*, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions*/)
         {
             _coachRepository = coachRepository;
             _cityRepository = cityRepository;
             _specialtyRepository = specialtyRepository;
-            _passwordHasher = password;
-            _jwtOptions = jwtOptions.Value;
+            //_passwordHasher = password;
+            //_jwtOptions = jwtOptions.Value;
 
         }
 

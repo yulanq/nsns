@@ -17,17 +17,17 @@ namespace Core.Services
     public class AdminService : IAdminService
     {
         private readonly IAdminRepository _adminRepository;
-        private readonly IPasswordHasher<Admin> _passwordHasher;
-        private readonly JwtOptions _jwtOptions;
+        //private readonly IPasswordHasher<Admin> _passwordHasher;
+        //private readonly JwtOptions _jwtOptions;
         //private const int TokenExpirationMinutes = 60; // Token validity duration
 
 
 
-        public AdminService(IAdminRepository adminRepository, IPasswordHasher<Admin> password, IOptions<JwtOptions> jwtOptions)
+        public AdminService(IAdminRepository adminRepository/*, IPasswordHasher<Admin> password, IOptions<JwtOptions> jwtOptions*/)
         {
             _adminRepository = adminRepository;
-            _passwordHasher = password;
-            _jwtOptions = jwtOptions.Value;
+            //_passwordHasher = password;
+            //_jwtOptions = jwtOptions.Value;
 
         }
 

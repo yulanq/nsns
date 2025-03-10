@@ -1,7 +1,9 @@
 ﻿
 using Core.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Core.Interfaces;
 using Core.Models;
 using Core.ViewModels;
@@ -16,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Web.Controllers.User
 {
     [Route("Child")]
+    [Authorize(Roles = "Staff")]
     //[ApiController]
     public class ChildController : Controller
     {

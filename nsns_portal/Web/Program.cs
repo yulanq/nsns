@@ -11,10 +11,53 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 using Pomelo.EntityFrameworkCore.MySql;
+using Microsoft.AspNetCore.Mvc;
+
+
+async Task SeedRolesAndAdmin(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+    string[] roleNames = { "Admin", "Staff", "Coach", "Parent", "Child" };
+
+    // Create roles if they don't exist
+    foreach (var roleName in roleNames)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole<int> { Name = roleName });
+        }
+    }
+
+    // Create an admin user if none exists
+    var adminEmail = "admin@example.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+    if (adminUser == null)
+    {
+        var newAdmin = new User
+        {
+            UserName = "admin",
+            Email = adminEmail,
+            EmailConfirmed = true,
+            Role = "Admin"
+        };
+
+        var result = await userManager.CreateAsync(newAdmin, "Admin@123"); // Secure default password
+
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(newAdmin, "Admin");
+        }
+    }
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Full MVC with Views (HTML pages using Razor).
+// Controllers that return both Views & JSON (e.g., hybrid APIs).
 builder.Services.AddControllersWithViews();
 
 // ? Add session services
@@ -30,7 +73,7 @@ builder.Services.AddDistributedMemoryCache();
 
 
 // Add JWT configuration to the dependency injection container
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+//builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
 
 builder.Services.AddScoped<IUserRepository<User>, UserRepository>();
@@ -82,7 +125,7 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 // Add password hasher
 //builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-builder.Services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
+//builder.Services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
 
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ICityService, CityService>();
@@ -117,29 +160,18 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//        ValidAudience = builder.Configuration["Jwt:Audience"],
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
-//    };
-//});
+
 var app = builder.Build();
 
 // ? Enable session middleware
 app.UseSession();
 
+// Automatically create roles and an admin user
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedRolesAndAdmin(services);
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -160,7 +192,7 @@ app.Use(async (context, next) =>
 {
     if (context.Request.Path == "/")
     {
-        context.Response.Redirect("/Staff/List");
+        context.Response.Redirect("/Account/Login");
         return;
     }
     await next();
@@ -176,14 +208,18 @@ app.MapControllers();
 //    name: "default",
 //    pattern: "{controller=User}/{action=AddAdmin}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
-    // Map controller routes
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Staff}/{action=List}/{id?}" // Default route points to User/AddAdmin
-    );
-});
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Account}/{action=Login}/{id?}");
+
+//app.UseEndpoints(endpoints =>
+//{
+//    // Map controller routes
+//    endpoints.MapControllerRoute(
+//        name: "default",
+//        pattern: "{controller=Account}/{action=Login}/{id?}" // Default route points to User/AddAdmin
+//    );
+//});
 
 //app.UseEndpoints(endpoints =>
 //{

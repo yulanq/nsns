@@ -21,17 +21,17 @@ namespace Core.Services
     public class ChildService : IChildService
     {
        
-        private readonly IPasswordHasher<Child> _passwordHasher;
-        private readonly JwtOptions _jwtOptions;
+        //private readonly IPasswordHasher<Child> _passwordHasher;
+        //private readonly JwtOptions _jwtOptions;
         private readonly IChildRepository _childRepository;
         private readonly ICityRepository _cityRepository;
 
-        public ChildService(IChildRepository childRepository, ICityRepository cityRepository, IPasswordHasher<Child> password, IOptions<JwtOptions> jwtOptions)
+        public ChildService(IChildRepository childRepository, ICityRepository cityRepository/*, IPasswordHasher<Child> password, IOptions<JwtOptions> jwtOptions*/)
         {
             _childRepository = childRepository;
             _cityRepository = cityRepository;
-            _passwordHasher = password;
-            _jwtOptions = jwtOptions.Value;
+            //_passwordHasher = password;
+            //_jwtOptions = jwtOptions.Value;
         }
 
         public async Task<IEnumerable<Child>> GetAllAsync()

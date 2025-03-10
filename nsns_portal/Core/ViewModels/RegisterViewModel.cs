@@ -1,9 +1,9 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.Models
+namespace Core.ViewModels
 {
-    public class RegisterRequest
+    public class RegisterViewModel
     {
         [Required]
         [EmailAddress]

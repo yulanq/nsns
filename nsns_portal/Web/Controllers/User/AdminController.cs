@@ -70,7 +70,7 @@ namespace Web.Controllers.User
 
         }
 
-        // GET: Staff/Delete/{userId}
+        // GET: Admin/Delete/{userId}
         [HttpGet("ConfirmDelete/{userId}")]
         public async Task<IActionResult> ConfirmDelete(int userId)
         {

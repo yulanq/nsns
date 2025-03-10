@@ -10,6 +10,7 @@ using Core.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 
 
@@ -36,7 +37,7 @@ namespace Web.Controllers.User
             _childService = childService;
         }
 
-
+        [Authorize(Roles = "Staff")]
         // POST: Add Staff Action
         [HttpPost("Add")]
         //[HttpPost]
@@ -110,6 +111,7 @@ namespace Web.Controllers.User
 
         }
 
+        [Authorize(Roles = "Staff")]
         // GET: Add View
         [HttpGet("Add")]
         //[HttpGet]
@@ -135,9 +137,9 @@ namespace Web.Controllers.User
         }
 
 
-       
 
 
+        [Authorize(Roles = "Staff")]
         // GET: Coach/Delete/{userId}
         [HttpGet("ConfirmDelete/{coachId}")]
         public async Task<IActionResult> ConfirmDelete(int coachId)
@@ -153,7 +155,7 @@ namespace Web.Controllers.User
             return View(coach);
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int coachId)
         {
