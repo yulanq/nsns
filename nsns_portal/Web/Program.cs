@@ -5,13 +5,13 @@ using Core.Repositories;
 using Core.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
+//using System.IdentityModel.Tokens.Jwt;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+//using Microsoft.IdentityModel.Tokens;
+//using System.Text;
 
-using Pomelo.EntityFrameworkCore.MySql;
-using Microsoft.AspNetCore.Mvc;
+//using Pomelo.EntityFrameworkCore.MySql;
+//using Microsoft.AspNetCore.Mvc;
 
 
 async Task SeedRolesAndAdmin(IServiceProvider serviceProvider)
@@ -135,9 +135,7 @@ builder.Services.AddScoped<ISpecialtyService, SpecialtyService>();
 
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
-builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql( builder.Configuration.GetConnectionString("DefaultConnection"),  new MySqlServerVersion(new Version(8, 0, 39)) // Replace with your MySQL version
-
-    ));
+builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql( builder.Configuration.GetConnectionString("DefaultConnection"),  new MySqlServerVersion(new Version(8, 0, 39)) ));
 
 
 // Add Identity
@@ -173,8 +171,7 @@ using (var scope = app.Services.CreateScope())
     await SeedRolesAndAdmin(services);
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -193,12 +190,15 @@ app.Use(async (context, next) =>
     if (context.Request.Path == "/")
     {
         context.Response.Redirect("/Account/Login");
+        //context.Response.Redirect("/Staff/List");
         return;
     }
     await next();
 });
 
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
