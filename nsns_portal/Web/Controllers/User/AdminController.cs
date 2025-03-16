@@ -19,10 +19,12 @@ namespace Web.Controllers.User
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
+        
 
         public AdminController(IAdminService adminService)
         {
             _adminService = adminService;
+            
           
         }
 
@@ -43,13 +45,19 @@ namespace Web.Controllers.User
             
             try
             {
-               var result = await _adminService.AddAsync( name, email, password,  phone,  wechat);
+                //var result = await _userRegistrationService.RegisterUserAsync(email, password, "Admin");
+                //if(!result)
+                //{
+                //    ModelState.AddModelError(string.Empty, "Registration failed. Please try again.");
+                //    return View();
+                //}
+                var result = await _adminService.AddAsync( name, email, password, phone,  wechat);
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed in adding the admin info.");
                     return View();
                 }
-                TempData["SuccessMessage"] = "he admin member has been added.";
+                TempData["SuccessMessage"] = "The admin member has been added.";
                 return RedirectToAction("List"); // Redirect to the admin list page
 
 
@@ -71,11 +79,11 @@ namespace Web.Controllers.User
         }
 
         // GET: Admin/Delete/{userId}
-        [HttpGet("ConfirmDelete/{userId}")]
-        public async Task<IActionResult> ConfirmDelete(int userId)
+        [HttpGet("ConfirmDelete/{adminId}")]
+        public async Task<IActionResult> ConfirmDelete(int adminId)
         {
             // Fetch the staff details from the database
-            var admin = await _adminService.GetAsync(userId);
+            var admin = await _adminService.GetAsync(adminId);
             if (admin == null)
             {
                 return NotFound();
@@ -87,11 +95,11 @@ namespace Web.Controllers.User
 
 
         [HttpPost("DeleteConfirmed")]
-        public async Task<IActionResult> DeleteConfirmed(int userId)
+        public async Task<IActionResult> DeleteConfirmed(int adminId)
         {
             try
             {
-                var result = await _adminService.RemoveAsync(userId);
+                var result = await _adminService.RemoveAsync(adminId);
 
                 if (!result)
                 {
@@ -108,7 +116,7 @@ namespace Web.Controllers.User
             }
 
             // If delete fails, reload the confirmation page
-            var admin = await _adminService.RemoveAsync(userId);
+            var admin = await _adminService.RemoveAsync(adminId);
             return View(admin);
         }
 
@@ -127,12 +135,12 @@ namespace Web.Controllers.User
        
 
         // GET: Edit View
-        [HttpGet("Edit/{userId}")]
+        [HttpGet("Edit/{adminId}")]
         //[HttpGet]
-        public async Task<IActionResult> Edit(int userId)
+        public async Task<IActionResult> Edit(int adminId)
         {
             // Fetch the staff details from the database
-            var admin = await _adminService.GetAsync(userId);
+            var admin = await _adminService.GetAsync(adminId);
             if (admin == null)
             {
                 return NotFound();
@@ -144,21 +152,21 @@ namespace Web.Controllers.User
         }
 
 
-        [HttpPost("Edit/{userId}")]
+        [HttpPost("Edit/{adminId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/ string phone, string wechat)
+        public async Task<IActionResult> Edit(int adminId, string name, string email, /*string password,*/ string phone, string wechat)
         {
            
 
             try
             {
-                var result = await _adminService.UpdateAsync(userId, name, email, /*password,*/ phone, wechat);
+                var result = await _adminService.UpdateAsync(adminId, name, email, /*password,*/ phone, wechat);
 
 
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed to update staff information.");
-                    var admin = await _adminService.GetAsync(userId);
+                    var admin = await _adminService.GetAsync(adminId);
                     return View(admin);
                 }
 
@@ -168,7 +176,7 @@ namespace Web.Controllers.User
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"Error: {ex.Message}";
-                var admin = await _adminService.GetAsync(userId);
+                var admin = await _adminService.GetAsync(adminId);
                 return View(admin);
             }
         }

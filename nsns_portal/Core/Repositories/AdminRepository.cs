@@ -92,10 +92,10 @@ namespace Core.Repositories
         }
 
         // Find a User by its email asynchronously
-        public async Task<Admin> GetAsync(int userId)
+        public async Task<Admin> GetAsync(int adminId)
         {
             return await _context.Admins.Include(u=>u.User)
-                .FirstOrDefaultAsync(u=> u.UserID == userId);  // Finds by ID asynchronously
+                .FirstOrDefaultAsync(u=> u.AdminID == adminId);  // Finds by ID asynchronously
         }
 
         // Get all Users from the database asynchronously

@@ -182,19 +182,19 @@ namespace Web.Controllers.User
         [HttpPost("Edit/{userId}")]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Edit(int userId, string name, DateTime birthDate, string gender, int cityId, string email/*, string password*/)
+        public async Task<IActionResult> Edit(int childId, string name, DateTime birthDate, string gender, int cityId, string email/*, string password*/)
         {
 
 
             try
             {
-                var result = await _childService.UpdateAsync(userId, name, birthDate, gender, cityId, email/*, string password*/);
+                var result = await _childService.UpdateAsync(childId, name, birthDate, gender, cityId, email/*, string password*/);
 
 
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed to update child information.");
-                    var child = await _childService.GetAsync(userId);
+                    var child = await _childService.GetAsync(childId);
 
                     if (child == null)
                     {
@@ -216,7 +216,7 @@ namespace Web.Controllers.User
             catch (Exception ex)
             {
                 //TempData["ErrorMessage"] = $"Error: {ex.Message}";
-                var child = await _childService.GetAsync(userId);
+                var child = await _childService.GetAsync(childId);
 
                 if (child == null)
                 {

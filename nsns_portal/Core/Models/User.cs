@@ -21,14 +21,14 @@ namespace Core.Models
         //[Key]
         //public int UserID { get; set; } // Primary Key
 
-       
+
         //[StringLength(45)]
         //public required string Email { get; set; } // User Email
 
-   
+
         //[StringLength(255)]
         //public required string Password { get; set; } // User Password
-
+        //public int Id { get; set; }
 
         public required string Role { get; set; } // User Role (Admin, Staff, Coach, Child)
 

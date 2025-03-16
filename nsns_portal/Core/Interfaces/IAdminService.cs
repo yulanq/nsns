@@ -13,11 +13,11 @@ namespace Core.Interfaces
 
         Task<bool> AddAsync(string name, string email, string password, string phone, string wechat);
 
-        Task<bool> RemoveAsync(int userId);
+        Task<bool> RemoveAsync(int adminId);
 
-        Task<bool> UpdateAsync(int id, string name, string email, /*string password, */  string phone, string wechat);
+        Task<bool> UpdateAsync(int adminId, string name, string email, /*string password, */  string phone, string wechat);
 
-        Task<Admin> GetAsync(int userId);
+        Task<Admin> GetAsync(int adminId);
 
         Task<IEnumerable<Admin>> GetAllAsync();
     }

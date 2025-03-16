@@ -17,15 +17,21 @@ namespace Core.Services
     public class AdminService : IAdminService
     {
         private readonly IAdminRepository _adminRepository;
+        private readonly IUserRegistrationService _userRegistrationService;
+        private readonly IUserRepository<User> _userRepository;
+        private readonly UserManager<Core.Models.User> _userManager;
         //private readonly IPasswordHasher<Admin> _passwordHasher;
         //private readonly JwtOptions _jwtOptions;
         //private const int TokenExpirationMinutes = 60; // Token validity duration
 
 
 
-        public AdminService(IAdminRepository adminRepository/*, IPasswordHasher<Admin> password, IOptions<JwtOptions> jwtOptions*/)
+        public AdminService(IAdminRepository adminRepository, IUserRegistrationService userRegistrationService, IUserRepository<User> userRepository, UserManager<Core.Models.User> userManager/*, IPasswordHasher<Admin> password, IOptions<JwtOptions> jwtOptions*/)
         {
             _adminRepository = adminRepository;
+            _userRegistrationService = userRegistrationService;
+            _userRepository = userRepository;
+            _userManager = userManager;
             //_passwordHasher = password;
             //_jwtOptions = jwtOptions.Value;
 
@@ -40,35 +46,33 @@ namespace Core.Services
                 throw new Exception("A admin with the same email already exists.");
             }
 
-            var user = new User
-            {
-                Email = email,
-                //Password = password,
-                Role = "Admin",
-                CreatedDate = DateTime.UtcNow
-            };
 
-            // Create the admin user
-            var adminUser = new Admin
-            {
-                User = user,
-                Name = name,
-                Phone = phone,
-                Wechat = wechat,
-            };
-            //adminUser.Password = _passwordHasher.HashPassword(adminUser, password);
-            // Save to the database
-            return await _adminRepository.AddAsync(adminUser);
+            var result = await _userRegistrationService.RegisterUserAsync(email, password, "Admin");
 
+            if (result == true)
+            {
+                var user = await _userRepository.GetByEmailAsync(email);
+                //var user2 = await _userManager.FindByEmailAsync(email);
+                var adminUser = new Admin
+                {
+                    UserID = user.Id,
+                    Name = name,
+                    Phone = phone,
+                    Wechat = wechat,
+                };
+                return await _adminRepository.AddAsync(adminUser);
+            }
+            else
+                return false;
 
         }
 
 
 
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(int adminId)
         {
             // Find the staff by ID
-            var admin = await _adminRepository.GetAsync(id);
+            var admin = await _adminRepository.GetAsync(adminId);
             if (admin == null)
             {
                 throw new Exception("Staff not found.");
@@ -79,10 +83,10 @@ namespace Core.Services
         }
 
 
-        public async Task<bool> UpdateAsync(int id, string name, string email, /*string password,*/ string phone, string wechat)
+        public async Task<bool> UpdateAsync(int adminId, string name, string email, /*string password,*/ string phone, string wechat)
         {
             // Find the staff by ID
-            var admin = await _adminRepository.GetAsync(id);
+            var admin = await _adminRepository.GetAsync(adminId);
             if (admin == null)
             {
                 throw new Exception("adminm not found.");
@@ -101,10 +105,10 @@ namespace Core.Services
             return await _adminRepository.UpdateAsync(admin);
         }
 
-        public async Task<Admin> GetAsync(int id)
+        public async Task<Admin> GetAsync(int adminId)
         {
             // Retrieve the staff by ID
-            var admin = await _adminRepository.GetAsync(id);
+            var admin = await _adminRepository.GetAsync(adminId);
             if (admin == null)
             {
                 throw new Exception("Admin not found.");
