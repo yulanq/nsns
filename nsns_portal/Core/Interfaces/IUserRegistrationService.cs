@@ -12,7 +12,7 @@ namespace Core.Interfaces
     public interface IUserRegistrationService
     {
 
-        Task<bool> RegisterUserAsync(string email, string password, string role);
+        Task<bool> RegisterUserAsync(string email, string password, string role, User user);
 
     }
 

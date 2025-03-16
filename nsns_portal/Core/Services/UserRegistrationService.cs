@@ -21,21 +21,24 @@ namespace Core.Services
             _userManager = userManager;
         }
 
-        public async Task<bool> RegisterUserAsync(string email, string password, string role)
+        public async Task<bool> RegisterUserAsync(string email, string password, string role, User user)
         {
-            var user = new User
+            var newUser = new User
             {
                 UserName = email,
                 Email = email,
-                Role = role
+                Role = role,
+                CreatedBy = user.Id
+                //CreatedDate = DateTime.Now
+                
             };
 
             try
             {
-                var result = await _userManager.CreateAsync(user, password);
+                var result = await _userManager.CreateAsync(newUser, password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, role);
+                    await _userManager.AddToRoleAsync(newUser, role);
                     return true;
                 }
                 else

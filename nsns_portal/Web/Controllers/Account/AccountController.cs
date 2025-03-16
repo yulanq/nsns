@@ -35,8 +35,9 @@ namespace Web.Controllers.Account
         {
             if (!ModelState.IsValid)
                 return View(model); // Return form with validation errors
+            var user = await _userManager.GetUserAsync(User);
 
-            var result = await _userRegistrationService.RegisterUserAsync(model.Email, model.Password, model.Role);
+            var result = await _userRegistrationService.RegisterUserAsync(model.Email, model.Password, model.Role, user);
 
             if (result)
                 return RedirectToAction("Login", "Account"); // Redirect to login page
@@ -74,6 +75,7 @@ namespace Web.Controllers.Account
 
             if (result.Succeeded)
             {
+                
                 if(user.Role == "Admin")
                     return Redirect("/Dashboard/Admin"); // Redirect to the requested page
                 else if (user.Role == "Staff")

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+//using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -37,7 +37,7 @@ namespace Core.Services
 
         }
 
-        public async Task<bool> AddAsync(string name, string email, string password, string phone, string wechat)
+        public async Task<bool> AddAsync(string name, string email, string password, string phone, string wechat, User user)
         {
             // Check if a user with the same username or email already exists
             var existingUser = await _adminRepository.GetByEmailAsync(email);
@@ -47,20 +47,28 @@ namespace Core.Services
             }
 
 
-            var result = await _userRegistrationService.RegisterUserAsync(email, password, "Admin");
+            var result = await _userRegistrationService.RegisterUserAsync(email, password, "Admin", user);
 
             if (result == true)
             {
-                var user = await _userRepository.GetByEmailAsync(email);
-                //var user2 = await _userManager.FindByEmailAsync(email);
-                var adminUser = new Admin
+                //var user = await _userRepository.GetByEmailAsync(email);
+                var newUser = await _userManager.FindByEmailAsync(email);
+                if (newUser != null)
                 {
-                    UserID = user.Id,
-                    Name = name,
-                    Phone = phone,
-                    Wechat = wechat,
-                };
-                return await _adminRepository.AddAsync(adminUser);
+                    var adminUser = new Admin
+                    {
+                        UserID = newUser.Id,
+                        Name = name,
+                        Phone = phone,
+                        Wechat = wechat,
+                        
+                        
+                    };
+
+                   // adminUser.User.CreatedBy = user.Id;
+                    return await _adminRepository.AddAsync(adminUser);
+                }
+                else return false;
             }
             else
                 return false;
@@ -79,11 +87,15 @@ namespace Core.Services
             }
 
             // Remove the staff
-            return await _adminRepository.RemoveAsync(admin);
+            var result = await _adminRepository.RemoveAsync(admin);
+            if (result)
+                result = await _userRepository.RemoveAsync(admin.User);
+            return result;
+
         }
 
 
-        public async Task<bool> UpdateAsync(int adminId, string name, string email, /*string password,*/ string phone, string wechat)
+        public async Task<bool> UpdateAsync(int adminId, string name, string email, /*string password,*/ string phone, string wechat, User user)
         {
             // Find the staff by ID
             var admin = await _adminRepository.GetAsync(adminId);
@@ -98,6 +110,7 @@ namespace Core.Services
             admin.Phone = phone;
             admin.Wechat = wechat;
             admin.User.UpdatedDate = DateTime.UtcNow;
+            admin.User.UpdatedBy = user.Id; 
 
            
 

@@ -11,11 +11,11 @@ namespace Core.Interfaces
     public interface IAdminService
     {
 
-        Task<bool> AddAsync(string name, string email, string password, string phone, string wechat);
+        Task<bool> AddAsync(string name, string email, string password, string phone, string wechat, User user);
 
         Task<bool> RemoveAsync(int adminId);
 
-        Task<bool> UpdateAsync(int adminId, string name, string email, /*string password, */  string phone, string wechat);
+        Task<bool> UpdateAsync(int adminId, string name, string email, /*string password, */  string phone, string wechat, User user);
 
         Task<Admin> GetAsync(int adminId);
 

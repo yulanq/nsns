@@ -19,11 +19,13 @@ namespace Web.Controllers.User
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
-        
+        private readonly UserManager<Core.Models.User> _userManager;
 
-        public AdminController(IAdminService adminService)
+
+        public AdminController(IAdminService adminService, UserManager<Core.Models.User> userManager)
         {
             _adminService = adminService;
+            _userManager = userManager;
             
           
         }
@@ -51,7 +53,10 @@ namespace Web.Controllers.User
                 //    ModelState.AddModelError(string.Empty, "Registration failed. Please try again.");
                 //    return View();
                 //}
-                var result = await _adminService.AddAsync( name, email, password, phone,  wechat);
+
+                var user = await _userManager.GetUserAsync(User);
+
+                var result = await _adminService.AddAsync( name, email, password, phone,  wechat, user);
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed in adding the admin info.");
@@ -160,7 +165,8 @@ namespace Web.Controllers.User
 
             try
             {
-                var result = await _adminService.UpdateAsync(adminId, name, email, /*password,*/ phone, wechat);
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _adminService.UpdateAsync(adminId, name, email, /*password,*/ phone, wechat, user);
 
 
                 if (!result)
