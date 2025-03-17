@@ -28,7 +28,7 @@ namespace Core.Interfaces
 
 
         // Find a User by its email asynchronously
-        Task<Staff> GetAsync(int userId);
+        Task<Staff> GetAsync(int staffId);
 
 
         // Get all Users from the database asynchronously

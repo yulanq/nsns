@@ -35,8 +35,8 @@
                 <td style="padding: 8px; border: 1px solid #ddd;">@staff.Phone</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">@staff.Wechat</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">
-                    <a href="/Staff/ConfirmDelete/@staff.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
-                    <a href="/Staff/Edit/@staff.UserID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                    <a href="/Staff/ConfirmDelete/@staff.StaffID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
+                    <a href="/Staff/Edit/@staff.StaffID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
                 </td>
             </tr>
         }
@@ -65,16 +65,4 @@
     </tbody>
 </table>
 
-@* @if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
-    </div>
-} *@

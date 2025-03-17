@@ -19,11 +19,13 @@ namespace Web.Controllers.User
     public class StaffController : Controller
     {
         private readonly IStaffService _staffService;
+        private readonly UserManager<Core.Models.User> _userManager;
 
 
-        public StaffController(IStaffService staffService)
+        public StaffController(IStaffService staffService, UserManager<Core.Models.User> userManager)
         {
             _staffService = staffService;
+            _userManager = userManager;
           
         }
 
@@ -44,7 +46,8 @@ namespace Web.Controllers.User
             
             try
             {
-                var result = await _staffService.AddAsync( name, email, password,  phone,  wechat);
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _staffService.AddAsync( name, email, password,  phone,  wechat, user);
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed in adding the staff info.");
@@ -76,11 +79,11 @@ namespace Web.Controllers.User
         }
 
         // GET: Staff/Delete/{userId}
-        [HttpGet("ConfirmDelete/{userId}")]
-        public async Task<IActionResult> ConfirmDelete(int userId)
+        [HttpGet("ConfirmDelete/{staffId}")]
+        public async Task<IActionResult> ConfirmDelete(int staffId)
         {
             // Fetch the staff details from the database
-            var staff = await _staffService.GetAsync(userId);
+            var staff = await _staffService.GetAsync(staffId);
             if (staff == null)
             {
                 return NotFound();
@@ -92,11 +95,11 @@ namespace Web.Controllers.User
 
 
         [HttpPost("DeleteConfirmed")]
-        public async Task<IActionResult> DeleteConfirmed(int userId)
+        public async Task<IActionResult> DeleteConfirmed(int staffId)
         {
             try
             {
-                var result = await _staffService.RemoveAsync(userId);
+                var result = await _staffService.RemoveAsync(staffId);
 
                 if (!result)
                 {
@@ -130,12 +133,12 @@ namespace Web.Controllers.User
        
 
         // GET: Edit View
-        [HttpGet("Edit/{userId}")]
+        [HttpGet("Edit/{staffId}")]
         //[HttpGet]
-        public async Task<IActionResult> Edit(int userId)
+        public async Task<IActionResult> Edit(int staffId)
         {
             // Fetch the staff details from the database
-            var staff = await _staffService.GetAsync(userId);
+            var staff = await _staffService.GetAsync(staffId);
             if (staff == null)
             {
                 return NotFound();
@@ -147,21 +150,22 @@ namespace Web.Controllers.User
         }
 
 
-        [HttpPost("Edit/{userId}")]
+        [HttpPost("Edit/{staffId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/ string phone, string wechat)
+        public async Task<IActionResult> Edit(int staffId, string name, string email, /*string password,*/ string phone, string wechat)
         {
             
 
             try
             {
-                var result = await _staffService.UpdateAsync(userId, name, email, /*password,*/ phone, wechat);
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _staffService.UpdateAsync(staffId, name, email, /*password,*/ phone, wechat, user);
 
 
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed to update staff information.");
-                    var staff = await _staffService.GetAsync(userId);
+                    var staff = await _staffService.GetAsync(staffId);
                     return View(staff);
                 }
 
@@ -171,7 +175,7 @@ namespace Web.Controllers.User
             catch (Exception ex)
             {
                 //TempData["ErrorMessage"] = $"Error: {ex.Message}";
-                var staff = await _staffService.GetAsync(userId);
+                var staff = await _staffService.GetAsync(staffId);
                 return View(staff);
             }
 

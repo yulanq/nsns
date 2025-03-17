@@ -20,6 +20,9 @@ namespace Core.Services
     public class StaffService : IStaffService
     {
         private readonly IStaffRepository _staffRepository;
+        IUserRegistrationService _userRegistrationService;
+        private readonly IUserRepository<User> _userRepository;
+        private readonly UserManager<Core.Models.User> _userManager;
         //private readonly IRepository<Specialty> _specialtyRepository;
         //private readonly IRepository<City> _cityRepository;
         //private readonly IPasswordHasher<Staff> _passwordHasher;
@@ -28,15 +31,18 @@ namespace Core.Services
 
 
 
-        public StaffService(IStaffRepository staffRepository)
+        public StaffService(IStaffRepository staffRepository, IUserRegistrationService userRegistrationService, UserManager<User> userManager, IUserRepository<User> userRepository)
         {
             _staffRepository = staffRepository;
+            _userRegistrationService = userRegistrationService;
+            _userManager = userManager;
+            _userRepository = userRepository;
             //_passwordHasher = password;
             //_jwtOptions = jwtOptions.Value;
 
         }
 
-        public async Task<bool> AddAsync(string name, string email, string password, string phone, string wechat)
+        public async Task<bool> AddAsync(string name, string email, string password, string phone, string wechat, User user)
         {
             // Check if a user with the same username or email already exists
             var existingUser = await _staffRepository.GetByEmailAsync(email);
@@ -45,56 +51,61 @@ namespace Core.Services
                 throw new Exception("A staff with the same username or email already exists.");
             }
 
-            var user = new User
+            var result = await _userRegistrationService.RegisterUserAsync(email, password, "Staff", user);
+
+            if (result == true)
             {
-                Email = email,
-                PasswordHash = "",
-                Role = "Staff",
-                CreatedDate = DateTime.UtcNow
-            };
+                //var user = await _userRepository.GetByEmailAsync(email);
+                var newUser = await _userManager.FindByEmailAsync(email);
+                if (newUser != null)
+                {
+                    var staffUser = new Staff
+                    {
+                        UserID = newUser.Id,
+                        Name = name,
+                        Phone = phone,
+                        Wechat = wechat,
 
-            //user.Password = _passwordHasher.HashPassword(user, password);
 
-            // Create the admin user
-            var staffUser = new Staff
-            {
-                User = user,
-                Name = name,
-                //Email = email,
-                //Password = password,
-                //Role = "Staff",
-                
-                Phone = phone,
-                Wechat = wechat,
-                //CreatedDate = DateTime.UtcNow,
-            }; 
-            //staffUser.Password = _passwordHasher.HashPassword(staffUser, password);
-            // Save to the database
-            return await _staffRepository.AddAsync(staffUser);
+                    };
 
-            
+                    
+                    return await _staffRepository.AddAsync(staffUser);
+                }
+                else return false;
+            }
+            else
+                return false;
+
+
         }
 
 
 
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(int staffId)
         {
             // Find the staff by ID
-            var staff = await _staffRepository.GetAsync(id);
+            var staff = await _staffRepository.GetAsync(staffId);
             if (staff == null)
             {
                 throw new Exception("Staff not found.");
             }
 
             // Remove the staff
-            return await _staffRepository.RemoveAsync(staff);
+            var result = await _staffRepository.RemoveAsync(staff);
+
+           
+            if (result)
+                result = await _userRepository.RemoveAsync(staff.User);
+            return result;
+
         }
 
 
-        public async Task<bool> UpdateAsync(int id, string name,string email, /*string password,*/ string phone, string wechat)
+        public async Task<bool> UpdateAsync(int staffId, string name,string email, /*string password,*/ string phone, string wechat, User user)
         {
             // Find the staff by ID
-            var staff = await _staffRepository.GetAsync(id);
+            var staff = await _staffRepository.GetAsync(staffId);
             if (staff == null)
             {
                 throw new Exception("Staff not found.");
@@ -105,6 +116,7 @@ namespace Core.Services
             //staff.Email = email;
             staff.Phone = phone;
             staff.Wechat = wechat;
+            staff.User.UpdatedBy = user.Id;
             //staff.UpdatedDate = DateTime.UtcNow;
 
             // Update the password if provided
@@ -117,10 +129,10 @@ namespace Core.Services
             return await _staffRepository.UpdateAsync(staff);
         }
 
-        public async Task<Staff> GetAsync(int id)
+        public async Task<Staff> GetAsync(int staffId)
         {
             // Retrieve the staff by ID
-            var staff = await _staffRepository.GetAsync(id);
+            var staff = await _staffRepository.GetAsync(staffId);
             if (staff == null)
             {
                 throw new Exception("Staff not found.");

@@ -86,7 +86,7 @@ namespace Core.Services
                 throw new Exception("Staff not found.");
             }
 
-            // Remove the staff
+            // Remove the admin
             var result = await _adminRepository.RemoveAsync(admin);
             if (result)
                 result = await _userRepository.RemoveAsync(admin.User);
