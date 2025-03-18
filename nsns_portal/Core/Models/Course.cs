@@ -45,7 +45,7 @@ namespace Core.Models
 
 
         [ForeignKey(nameof(CreatedBy))]
-        public virtual required User CreatedByUser { get; set; } // Navigation property for the user who created the course
+        public virtual  User CreatedByUser { get; set; } // Navigation property for the user who created the course
 
         [ForeignKey(nameof(UpdatedBy))]
         public virtual User? UpdatedByUser { get; set; } // Navigation property for the user who last updated the course

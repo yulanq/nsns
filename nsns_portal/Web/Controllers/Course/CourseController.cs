@@ -2,6 +2,7 @@
 using Core.Models;
 using Core.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -18,13 +19,15 @@ namespace Web.Controllers.Courses
         private readonly ICourseService _courseService;
         private readonly ICoachService _coachService;
         private readonly ISpecialtyService _specialtyService;
+        private readonly UserManager<Core.Models.User> _userManager;
 
 
-        public CourseController(ICourseService courseService, ICoachService coachService, ISpecialtyService specialtyService)
+        public CourseController(ICourseService courseService, ICoachService coachService, ISpecialtyService specialtyService, UserManager<Core.Models.User> userManager)
         {
             _courseService = courseService;
             _coachService = coachService;
             _specialtyService = specialtyService;
+            _userManager = userManager;
 
         }
 
@@ -122,7 +125,9 @@ namespace Web.Controllers.Courses
 
             try
             {
-                var result = await _courseService.AddAsync(model.Title, model.Description, model.HourlyCost, model.IsActive, model.CoachID,15);
+                var user = await _userManager.GetUserAsync(User);
+
+                var result = await _courseService.AddAsync(model.Title, model.Description, model.HourlyCost, model.IsActive, model.CoachID, user);
 
                 if (!result)
                 {
@@ -184,7 +189,8 @@ namespace Web.Controllers.Courses
         {
             try
             {
-                var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, isActive /*userId, updatedBy*/);
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, isActive, user);
 
                 if (!result)
                 {

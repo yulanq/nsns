@@ -200,14 +200,14 @@ namespace Web.Controllers.User
 
 
         // GET: Edit View
-        [HttpGet("Edit/{userId}")]
+        [HttpGet("Edit/{coachId}")]
         //[HttpGet]
-        public async Task<IActionResult> Edit(int userId)
+        public async Task<IActionResult> Edit(int coachId)
         {
             //Fetch the staff details from the database
 
 
-           var coach = await _coachService.GetAsync(userId);
+           var coach = await _coachService.GetAsync(coachId);
 
             if (coach == null)
             {
@@ -242,24 +242,24 @@ namespace Web.Controllers.User
         }
 
 
-        [HttpPost("Edit/{userId}")]
+        [HttpPost("Edit/{coachId}")]
         [ValidateAntiForgeryToken]
 
        
-        public async Task<IActionResult> Edit(int userId, string name, string email, /*string password,*/int specialtyId, string gender, string phone, string wechat, int cityId)
+        public async Task<IActionResult> Edit(int coachId, string name, string email, /*string password,*/int specialtyId, string gender, string phone, string wechat, int cityId)
         {
            
 
             try
             {
                 var user = await _userManager.GetUserAsync(User);
-                var result = await _coachService.UpdateAsync(userId, name, email, /*password,*/specialtyId, gender, phone, wechat, cityId, user);
+                var result = await _coachService.UpdateAsync(coachId, name, email, /*password,*/specialtyId, gender, phone, wechat, cityId, user);
 
 
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed to update coach information.");
-                    var coach = await _coachService.GetAsync(userId);
+                    var coach = await _coachService.GetAsync(coachId);
 
                     if (coach == null)
                     {
@@ -297,7 +297,7 @@ namespace Web.Controllers.User
             catch (Exception ex)
             {
                 //TempData["ErrorMessage"] = $"Error: {ex.Message}";
-                var coach = await _coachService.GetAsync(userId);
+                var coach = await _coachService.GetAsync(coachId);
 
                 if (coach == null)
                 {

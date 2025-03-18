@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using Core.Models;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
+//using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.Extensions.Options;
@@ -23,6 +23,7 @@ namespace Core.Services
         private readonly ISpecialtyRepository _specialtyRepository;
         private readonly ICityRepository _cityRepository;
         IUserRegistrationService _userRegistrationService;
+        private readonly IUserRepository<User> _userRepository;
         private readonly UserManager<Core.Models.User> _userManager;
         //private readonly IPasswordHasher<Coach> _passwordHasher;
         //private readonly JwtOptions _jwtOptions;
@@ -30,13 +31,14 @@ namespace Core.Services
 
 
 
-        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, ISpecialtyRepository specialtyRepository, IUserRegistrationService userRegistrationService, UserManager<Core.Models.User> userManager /*, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions*/)
+        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, ISpecialtyRepository specialtyRepository, IUserRegistrationService userRegistrationService, UserManager<Core.Models.User> userManager, IUserRepository<User> userRepository /*, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions*/)
         {
             _coachRepository = coachRepository;
             _cityRepository = cityRepository;
             _specialtyRepository = specialtyRepository;
             _userRegistrationService = userRegistrationService;
             _userManager = userManager;
+            _userRepository = userRepository;
             //_passwordHasher = password;
             //_jwtOptions = jwtOptions.Value;
 
@@ -115,7 +117,10 @@ namespace Core.Services
             }
 
             // Remove the coach
-            return await _coachRepository.RemoveAsync(coach);
+            var result = await _coachRepository.RemoveAsync(coach);
+            if (result)
+                result = await _userRepository.RemoveAsync(coach.User);
+            return result;
         }
 
 
@@ -214,7 +219,7 @@ namespace Core.Services
             catch (Exception ex)
             {
                 // Handle exceptions as needed (e.g., logging)
-                throw new Exception("An error occurred while retrieving staff records.", ex);
+                throw new Exception("An error occurred while retrieving coach records.", ex);
             }
 
         }

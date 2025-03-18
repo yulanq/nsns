@@ -51,7 +51,7 @@ namespace Core.Services
 
         // Add a new course
         
-        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool isActive, int coachId, int createdBy)
+        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool isActive, int coachId, User user)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -81,11 +81,11 @@ namespace Core.Services
                 throw new Exception("No coach is added.");
             }
 
-            var createdByUser = await _userRepository.GetAsync(createdBy);
-            if (createdByUser == null)
-            {
-                throw new Exception("No createdBy  is added.");
-            }
+            //var createdByUser = await _userRepository.GetAsync(createdBy);
+            //if (createdByUser == null)
+            //{
+            //    throw new Exception("No createdBy  is added.");
+            //}
 
             var course = new Course
             {
@@ -95,8 +95,8 @@ namespace Core.Services
                 IsActive = isActive,
                 Coach = coach,
                 //CoachID = coachId,
-                CreatedBy = createdBy,
-                CreatedByUser = createdByUser,
+                CreatedBy = user.Id,
+                //CreatedByUser = createdByUser,
                 CreatedDate = DateTime.Now
             };
 
@@ -115,7 +115,7 @@ namespace Core.Services
 
 
         // Update an existing course
-        public async Task<bool> UpdateAsync(int courseId, string title, string description, decimal hourlyCost, bool isActive/*, int userId, int updatedBy*/)
+        public async Task<bool> UpdateAsync(int courseId, string title, string description, decimal hourlyCost, bool isActive, User user/*, int userId, int updatedBy*/)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -149,7 +149,7 @@ namespace Core.Services
             existingCourse.HourlyCost = hourlyCost;
             existingCourse.IsActive = isActive;
            // existingCourse.UserID = userId;
-            //existingCourse.UpdatedBy = updatedBy;
+            existingCourse.UpdatedBy = user.Id;
             existingCourse.UpdatedDate = DateTime.Now;
 
             // Save changes to the repository
