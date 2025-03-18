@@ -69,7 +69,7 @@ namespace Core.Services
                     Child = child,
                     Course = course,
                     CreatedBy = createdBy,
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.Now,
                     Status = status
                 };
 
@@ -152,7 +152,7 @@ namespace Core.Services
                 ScheduledAt = scheduledAt,
                 ScheduledHours = scheduledHours,
                 CreatedBy = coach.UserID,
-                CreatedDate = DateTime.UtcNow,
+                CreatedDate = DateTime.Now,
                 Status = "Scheduled"
             };
 
@@ -237,11 +237,11 @@ namespace Core.Services
             enrollment.Status = "Completed";
             enrollment.ActualHours = actualHours;
 
-            if(DateTime.UtcNow < enrollment.ScheduledAt)
+            if(DateTime.Now < enrollment.ScheduledAt)
             {
                 throw new Exception("You can only complete the course after the scheduled date.");
             }
-            enrollment.UpdatedDate = DateTime.UtcNow;
+            enrollment.UpdatedDate = DateTime.Now;
 
             try
             {

@@ -36,8 +36,8 @@ namespace Core.Models
         public int? UpdatedBy { get; set; } // Foreign key to the User table for the last updater
 
         // Timestamps for record creation and update
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedDate { get; set; } 
+        public DateTime? UpdatedDate { get; set; } 
 
         // Navigation properties
         [ForeignKey(nameof(CoachID))]

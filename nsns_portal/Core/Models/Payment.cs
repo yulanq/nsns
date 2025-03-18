@@ -51,7 +51,7 @@ namespace Core.Models
         public virtual User? UpdatedByUser { get; set; } // Navigation property for user who updated the payment (nullable)
 
         // Timestamps for record creation and update
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow; // Created timestamp
-        public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow; // Updated timestamp (nullable)
+        public DateTime CreatedDate { get; set; }  // Created timestamp
+        public DateTime? UpdatedDate { get; set; } // Updated timestamp (nullable)
     }
 }

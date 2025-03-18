@@ -47,12 +47,7 @@ namespace Web.Controllers.User
             
             try
             {
-                //var result = await _userRegistrationService.RegisterUserAsync(email, password, "Admin");
-                //if(!result)
-                //{
-                //    ModelState.AddModelError(string.Empty, "Registration failed. Please try again.");
-                //    return View();
-                //}
+                
 
                 var user = await _userManager.GetUserAsync(User);
 

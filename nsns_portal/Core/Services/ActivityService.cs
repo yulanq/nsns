@@ -88,7 +88,7 @@ namespace Core.Services
             activity.Cost = cost;
             activity.IsActive = isActive;
             //activity.UpdatedDate = DateTime.UtcNow;
-            activity.UpdatedDate = DateTime.UtcNow;
+            activity.UpdatedDate = DateTime.Now;
             // Save changes
             return await _activityRepository.UpdateAsync(activity);
         }

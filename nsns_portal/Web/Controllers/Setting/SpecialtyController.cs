@@ -20,9 +20,11 @@ namespace Web.Controllers.Setting
     {
         //private readonly AppDbContext _context;
         private ISpecialtyService _specialtyService;
-        public SpecialtyController(ISpecialtyService specialtyService)
+        private readonly UserManager<Core.Models.User> _userManager;
+        public SpecialtyController(ISpecialtyService specialtyService,  UserManager<Core.Models.User> userManager)
         {
             _specialtyService = specialtyService;
+            _userManager = userManager;
         }
 
         // ✅ Load City List
@@ -38,6 +40,7 @@ namespace Web.Controllers.Setting
         [HttpGet("Add")]
         public async Task<IActionResult> Add()
         {
+
             return PartialView("_Add", new Specialty { Title = string.Empty, Description = string.Empty });
         }
 
@@ -65,14 +68,21 @@ namespace Web.Controllers.Setting
 
             if (!ModelState.IsValid)
                 return BadRequest("Invalid data");
-            specialty.CreatedBy = 1;  //temparaly set it to 1
+            var user = await _userManager.GetUserAsync(User);
+             
             try
             {
                 var result = false;
                 if (specialty.SpecialtyID == 0)
+                {
+                    specialty.CreatedBy = user.Id;
                     result = await _specialtyService.AddAsync(specialty);
+                }
                 else
+                {
+                    specialty.UpdatedBy = user.Id;
                     result = await _specialtyService.UpdateAsync(specialty);
+                }
 
                 if (result)
                     return Json(new { success = true });

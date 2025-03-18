@@ -31,10 +31,10 @@ namespace Core.Models
         public int? UpdatedBy { get; set; }
 
         [Column(TypeName = "timestamp")]
-        public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedDate { get; set; } 
 
         [Column(TypeName = "timestamp")]
-        public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedDate { get; set; } 
 
         // Navigation properties
         public virtual User? CreatedByUser { get; set; }

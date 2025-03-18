@@ -34,10 +34,10 @@ namespace Core.Models
         public virtual CourseEnrollment? Enrollment { get; set; } // Navigation property for the associated Enrollment
 
         // Timestamps for record creation and update
-        public DateTime? CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedDate { get; set; } 
         public int CreatedBy { get; set; }
 
         public int? UpdatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedDate { get; set; } 
     }
 }

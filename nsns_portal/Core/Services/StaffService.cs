@@ -113,7 +113,7 @@ namespace Core.Services
 
             // Update fields
             staff.Name = name;
-            //staff.Email = email;
+            staff.User.Email = email;
             staff.Phone = phone;
             staff.Wechat = wechat;
             staff.User.UpdatedBy = user.Id;

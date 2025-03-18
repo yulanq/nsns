@@ -306,7 +306,7 @@ namespace Web.Controllers.User
                 {
                     Name = parentName,
                     CreatedBy = 1, // Assume the user ID of admin/creator
-                    CreatedDate = DateTime.UtcNow
+                    CreatedDate = DateTime.Now
                 };
 
                 // ✅ 2. Save the parent in the database

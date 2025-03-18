@@ -97,7 +97,7 @@ namespace Core.Services
                 //CoachID = coachId,
                 CreatedBy = createdBy,
                 CreatedByUser = createdByUser,
-                CreatedDate = DateTime.UtcNow
+                CreatedDate = DateTime.Now
             };
 
             
@@ -150,7 +150,7 @@ namespace Core.Services
             existingCourse.IsActive = isActive;
            // existingCourse.UserID = userId;
             //existingCourse.UpdatedBy = updatedBy;
-            existingCourse.UpdatedDate = DateTime.UtcNow;
+            existingCourse.UpdatedDate = DateTime.Now;
 
             // Save changes to the repository
             return await _courseRepository.UpdateAsync(existingCourse);

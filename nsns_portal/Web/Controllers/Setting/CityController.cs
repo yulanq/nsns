@@ -19,9 +19,11 @@ namespace Web.Controllers.Setting
     {
         //private readonly AppDbContext _context;
         private ICityService _cityService;
-        public CityController(ICityService cityService)
+        private readonly UserManager<Core.Models.User> _userManager;
+        public CityController(ICityService cityService, UserManager<Core.Models.User> userManager)
         {
             _cityService = cityService;
+            _userManager = userManager;
         }
 
         // ✅ Load City List
@@ -64,14 +66,23 @@ namespace Web.Controllers.Setting
             
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid data");
-                city.CreatedBy = 1;  //temparaly set it to 1
-                try
+            //city.CreatedBy = 1;  //temparaly set it to 1
+            var user = await _userManager.GetUserAsync(User);
+            try
                 {
                    var result = false;
-                    if (city.CityID == 0)
-                         result = await _cityService.AddAsync(city);
-                    else
-                         result = await _cityService.UpdateAsync(city);
+                if (city.CityID == 0)
+                {
+                    city.CreatedBy = user.Id;
+                    city.CreatedDate = DateTime.Now; ;
+                    result = await _cityService.AddAsync(city);
+                }
+                else
+                {
+                    city.UpdatedBy = user.Id;
+                    city.UpdatedDate = DateTime.Now;
+                    result = await _cityService.UpdateAsync(city);
+                }
 
                     if (result)
                         return Json(new { success = true });

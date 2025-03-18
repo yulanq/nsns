@@ -26,8 +26,8 @@ namespace Web.Controllers.User
         private readonly ICourseEnrollmentService _courseEnrollmentService;
         private readonly ICourseService _courseService;
         private readonly IChildService _childService;
-
-        public CoachController(ICoachService coachService, ICityService cityService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService)
+        private readonly UserManager<Core.Models.User> _userManager;
+        public CoachController(ICoachService coachService, ICityService cityService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
         {
             _coachService = coachService;
             _cityService = cityService;
@@ -35,7 +35,8 @@ namespace Web.Controllers.User
             _courseEnrollmentService = courseEnrollmentService;
             _courseService = courseService;
             _childService = childService;
-        }
+            _userManager = userManager;
+    }
 
         [Authorize(Roles = "Staff")]
         // POST: Add Staff Action
@@ -52,7 +53,8 @@ namespace Web.Controllers.User
 
             try
             {
-                var result = await _coachService.AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId);
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _coachService.AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId, user);
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed in adding the coach info.");
@@ -250,7 +252,8 @@ namespace Web.Controllers.User
 
             try
             {
-                var result = await _coachService.UpdateAsync(userId, name, email, /*password,*/specialtyId, gender, phone, wechat, cityId);
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _coachService.UpdateAsync(userId, name, email, /*password,*/specialtyId, gender, phone, wechat, cityId, user);
 
 
                 if (!result)

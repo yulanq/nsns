@@ -59,7 +59,7 @@ namespace Core.Services
                 Email = email,
                 PasswordHash = password,
                 Role = "Child",
-                CreatedDate = DateTime.UtcNow
+                CreatedDate = DateTime.Now
             };
 
             City city = null;
@@ -107,7 +107,7 @@ namespace Core.Services
             child.Gender = gender;
            
             child.CityID = cityId;
-            child.User.UpdatedDate = DateTime.UtcNow;
+            child.User.UpdatedDate = DateTime.Now;
 
             // Update the password if provided
             //if (!string.IsNullOrWhiteSpace(password))
