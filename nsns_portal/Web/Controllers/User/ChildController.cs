@@ -581,7 +581,8 @@ namespace Web.Controllers.User
                     receiptPath = $"/receipts/{uniqueFileName}";
                 }
 
-                var result = await _paymentService.AddAsync(childId, parentId, packageId, amount, paymentDate, receiptPath);
+                Core.Models.User user = await _userManager.GetUserAsync(User);
+                var result = await _paymentService.AddAsync(childId, parentId, packageId, amount, paymentDate, receiptPath, user);
                 if (result)
                 {
                     TempData["SuccessMessage"] = "Payment info has been added successfully.";

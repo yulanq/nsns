@@ -69,7 +69,7 @@ namespace Core.Services
         }
 
         // 🔹 Add a new payment
-        public async Task<bool> AddAsync(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate, string receiptPath)
+        public async Task<bool> AddAsync(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate, string receiptPath, User user)
         {
             
             var createdBy = 1;
@@ -87,11 +87,11 @@ namespace Core.Services
                 throw new Exception("Parent is not found.");
             }
 
-            var createdByUser = await _userRepository.GetAsync(createdBy);
-            if (createdByUser == null)
-            {
-                throw new Exception("No createdBy is added.");
-            }
+            //var createdByUser = await _userRepository.GetAsync(createdBy);
+            //if (createdByUser == null)
+            //{
+            //    throw new Exception("No createdBy is added.");
+            //}
 
             var payment = new Payment
             {
@@ -103,7 +103,7 @@ namespace Core.Services
                 Parent = parent,
                 Child = child,
                 PaymentDate = paymentDate,
-                CreatedByUser = createdByUser,
+                CreatedByUser = user,
                 Receipt = receiptPath
             };
 
