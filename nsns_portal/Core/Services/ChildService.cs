@@ -49,16 +49,17 @@ namespace Core.Services
         //    return await _childRepository.GetChildByIdAsync(childId);
         //}
         //public async Task<bool> AddAsync(Child child)
-        public async Task<bool> AddAsync(string name, DateTime? birthDate, string? gender, int? cityId, string email, string password)
+        public async Task<bool> AddAsync(string name, DateTime? birthDate, string? gender, int? cityId, string email, string password, User user)
         {
             //if (string.IsNullOrWhiteSpace(child.Name))
             //    throw new ArgumentException("Child name cannot be empty.");
 
-            var user = new User
+            var newUser = new User
             {
                 Email = email,
                 PasswordHash = password,
                 Role = "Child",
+                CreatedBy = user.Id,
                 CreatedDate = DateTime.Now
             };
 
@@ -71,7 +72,7 @@ namespace Core.Services
                 Name = name,
                 BirthDate = birthDate,
                 Gender = gender,
-                User = user,
+                User = newUser,
                 City = city
             };
             //child.Password = _passwordHasher.HashPassword(childUser, child.Password);

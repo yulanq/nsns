@@ -185,16 +185,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 //This will ensure any request to the root URL redirects to /User/AddAdmin.
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path == "/")
-    {
-        context.Response.Redirect("/Account/Login");
-        //context.Response.Redirect("/Staff/List");
-        return;
-    }
-    await next();
-});
+//app.Use(async (context, next) =>
+//{
+//    if (context.Request.Path == "/")
+//    {
+//        context.Response.Redirect("/Account/Login");
+//        //context.Response.Redirect("/Staff/List");
+//        return;
+//    }
+//    await next();
+//});
 
 app.UseRouting();
 app.UseAuthentication();
@@ -230,6 +230,18 @@ app.MapControllers();
 //    );
 //});
 
+app.UseEndpoints(endpoints =>
+{
+    // Map controller routes
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}" // Default route points to Home/Index
+    );
+});
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}");
 
 
 

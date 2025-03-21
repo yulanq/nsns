@@ -75,21 +75,21 @@ namespace Web.Controllers.Account
 
             if (result.Succeeded)
             {
-                
-                if(user.Role == "Admin")
-                    return Redirect("/Dashboard/Admin"); // Redirect to the requested page
-                else if (user.Role == "Staff")
-                    return Redirect("/Dashboard/Staff"); // Redirect to the requested page
-                else if (user.Role == "Coach")
-                    return Redirect("/Dashboard/Coach"); // Redirect to the requested page
-                else if (user.Role == "Child")
-                    return Redirect("/Dashboard/Child"); // Redirect to the requested page
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
-                    
+
+                //if(user.Role == "Admin")
+                //    return Redirect("/Dashboard/Admin"); // Redirect to the requested page
+                //else if (user.Role == "Staff")
+                //    return Redirect("/Dashboard/Staff"); // Redirect to the requested page
+                //else if (user.Role == "Coach")
+                //    return Redirect("/Dashboard/Coach"); // Redirect to the requested page
+                //else if (user.Role == "Child")
+                //    return Redirect("/Dashboard/Child"); // Redirect to the requested page
+                //else
+                //{
+                //    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                //    return View(model);
+                //}
+                return Redirect("/Home/Index");
             }
             else
             {
@@ -106,6 +106,12 @@ namespace Web.Controllers.Account
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
+
+        //public async Task<IActionResult> Logout()
+        //{
+        //    await _signInManager.SignOutAsync();
+        //    return RedirectToAction("Index", "Home"); // Redirect to homepage after logout
+        //}
 
     }
 }

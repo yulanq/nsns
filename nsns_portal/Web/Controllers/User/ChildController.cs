@@ -32,8 +32,9 @@ namespace Web.Controllers.User
         private readonly IActivityEnrollmentService _activityEnrollmentService;
         private readonly IActivityService _activityService;
         private readonly IPaymentService _paymentService;
+        private readonly UserManager<Core.Models.User> _userManager;
 
-        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, IActivityService activityService, ICourseEnrollmentService courseEnrollmentService, IActivityEnrollmentService activityEnrollmentService, IPaymentService paymentService)
+        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, IActivityService activityService, ICourseEnrollmentService courseEnrollmentService, IActivityEnrollmentService activityEnrollmentService, IPaymentService paymentService, UserManager<Core.Models.User> userManager)
         {
             _childService = childService;
             _parentService = parentService;
@@ -45,6 +46,7 @@ namespace Web.Controllers.User
             _activityService = activityService;
             _activityEnrollmentService = activityEnrollmentService;
             _paymentService = paymentService;
+            _userManager = userManager;
         }
 
         // ✅ Helper method to get City List
@@ -109,7 +111,8 @@ namespace Web.Controllers.User
 
             try
             {
-                var result = await _childService.AddAsync(name, birthDate, gender, cityId, email, password);
+                Core.Models.User user = await _userManager.GetUserAsync(User);
+                var result = await _childService.AddAsync(name, birthDate, gender, cityId, email, password, user);
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed in adding the child info.");
@@ -302,10 +305,11 @@ namespace Web.Controllers.User
             try
             {
                 // ✅ 1. Create a new Parent object
+                var user = await _userManager.GetUserAsync(User);
                 var newParent = new Parent
                 {
                     Name = parentName,
-                    CreatedBy = 1, // Assume the user ID of admin/creator
+                    CreatedBy = user.Id, // Assume the user ID of admin/creator
                     CreatedDate = DateTime.Now
                 };
 
@@ -318,7 +322,7 @@ namespace Web.Controllers.User
                 }
 
 
-                var success = await _parentChildService.AddParentToChild(parentId, newParent, childId, relationship, 1); // Assuming CreatedBy = 1
+                var success = await _parentChildService.AddParentToChild(parentId, newParent, childId, relationship, user.Id); // Assuming CreatedBy = 1
                 if (!success)
                 {
                     TempData["ErrorMessage"] = "Failed to add parent to child.";

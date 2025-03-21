@@ -27,6 +27,7 @@ namespace Web.Controllers.User
         private readonly ICourseService _courseService;
         private readonly IChildService _childService;
         private readonly UserManager<Core.Models.User> _userManager;
+        
         public CoachController(ICoachService coachService, ICityService cityService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
         {
             _coachService = coachService;
@@ -36,7 +37,8 @@ namespace Web.Controllers.User
             _courseService = courseService;
             _childService = childService;
             _userManager = userManager;
-    }
+            
+        }
 
         [Authorize(Roles = "Staff")]
         // POST: Add Staff Action
