@@ -94,12 +94,12 @@ namespace Core.Repositories
             
         }
 
-        public async Task<Coach?> GetCoachByIdAsync(int coachId)
+        public async Task<Coach?> GetCoachByIdAsync(int userId)
         {
             return await _context.Coaches
                 .Include(c => c.City)
                 .Include(c => c.Specialty)
-                .FirstOrDefaultAsync(c => c.CoachID == coachId);
+                .FirstOrDefaultAsync(c => c.UserID == userId);
         }
 
 

@@ -140,7 +140,7 @@ namespace Core.Services
             Child? child = await _childRepository.GetAsync(childId);
             if (child == null)
                 throw new ArgumentException("Invalid child.");
-            Coach? coach = await _coachRepository.GetCoachByIdAsync(coachId);
+            Coach? coach = await _coachRepository.GetAsync(coachId);
             if(coach == null)
                 throw new ArgumentException("Invalid coach.");
             Course course = await _courseRepository.GetAsync(courseId);

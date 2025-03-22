@@ -33,7 +33,7 @@ namespace Web.Controllers.Courses
 
 
 
-        // GET: Staff/Delete/{userId}
+        
         [HttpGet("ConfirmDelete/{courseId}")]
         public async Task<IActionResult> ConfirmDelete(int courseId)
         {

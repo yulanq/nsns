@@ -21,6 +21,7 @@ namespace Web.Controllers.User
     public class CoachController : Controller
     {
         private readonly ICoachService _coachService;
+        private readonly ICoachRepository _coachRepository;
         private readonly ICityService _cityService;
         private readonly ISpecialtyService _specialtyService;
         private readonly ICourseEnrollmentService _courseEnrollmentService;
@@ -28,9 +29,10 @@ namespace Web.Controllers.User
         private readonly IChildService _childService;
         private readonly UserManager<Core.Models.User> _userManager;
         
-        public CoachController(ICoachService coachService, ICityService cityService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
+        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICityService cityService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
         {
             _coachService = coachService;
+            _coachRepository = coachRepository;
             _cityService = cityService;
             _specialtyService = specialtyService;
             _courseEnrollmentService = courseEnrollmentService;
@@ -336,7 +338,9 @@ namespace Web.Controllers.User
         [HttpGet("ManageCourse")]
         public async Task<IActionResult> ManageCourse()
         {
-            int coachId = 16; // Replace with actual coach ID retrieval logic
+            var user = await _userManager.GetUserAsync(User);
+            var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
+            int coachId = coach.CoachID; 
 
             // Get all children registered in the coach's course
             var children = await _courseEnrollmentService.GetRegisterationByCoachAsync(coachId);
@@ -358,7 +362,9 @@ namespace Web.Controllers.User
         [HttpGet("ManageSchedules/{childId}")]
         public async Task<IActionResult> ManageSchedules(int childId)
         {
-            int coachId = 16;  //GetLoggedInCoachId();
+            var user = await _userManager.GetUserAsync(User);
+            var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
+            int coachId = coach.CoachID;
             // ✅ Get children who are enrolled in the coach's courses
             //var children = await _courseEnrollmentService.GetRegisteredChildrenByCoachAsync(coachId);
             var child = await _childService.GetAsync(childId);
@@ -387,8 +393,10 @@ namespace Web.Controllers.User
         [HttpPost("ScheduleCourse")]
         public async Task<IActionResult> ScheduleCourse(int childId, int courseId, DateTime scheduledAt, decimal scheduledHours)
         {
-            int coachId = 16; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
-           
+            var user = await _userManager.GetUserAsync(User);
+            var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
+            int coachId = coach.CoachID;
+
 
             Child? child = await _childService.GetAsync(childId);
             if (child == null)
@@ -433,7 +441,9 @@ namespace Web.Controllers.User
         [HttpGet("ManageEnrollments/{childId}")]
         public async Task<IActionResult> ManageEnrollments(int childId)
         {
-            int coachId = 16; // Replace with actual coach ID retrieval logic
+            var user = await _userManager.GetUserAsync(User);
+            var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
+            int coachId = coach.CoachID;
 
             // Get all children registered in the coach's course
             //var children = await _courseEnrollmentService.GetRegisterationByCoachAsync(coachId);
