@@ -13,7 +13,7 @@ namespace Core.Interfaces
     public interface ICourseEnrollmentService
     {
 
-        Task<bool> AddRegisteredEnrollmentAsync(int childId, int courseId, decimal scheduledHours, int createdBy, string status);
+        Task<bool> AddRegisteredEnrollmentAsync(int childId, int courseId, decimal scheduledHours, string status, User user);
         Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId);
         Task<IEnumerable<CourseEnrollment>> GetRegisteredEnrollmentsByChildAsync(int childId);
 

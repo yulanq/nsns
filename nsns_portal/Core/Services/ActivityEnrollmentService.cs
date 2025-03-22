@@ -35,7 +35,7 @@ namespace Core.Services
             return enrollments.Any(e => e.ActivityID == activityId);
         }
 
-        public async Task<bool> AddRegisteredEnrollmentAsync(int userId, int activityId, string status)
+        public async Task<bool> AddRegisteredEnrollmentAsync(int userId, int activityId, string status, User user)
         {
             if (userId <= 0 || activityId <= 0)
                 throw new ArgumentException("Invalid child or activity.");
@@ -51,7 +51,7 @@ namespace Core.Services
                 ActivityID = activityId,
                 Child = child,
                 Status = status,
-                CreatedBy = 1, // Temporary user ID
+                CreatedBy = user.Id, // Temporary user ID
                 CreatedDate = DateTime.UtcNow
             };
 
