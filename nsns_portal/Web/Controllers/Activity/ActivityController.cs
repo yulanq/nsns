@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Web.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Web.Controllers.Activity
 {
@@ -12,13 +13,15 @@ namespace Web.Controllers.Activity
         //[ApiController]
 
         private readonly IActivityService _activityService;
-       
+        private readonly UserManager<Core.Models.User> _userManager;
 
 
-        public ActivityController(IActivityService activityService)
+
+        public ActivityController(IActivityService activityService, UserManager<Core.Models.User> userManager)
         {
             _activityService = activityService;
-           
+            _userManager = userManager;
+            _userManager = userManager;
         }
 
 
@@ -105,9 +108,10 @@ namespace Web.Controllers.Activity
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Add(string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive, int createdBy)
+        public async Task<IActionResult> Add(string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive)
         {
-            createdBy = 1; //temparary set
+            //createdBy = 1; //temparary set
+
             if (!ModelState.IsValid)
             {
                
@@ -116,7 +120,8 @@ namespace Web.Controllers.Activity
 
             try
             {
-                var result = await _activityService.AddAsync( title,  description,  address,  maxCapacity,  scheduledAt,  Cost,  isActive,  createdBy);
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _activityService.AddAsync( title,  description,  address,  maxCapacity,  scheduledAt,  Cost,  isActive,  user);
 
                 if (!result)
                 {
@@ -168,7 +173,8 @@ namespace Web.Controllers.Activity
         {
             try
             {
-                var result = await _activityService.UpdateAsync(activityId,  title,  description,  address,  maxCapacity,  scheduledAt,  cost, isActive);
+                var user = await _userManager.GetUserAsync(User);
+                var result = await _activityService.UpdateAsync(activityId,  title,  description,  address,  maxCapacity,  scheduledAt,  cost, isActive, user);
 
                 if (!result)
                 {

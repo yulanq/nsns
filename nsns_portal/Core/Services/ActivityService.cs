@@ -28,9 +28,9 @@ namespace Core.Services
             _activityRepository = activityRepository;
         }
 
-        public async Task<bool> AddAsync(string title, string description, string address, int maxCapacity, DateTime scheduledAt,Decimal Cost, bool isActive, int createdBy)
+        public async Task<bool> AddAsync(string title, string description, string address, int maxCapacity, DateTime scheduledAt,Decimal Cost, bool isActive, User user)
         {
-            
+
 
             // Create the activity
             var activity = new Activity
@@ -42,9 +42,10 @@ namespace Core.Services
                 ScheduledAt = scheduledAt,
                 Cost = Cost,
                 IsActive = isActive,
-                CreatedBy = createdBy
+                CreatedBy = user.Id,
+                CreatedDate = DateTime.Now
 
-               
+
             }; 
             
             // Save to the database
@@ -69,7 +70,7 @@ namespace Core.Services
         }
 
 
-        public async Task<bool> UpdateAsync(int id, string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal cost, bool isActive)
+        public async Task<bool> UpdateAsync(int id, string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal cost, bool isActive, User user)
         //public async Task<bool> UpdateAsync(Activity activity)
         {
             //Find the staff by ID
@@ -89,6 +90,7 @@ namespace Core.Services
             activity.IsActive = isActive;
             //activity.UpdatedDate = DateTime.UtcNow;
             activity.UpdatedDate = DateTime.Now;
+            activity.UpdatedBy = user.Id;
             // Save changes
             return await _activityRepository.UpdateAsync(activity);
         }

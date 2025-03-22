@@ -11,11 +11,11 @@ namespace Core.Interfaces
     public interface IActivityService
     {
 
-        Task<bool> AddAsync(string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive, int createdBy);
+        Task<bool> AddAsync(string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive, User user);
 
         Task<bool> RemoveAsync(int userId);
 
-        Task<bool> UpdateAsync(int id, string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive);
+        Task<bool> UpdateAsync(int id, string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive, User user);
 
         Task<Activity> GetAsync(int userId);
 
