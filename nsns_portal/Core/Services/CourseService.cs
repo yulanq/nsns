@@ -24,11 +24,13 @@ namespace Core.Services
         private readonly ICourseRepository _courseRepository;
         private readonly ICoachRepository _coachRepository;
         private readonly IUserRepository<User> _userRepository;
+        private readonly ISpecialtyRepository _specialtyRepository;
 
-        public CourseService(ICourseRepository courseRepository, ICoachRepository coachRepository, IUserRepository<User> userRepository)
+        public CourseService(ICourseRepository courseRepository, ICoachRepository coachRepository, ISpecialtyRepository specialtyRepository, IUserRepository<User> userRepository)
         {
             _courseRepository = courseRepository;
             _coachRepository = coachRepository;
+            _specialtyRepository = specialtyRepository;
             _userRepository = userRepository;
         }
 
@@ -51,7 +53,7 @@ namespace Core.Services
 
         // Add a new course
         
-        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool isActive, int coachId, User user)
+        public async  Task<bool> AddAsync(string title, string description, decimal hourlyCost, bool isActive, int coachId, int specialtyId, User user)
         {
             // Validate inputs
             if (string.IsNullOrWhiteSpace(title))
@@ -81,6 +83,13 @@ namespace Core.Services
                 throw new Exception("No coach is added.");
             }
 
+            //Retrieve the coach entity
+            var specialty = await _specialtyRepository.GetAsync(specialtyId);
+            if (specialty == null)
+            {
+                throw new Exception("No coach is added.");
+            }
+
             //var createdByUser = await _userRepository.GetAsync(createdBy);
             //if (createdByUser == null)
             //{
@@ -94,6 +103,7 @@ namespace Core.Services
                 HourlyCost = hourlyCost,
                 IsActive = isActive,
                 Coach = coach,
+                Specialty = specialty,
                 //CoachID = coachId,
                 CreatedBy = user.Id,
                 //CreatedByUser = createdByUser,

@@ -37,7 +37,17 @@
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">@index</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.Name</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@(coach.Specialty != null ? coach.Specialty.Title : "N/A")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">
+                        @if (coach.Specialties != null && coach.Specialties.Any())
+                        {
+                            @string.Join(", ", coach.Specialties.Select(s => s.Title))
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+                    
+                    </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.Gender</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.User.Email</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.Phone</td>

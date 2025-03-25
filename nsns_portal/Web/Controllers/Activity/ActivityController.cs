@@ -1,7 +1,7 @@
 ﻿using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
-using Web.ViewModels;
+using Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace Web.Controllers.Activity

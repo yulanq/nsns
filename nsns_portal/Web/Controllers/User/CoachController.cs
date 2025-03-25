@@ -24,17 +24,20 @@ namespace Web.Controllers.User
         private readonly ICoachRepository _coachRepository;
         private readonly ICityService _cityService;
         private readonly ISpecialtyService _specialtyService;
+
+        private readonly ICoachSpecialtyService _coachSpecialtyService;
         private readonly ICourseEnrollmentService _courseEnrollmentService;
         private readonly ICourseService _courseService;
         private readonly IChildService _childService;
         private readonly UserManager<Core.Models.User> _userManager;
         
-        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICityService cityService, ISpecialtyService specialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
+        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICityService cityService, ISpecialtyService specialtyService, ICoachSpecialtyService coachSpecialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
         {
             _coachService = coachService;
             _coachRepository = coachRepository;
             _cityService = cityService;
             _specialtyService = specialtyService;
+            _coachSpecialtyService = coachSpecialtyService;
             _courseEnrollmentService = courseEnrollmentService;
             _courseService = courseService;
             _childService = childService;
@@ -46,19 +49,32 @@ namespace Web.Controllers.User
         // POST: Add Staff Action
         [HttpPost("Add")]
         //[HttpPost]
-        public async Task<IActionResult> Add(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId)
+        public async Task<IActionResult> Add(string name, string email, string password, List<int> specialtyIds, string gender, string phone, string wechat, int cityId)
         {
 
            
             if (!ModelState.IsValid)
             {
+                var cities = await _cityService.GetAllAsync(); // Replace with your data fetching logic
+                ViewBag.CityList = cities.Select(c => new SelectListItem
+                {
+                    Value = c.CityID.ToString(),
+                    Text = c.Name
+                }).ToList();
+
+                var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
+                ViewBag.SpecialtyList = specialties.Select(c => new SelectListItem
+                {
+                    Value = c.SpecialtyID.ToString(),
+                    Text = c.Title
+                }).ToList();
                 return View();
             }
 
             try
             {
                 var user = await _userManager.GetUserAsync(User);
-                var result = await _coachService.AddAsync(name, email, password, specialtyId, gender, phone, wechat, cityId, user);
+                var result = await _coachService.AddAsync(name, email, password, specialtyIds, gender, phone, wechat, cityId, user);
                 if (!result)
                 {
                     ModelState.AddModelError(string.Empty, "Failed in adding the coach info.");
@@ -232,12 +248,21 @@ namespace Web.Controllers.User
 
             var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
 
+            var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
+
             ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
             {
                 Value = s.SpecialtyID.ToString(),
                 Text = s.Title,
-                Selected = s.SpecialtyID == coach.SpecialtyID
+                Selected = coachSpecialtyIds.Contains(s.SpecialtyID)
             }).ToList();
+
+            //ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+            //{
+            //    Value = s.SpecialtyID.ToString(),
+            //    Text = s.Title,
+            //    Selected = s.SpecialtyID == coach.SpecialtyID
+            //}).ToList();
 
             // Pass the coach details to the Edit.cshtml view
             return View(coach);
@@ -282,14 +307,26 @@ namespace Web.Controllers.User
                     }).ToList();
 
 
+                    //var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
+
+                    //ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+                    //{
+                    //    Value = s.SpecialtyID.ToString(),
+                    //    Text = s.Title,
+                    //    Selected = s.SpecialtyID == coach.SpecialtyID
+                    //}).ToList();
+
                     var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
+
+                    var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
 
                     ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                     {
                         Value = s.SpecialtyID.ToString(),
                         Text = s.Title,
-                        Selected = s.SpecialtyID == coach.SpecialtyID
+                        Selected = coachSpecialtyIds.Contains(s.SpecialtyID)
                     }).ToList();
+
 
                     // Pass the coach details to the Edit.cshtml view
                     return View(coach);
@@ -320,14 +357,26 @@ namespace Web.Controllers.User
                 }).ToList();
 
 
+                //var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
+
+                //ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+                //{
+                //    Value = s.SpecialtyID.ToString(),
+                //    Text = s.Title,
+                //    Selected = s.SpecialtyID == coach.SpecialtyID
+                //}).ToList();
+
                 var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
+
+                var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
 
                 ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                 {
                     Value = s.SpecialtyID.ToString(),
                     Text = s.Title,
-                    Selected = s.SpecialtyID == coach.SpecialtyID
+                    Selected = coachSpecialtyIds.Contains(s.SpecialtyID)
                 }).ToList();
+
 
                 // Pass the coach details to the Edit.cshtml view
                 return View(coach);

@@ -93,6 +93,8 @@ namespace Core.Contexts
 
         public DbSet<City> Cities { get; set; }
 
+        public DbSet<CoachSpecialty> CoachSpecialties { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -183,6 +185,23 @@ namespace Core.Contexts
 
             modelBuilder.Entity<City>()
         .ToTable("cities"); // Explicitly map to the table name
+
+            modelBuilder.Entity<CoachSpecialty>()
+        .ToTable("coach_specialty"); // Explicitly map to the table name
+
+
+            //modelBuilder.Entity<CoachSpecialty>()
+            //.HasKey(cs => new { cs.CoachId, cs.SpecialtyId });
+
+            //modelBuilder.Entity<CoachSpecialty>()
+            //    .HasOne(cs => cs.Coach)
+            //    .WithMany(c => c.CoachSpecialties)
+            //    .HasForeignKey(cs => cs.CoachId);
+
+            //modelBuilder.Entity<CoachSpecialty>()
+            //    .HasOne(cs => cs.Specialty)
+            //    .WithMany(s => s.CoachSpecialties)
+            //    .HasForeignKey(cs => cs.SpecialtyId);
         }
     }
 

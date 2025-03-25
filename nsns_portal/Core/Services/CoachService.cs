@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services
 {
@@ -21,6 +22,7 @@ namespace Core.Services
     {
         private readonly ICoachRepository _coachRepository;
         private readonly ISpecialtyRepository _specialtyRepository;
+        private readonly ICoachSpecialtyService _coachSpecialtyService;
         private readonly ICityRepository _cityRepository;
         IUserRegistrationService _userRegistrationService;
         private readonly IUserRepository<User> _userRepository;
@@ -31,7 +33,7 @@ namespace Core.Services
 
 
 
-        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, ISpecialtyRepository specialtyRepository, IUserRegistrationService userRegistrationService, UserManager<Core.Models.User> userManager, IUserRepository<User> userRepository /*, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions*/)
+        public CoachService(ICoachRepository coachRepository, ICityRepository cityRepository, ISpecialtyRepository specialtyRepository, IUserRegistrationService userRegistrationService, UserManager<Core.Models.User> userManager, IUserRepository<User> userRepository, ICoachSpecialtyService coachSpecialtyService /*, IPasswordHasher<Coach> password, IOptions<JwtOptions> jwtOptions*/)
         {
             _coachRepository = coachRepository;
             _cityRepository = cityRepository;
@@ -39,12 +41,13 @@ namespace Core.Services
             _userRegistrationService = userRegistrationService;
             _userManager = userManager;
             _userRepository = userRepository;
+            _coachSpecialtyService = coachSpecialtyService;
             //_passwordHasher = password;
             //_jwtOptions = jwtOptions.Value;
 
         }
 
-        public async Task<bool> AddAsync(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId, User user)
+        public async Task<bool> AddAsync(string name, string email, string password, List<int> specialtyIds, string gender, string phone, string wechat, int cityId, User user)
         {
             // Check if a user with the same username or email already exists
             var existingUser = await _coachRepository.GetByEmailAsync(email);
@@ -53,29 +56,21 @@ namespace Core.Services
                 throw new Exception("A coach with the same email already exists.");
             }
 
-            //Retrieve the Specialty entity
-            var specialty = await _specialtyRepository.GetAsync(specialtyId);
-            if (specialty == null)
-            {
-                throw new Exception("Invalid Specialty ID.");
-            }
 
-
-            // Retrieve the city entity
-            var city = await _cityRepository.GetAsync(cityId);
-            if (city == null)
-            {
-                throw new Exception("No city is added.");
-            }
-
-           
 
             var result = await _userRegistrationService.RegisterUserAsync(email, password, "Coach", user);
-
 
             if (result == true)
             {
                 //var user = await _userRepository.GetByEmailAsync(email);
+
+                // Retrieve the city entity
+                var city = await _cityRepository.GetAsync(cityId);
+                if (city == null)
+                {
+                    throw new Exception("No city is added.");
+                }
+
                 var newUser = await _userManager.FindByEmailAsync(email);
                 if (newUser != null)
                 {
@@ -87,16 +82,31 @@ namespace Core.Services
                         Wechat = wechat,
                         CityID = cityId,
                         City = city,
-                        SpecialtyID = specialtyId,
-                        Specialty = specialty, // Required property initialized
+                        //SpecialtyID = specialtyId,
+                        //Specialty = specialty, // Required property initialized
                         Gender = gender
-
-                        
 
                     };
 
 
-                    return await _coachRepository.AddAsync(coachUser);
+                    result = await _coachRepository.AddAsync(coachUser);
+                    if (result)
+                    {
+                        foreach (var specialtyId in specialtyIds)
+                        {
+                          
+                            result = await _coachSpecialtyService.AddSpecialtyToCoach(coachUser.CoachID, specialtyId, user.Id);
+                            if (!result)
+                                return false;
+                        }
+                        return true;
+
+                        
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else return false;
             }
@@ -136,7 +146,7 @@ namespace Core.Services
             // Update fields
             coach.Name = name;
             coach.User.Email = email;
-            coach.SpecialtyID = specialtyId;
+            //coach.SpecialtyID = specialtyId;
             coach.Gender = gender;
             coach.Phone = phone;
             coach.Wechat = wechat;
@@ -169,11 +179,11 @@ namespace Core.Services
 
             //Retrieve the Specialty entity
 
-            if (coach.SpecialtyID != null)
-            {
-                var specialty = await _specialtyRepository.GetAsync(coach.SpecialtyID);
-                coach.Specialty = specialty;
-            }
+            //if (coach.SpecialtyID != null)
+            //{
+            //    var specialty = await _specialtyRepository.GetAsync(coach.SpecialtyID);
+            //    coach.Specialty = specialty;
+            //}
 
            
 

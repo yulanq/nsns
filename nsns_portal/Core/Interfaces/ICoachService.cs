@@ -16,7 +16,7 @@ namespace Core.Interfaces
         /// </summary>
         /// 
         
-        Task<bool> AddAsync(string name, string email, string password, int specialtyId, string gender, string phone, string wechat, int cityId, User user);
+        Task<bool> AddAsync(string name, string email, string password, List<int> specialtyIds, string gender, string phone, string wechat, int cityId, User user);
 
         Task<bool> RemoveAsync(int coachId);
 

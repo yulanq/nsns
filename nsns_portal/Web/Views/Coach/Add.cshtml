@@ -34,13 +34,21 @@
         <tr>
             <td style="padding: 8px;"><label for="specialtyId">Specialty:</label></td>
             <td style="padding: 8px;">
-                <select name="specialtyId" class="form-control" style="width: 100%;">
+              @*   <select name="specialtyId" class="form-control" style="width: 100%;">
                     <option value="" selected>-- Select Specialty --</option>
                     @foreach (var specialty in ViewBag.SpecialtyList)
                     {
                         <option value="@specialty.Value">@specialty.Text</option>
                     }
+                </select> *@
+                <select name="specialtyIds" multiple class="form-control" style="width: 100%;" required>
+                    <option value="" selected>-- Select Specialties --</option>
+                    @foreach (var specialty in ViewBag.SpecialtyList)
+                    {
+                        <option value="@specialty.Value">@specialty.Text</option>
+                    }
                 </select>
+                <small style="color: darkslategray;">(You can hold CTRL to select multiple specialties)</small>
             </td>
         </tr>
         <tr>

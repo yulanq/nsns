@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using Web.ViewModels;
+using Core.ViewModels;
 
 namespace Web.Controllers.Courses
 {
@@ -127,7 +127,7 @@ namespace Web.Controllers.Courses
             {
                 var user = await _userManager.GetUserAsync(User);
 
-                var result = await _courseService.AddAsync(model.Title, model.Description, model.HourlyCost, model.IsActive, model.CoachID, user);
+                var result = await _courseService.AddAsync(model.Title, model.Description, model.HourlyCost, model.IsActive, model.CoachID, model.SpecialtyID,user);
 
                 if (!result)
                 {

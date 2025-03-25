@@ -30,9 +30,9 @@ namespace Core.Models
         [MaxLength(255)]
         public required string Gender { get; set; }
 
-        public int SpecialtyID { get; set; }
-        [ForeignKey("SpecialtyID")]
-        public virtual required Specialty Specialty { get; set; } // Navigation property to Speical table (SpecialID)
+        //public int SpecialtyID { get; set; }
+        //[ForeignKey("SpecialtyID")]
+        //public virtual required Specialty Specialty { get; set; } // Navigation property to Speical table (SpecialID)
 
         [MaxLength(50)]
         public string? Phone { get; set; }
@@ -47,6 +47,8 @@ namespace Core.Models
         public int CityID { get; set; }
         [ForeignKey("CityID")]
         public virtual required City City { get; set; } // Navigation property to Speical table (SpecialID)
+
+        public List<Specialty>? Specialties { get; set; }
 
 
         //public int? CreatedBy { get; set; }

@@ -136,9 +136,12 @@ namespace Core.Repositories
 
         public async Task<IEnumerable<Course>> GetActiveCoursesBySpecialtyAsync(int specialtyId)
         {
+            //return await _context.Courses
+            //    .Include(c => c.Coach)
+            //    .Where(c => c.Coach.SpecialtyID == specialtyId && c.IsActive == true)  // ✅ Filter by Specialty
+            //    .ToListAsync();
             return await _context.Courses
-                .Include(c => c.Coach)
-                .Where(c => c.Coach.SpecialtyID == specialtyId && c.IsActive == true)  // ✅ Filter by Specialty
+                .Where(c => c.SpecialtyID == specialtyId && c.IsActive)
                 .ToListAsync();
         }
 

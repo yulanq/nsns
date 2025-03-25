@@ -32,6 +32,9 @@ namespace Core.Models
         // Foreign keys for related tables
         [Required]
         public int CoachID { get; set; } // Foreign key to the Coach table
+        [Required]
+        public int SpecialtyID { get; set; }
+
         public int CreatedBy { get; set; } // Foreign key to the User table for the creator
         public int? UpdatedBy { get; set; } // Foreign key to the User table for the last updater
 
@@ -43,6 +46,8 @@ namespace Core.Models
         [ForeignKey(nameof(CoachID))]
         public virtual required Coach Coach { get; set; } // Correctly mapped to Coach
 
+        [ForeignKey(nameof(SpecialtyID))]
+        public virtual required Specialty Specialty { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
         public virtual  User CreatedByUser { get; set; } // Navigation property for the user who created the course

@@ -98,7 +98,7 @@ namespace Core.Repositories
         {
             return await _context.Coaches
                 .Include(c => c.City)
-                .Include(c => c.Specialty)
+                //.Include(c => c.Specialty)
                 .FirstOrDefaultAsync(c => c.UserID == userId);
         }
 
@@ -109,15 +109,26 @@ namespace Core.Repositories
             return await _context.Coaches
                 .Include(c => c.User)
                 .Include(c => c.City) // Eagerly load the City navigation property
-                .Include(c => c.Specialty) // Eagerly load the Specialty navigation property
+                .Include(c => c.Specialties) // Eagerly load the Specialty navigation property
+                
                 .ToListAsync();  // Retrieves all users asynchronously
+
+
+        //    await _context.Coaches
+        //.Include(c => c.User)  // Include user for email
+        //.Include(c => c.City)  // Include city for city name
+        //.Include(c => c.Coach_Specialties) // Include related specialties
+        //.ThenInclude(cs => cs.Specialty)
+        //.ToListAsync();
+
         }
 
         public async Task<IEnumerable<Coach>> GetCoachesBySpecialtyAsync(int specialtyId)
         {
-            return await _context.Coaches
-                .Include(c => c.User)
-                .Where(c => c.SpecialtyID == specialtyId)
+            return await _context.CoachSpecialties
+                .Where(cs => cs.SpecialtyID == specialtyId)
+                .Include(cs => cs.Coach) // Ensure Coach entity is loaded
+                .Select(cs => cs.Coach)  // Extract the Coach entity
                 .ToListAsync();
         }
 
