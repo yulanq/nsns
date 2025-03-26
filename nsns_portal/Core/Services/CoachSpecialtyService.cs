@@ -18,39 +18,39 @@ using System.Collections;
 
 namespace Core.Services
 {
-    public class CoachSpecialtyService : ICoachSpecialtyService
-    {
-        private readonly ICoachSpecialtyRepository _coachSpecialtyRepository;
+    //public class CoachSpecialtyService : ICoachSpecialtyService
+    //{
+        //private readonly ICoachSpecialtyRepository _coachSpecialtyRepository;
 
-        public CoachSpecialtyService(ICoachSpecialtyRepository coachSpecialtyRepository)
-        {
-            _coachSpecialtyRepository = coachSpecialtyRepository;
-        }
+        //public CoachSpecialtyService(ICoachSpecialtyRepository coachSpecialtyRepository)
+        //{
+        //    _coachSpecialtyRepository = coachSpecialtyRepository;
+        //}
 
-        public async Task<bool> AddSpecialtyToCoach(int coachId, int specialtyId, int createdBy)
-        {
-            if (coachId <= 0 || specialtyId <= 0)
-                throw new ArgumentException("Invalid Coach or Specialty ID.");
+        //public async Task<bool> AddSpecialtyToCoach(int coachId, int specialtyId, int createdBy)
+        //{
+        //    if (coachId <= 0 || specialtyId <= 0)
+        //        throw new ArgumentException("Invalid Coach or Specialty ID.");
 
-            var newRelation = new CoachSpecialty
-            {
-                CoachID = coachId,
-                SpecialtyID = specialtyId,
-                CreatedBy = createdBy,
-                CreatedDate = DateTime.Now,
-                //UpdatedDate = DateTime.Now
-            };
+        //    var newRelation = new CoachSpecialty
+        //    {
+        //        CoachID = coachId,
+        //        SpecialtyID = specialtyId,
+        //        //CreatedBy = createdBy,
+        //        //CreatedDate = DateTime.Now,
+        //        //UpdatedDate = DateTime.Now
+        //    };
 
-            //newRelation.Parent = parent;
+        //    //newRelation.Parent = parent;
 
-            return await _coachSpecialtyRepository.AddAsync(newRelation);
-        }
+        //    return await _coachSpecialtyRepository.AddAsync(newRelation);
+        //}
 
 
-        public async Task<IEnumerable<int>> GetSpecialtyIdsByCoachAsync(int coachId)
-        {
-            return await _coachSpecialtyRepository.GetSpecialtyIdsByCoachAsync(coachId);
-        }
+        //public async Task<IEnumerable<int>> GetSpecialtyIdsByCoachAsync(int coachId)
+        //{
+        //    return await _coachSpecialtyRepository.GetSpecialtyIdsByCoachAsync(coachId);
+        //}
 
         //public async Task<IEnumerable<ParentChild>> GetParentsByChildIdAsync(int childId)
         //{
@@ -61,7 +61,7 @@ namespace Core.Services
         //{
         //    return await _parentChildRepository.DeleteAsync(parentChildId);
         //}
-    }
+    //}
 
 
 }

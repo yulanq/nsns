@@ -109,29 +109,29 @@ namespace Core.Repositories
         //        .ToListAsync();
         //}
 
-        public async Task<bool> AddAsync(CoachSpecialty entity)
-        {
-            try
-            {
-                await _context.CoachSpecialties.AddAsync(entity);
-                await _context.SaveChangesAsync();  // Commit the changes asynchronously
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false; // Return failure in case of an exception
-            }
+        //public async Task<bool> AddAsync(CoachSpecialty entity)
+        //{
+        //    try
+        //    {
+        //        await _context.CoachSpecialties.AddAsync(entity);
+        //        await _context.SaveChangesAsync();  // Commit the changes asynchronously
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false; // Return failure in case of an exception
+        //    }
 
-        }
+        //}
 
 
-        public async Task<IEnumerable<int>> GetSpecialtyIdsByCoachAsync(int coachId)
-        {
-            return await _context.CoachSpecialties
-                .Where(cs => cs.CoachID == coachId)
-                .Select(cs => cs.SpecialtyID)
-                .ToListAsync();
-        }
+        //public async Task<IEnumerable<int>> GetSpecialtyIdsByCoachAsync(int coachId)
+        //{
+        //    return await _context.CoachSpecialties
+        //        .Where(cs => cs.CoachID == coachId)
+        //        .Select(cs => cs.SpecialtyID)
+        //        .ToListAsync();
+        //}
 
     }
 

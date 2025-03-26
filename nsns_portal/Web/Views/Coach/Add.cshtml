@@ -42,7 +42,7 @@
                     }
                 </select> *@
                 <select name="specialtyIds" multiple class="form-control" style="width: 100%;" required>
-                    <option value="" selected>-- Select Specialties --</option>
+                   @*  <option value="" selected>-- Select Specialties --</option> *@
                     @foreach (var specialty in ViewBag.SpecialtyList)
                     {
                         <option value="@specialty.Value">@specialty.Text</option>

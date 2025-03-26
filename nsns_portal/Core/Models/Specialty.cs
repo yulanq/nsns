@@ -24,6 +24,9 @@ namespace Core.Models
         public required string Description { get; set; }
 
         [Required]
+        public ICollection<CoachSpecialty> CoachSpecialties { get; set; }
+
+        [Required]
         [ForeignKey("CreatedByUser")]
         public int CreatedBy { get; set; }
 

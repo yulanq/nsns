@@ -133,6 +133,10 @@ builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 builder.Services.AddScoped<ISpecialtyService, SpecialtyService>();
 
+//builder.Services.AddScoped<ICoachSpecialtyRepository, CoachSpecialtyRepository>();
+//builder.Services.AddScoped<ICoachSpecialtyService, CoachSpecialtyService>();
+
+
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql( builder.Configuration.GetConnectionString("DefaultConnection"),  new MySqlServerVersion(new Version(8, 0, 39)) ));

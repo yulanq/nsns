@@ -189,6 +189,19 @@ namespace Core.Contexts
             modelBuilder.Entity<CoachSpecialty>()
         .ToTable("coach_specialty"); // Explicitly map to the table name
 
+            modelBuilder.Entity<CoachSpecialty>()
+        .HasKey(cs => new { cs.CoachID, cs.SpecialtyID }); // Composite Primary Key
+
+            modelBuilder.Entity<CoachSpecialty>()
+                .HasOne(cs => cs.Coach)
+                .WithMany(c => c.CoachSpecialties)
+                .HasForeignKey(cs => cs.CoachID);
+
+            modelBuilder.Entity<CoachSpecialty>()
+                .HasOne(cs => cs.Specialty)
+                .WithMany(s => s.CoachSpecialties)
+                .HasForeignKey(cs => cs.SpecialtyID);
+
 
             //modelBuilder.Entity<CoachSpecialty>()
             //.HasKey(cs => new { cs.CoachId, cs.SpecialtyId });

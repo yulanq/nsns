@@ -48,7 +48,11 @@ namespace Core.Models
         [ForeignKey("CityID")]
         public virtual required City City { get; set; } // Navigation property to Speical table (SpecialID)
 
-        public List<Specialty>? Specialties { get; set; }
+        // Many-to-Many Relationship
+        [Required]
+        public ICollection<CoachSpecialty> CoachSpecialties { get; set; }
+
+        //public List<Specialty>? Specialties { get; set; }
 
 
         //public int? CreatedBy { get; set; }

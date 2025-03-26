@@ -19,7 +19,7 @@
         <tr style="background-color: #f2f2f2;">
             <th style="padding: 8px; border: 1px solid #ddd;">#</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Name</th>
-            <th style="padding: 8px; border: 1px solid #ddd;">Specialty</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Specialties</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Gender</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Email</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Phone</th>
@@ -38,9 +38,9 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">@index</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@coach.Name</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        @if (coach.Specialties != null && coach.Specialties.Any())
+                        @if (coach.CoachSpecialties != null && coach.CoachSpecialties.Any())
                         {
-                            @string.Join(", ", coach.Specialties.Select(s => s.Title))
+                            @string.Join(", ", coach.CoachSpecialties.Select(cs => cs.Specialty.Title))
                         }
                         else
                         {

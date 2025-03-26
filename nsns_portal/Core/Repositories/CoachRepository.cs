@@ -88,8 +88,11 @@ namespace Core.Repositories
         // Find a User by its email asynchronously
         public async Task<Coach> GetAsync(int coachId)
         {
-            return await _context.Coaches.Include(u => u.User)
-                .FirstOrDefaultAsync(u => u.CoachID == coachId);
+            return await _context.Coaches
+                .Include(c => c.User)
+                .Include(c => c.City)
+                .Include(c=> c.CoachSpecialties)
+                .FirstOrDefaultAsync(c => c.CoachID == coachId);
                
             
         }
@@ -98,7 +101,7 @@ namespace Core.Repositories
         {
             return await _context.Coaches
                 .Include(c => c.City)
-                //.Include(c => c.Specialty)
+                .Include(c => c.CoachSpecialties)
                 .FirstOrDefaultAsync(c => c.UserID == userId);
         }
 
@@ -109,8 +112,8 @@ namespace Core.Repositories
             return await _context.Coaches
                 .Include(c => c.User)
                 .Include(c => c.City) // Eagerly load the City navigation property
-                .Include(c => c.Specialties) // Eagerly load the Specialty navigation property
-                
+                .Include(c => c.CoachSpecialties) // Eagerly load the Specialty navigation property
+                .ThenInclude(cs => cs.Specialty) // Load the specialties via the join table
                 .ToListAsync();  // Retrieves all users asynchronously
 
 

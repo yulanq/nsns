@@ -38,13 +38,16 @@
         <tr>
             <td style="padding: 8px;"><label for="specialtyId">Specialty:</label></td>
             <td style="padding: 8px;">
-                <select name="specialtyId" class="form-control" style="width: 100%;">
-                    <option value="" >-- Select Specialty --</option>
+                <select name="specialtyIds" class="form-control" style="width: 100%;" multiple>
+                    @* <option value="" >-- Select Specialty --</option> *@
                     @foreach (var specialty in ViewBag.SpecialtyList)
                     {
-                        <option value="@specialty.Value" selected="@(specialty.Selected ? "selected" : null)">@specialty.Text</option>
+                       @*  <option value="@specialty.Value" selected="@(specialty.Selected ? "selected" : null)">@specialty.Text</option> *@
+                        var isSelected = Model.CoachSpecialties.Any(cs => cs.SpecialtyID == int.Parse(specialty.Value));
+                        <option value="@specialty.Value" selected="@(isSelected ? "selected" : null)">@specialty.Text</option>
                     }
                 </select>
+                <small style="color: darkslategray;">(You can hold CTRL to select multiple specialties)</small>
             </td>
         </tr>
 

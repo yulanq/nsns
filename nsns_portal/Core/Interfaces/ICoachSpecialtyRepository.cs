@@ -11,9 +11,9 @@ namespace Core.Interfaces
 {
     public interface ICoachSpecialtyRepository
     {
-        Task<bool> AddAsync(CoachSpecialty entity);
+        //Task<bool> AddAsync(CoachSpecialty entity);
 
-        Task<IEnumerable<int>> GetSpecialtyIdsByCoachAsync(int coachId);
+        //Task<IEnumerable<int>> GetSpecialtyIdsByCoachAsync(int coachId);
 
 
         // Remove a Specialty

@@ -25,19 +25,19 @@ namespace Web.Controllers.User
         private readonly ICityService _cityService;
         private readonly ISpecialtyService _specialtyService;
 
-        private readonly ICoachSpecialtyService _coachSpecialtyService;
+        //private readonly ICoachSpecialtyService _coachSpecialtyService;
         private readonly ICourseEnrollmentService _courseEnrollmentService;
         private readonly ICourseService _courseService;
         private readonly IChildService _childService;
         private readonly UserManager<Core.Models.User> _userManager;
         
-        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICityService cityService, ISpecialtyService specialtyService, ICoachSpecialtyService coachSpecialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
+        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICityService cityService, ISpecialtyService specialtyService, /*ICoachSpecialtyService coachSpecialtyService,*/ ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
         {
             _coachService = coachService;
             _coachRepository = coachRepository;
             _cityService = cityService;
             _specialtyService = specialtyService;
-            _coachSpecialtyService = coachSpecialtyService;
+            //_coachSpecialtyService = coachSpecialtyService;
             _courseEnrollmentService = courseEnrollmentService;
             _courseService = courseService;
             _childService = childService;
@@ -74,6 +74,7 @@ namespace Web.Controllers.User
             try
             {
                 var user = await _userManager.GetUserAsync(User);
+                
                 var result = await _coachService.AddAsync(name, email, password, specialtyIds, gender, phone, wechat, cityId, user);
                 if (!result)
                 {
@@ -248,7 +249,9 @@ namespace Web.Controllers.User
 
             var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
 
-            var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
+            //var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
+            var coachSpecialtyIds = coach.CoachSpecialties?.Select(cs => cs.SpecialtyID).ToHashSet() ?? new HashSet<int>();
+
 
             ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
             {
@@ -275,14 +278,14 @@ namespace Web.Controllers.User
         [ValidateAntiForgeryToken]
 
        
-        public async Task<IActionResult> Edit(int coachId, string name, string email, /*string password,*/int specialtyId, string gender, string phone, string wechat, int cityId)
+        public async Task<IActionResult> Edit(int coachId, string name, string email, /*string password,*/List<int> specialtyIds, string gender, string phone, string wechat, int cityId)
         {
            
 
             try
             {
                 var user = await _userManager.GetUserAsync(User);
-                var result = await _coachService.UpdateAsync(coachId, name, email, /*password,*/specialtyId, gender, phone, wechat, cityId, user);
+                var result = await _coachService.UpdateAsync(coachId, name, email, /*password,*/specialtyIds, gender, phone, wechat, cityId, user);
 
 
                 if (!result)
@@ -318,7 +321,8 @@ namespace Web.Controllers.User
 
                     var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
 
-                    var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
+                    //var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
+                    var coachSpecialtyIds = coach.CoachSpecialties?.Select(cs => cs.SpecialtyID).ToHashSet() ?? new HashSet<int>();
 
                     ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                     {
@@ -368,7 +372,8 @@ namespace Web.Controllers.User
 
                 var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
 
-                var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
+                //var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
+                var coachSpecialtyIds = coach.CoachSpecialties?.Select(cs => cs.SpecialtyID).ToHashSet() ?? new HashSet<int>();
 
                 ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                 {

@@ -13,17 +13,17 @@ namespace Core.Models
     {
 
 
-        [Key]
-        public int CoachSpecialtyID { get; set; } // Primary Key
+        //[Key]
+        //public int CoachSpecialtyID { get; set; } // Primary Key
 
         public int CoachID { get; set; } // Foreign Key to Coaches
         public int SpecialtyID { get; set; } // Foreign Key to Specialties
 
-        public int CreatedBy { get; set; } // Created By User
-        public int UpdatedBy { get; set; } // Updated By User
+        //public int CreatedBy { get; set; } // Created By User
+        //public int UpdatedBy { get; set; } // Updated By User
 
-        public DateTime CreatedDate { get; set; }  
-        public DateTime UpdatedDate { get; set; }
+        //public DateTime CreatedDate { get; set; }  
+        //public DateTime UpdatedDate { get; set; }
 
        
 

@@ -29,9 +29,9 @@ namespace Core.Interfaces
         //// ✅ Get All Cities
         //Task<IEnumerable<City>> GetAllAsync();
 
-        Task<bool> AddSpecialtyToCoach(int coachId, int specialtyId, int createdBy);
+        //Task<bool> AddSpecialtyToCoach(int coachId, int specialtyId, int createdBy);
 
-        Task<IEnumerable<int>> GetSpecialtyIdsByCoachAsync(int coachId);
+        //Task<IEnumerable<int>> GetSpecialtyIdsByCoachAsync(int coachId);
 
         //Task<IEnumerable<ParentChild>> GetParentsByChildIdAsync(int childId);
 
