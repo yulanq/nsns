@@ -27,7 +27,7 @@ namespace Core.Repositories
                 return await _context.Courses
                 .Include(c => c.Coach)
                 .Include(c => c.CreatedByUser)
-                //.Include(c => c.UpdatedByUser)
+                .Include(c => c.Specialty)
                 .ToListAsync();
 
                 //return await _context.Courses.ToListAsync();
