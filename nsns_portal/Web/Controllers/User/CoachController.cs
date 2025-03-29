@@ -502,13 +502,13 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = "Failed to schedule the course.";
             }
 
-            return RedirectToAction("ManageSchedules", new { childId });
+            return RedirectToAction("ManageSchedules", new { childId, courseId = courseId });
         }
 
         
 
         [HttpPost("DeleteSchedule")]
-        public async Task<IActionResult> DeleteSchedule(int enrollmentId, int childId)
+        public async Task<IActionResult> DeleteSchedule(int enrollmentId, int childId, int courseId)
         {
             bool result = await _courseEnrollmentService.RemoveScheduleAsync(enrollmentId);
 
@@ -521,7 +521,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = "Failed to delete the schedule.";
             }
 
-            return RedirectToAction("ManageSchedules", new { childId });
+            return RedirectToAction("ManageSchedules", new { childId, courseId = courseId });
         }
 
 
@@ -559,7 +559,7 @@ namespace Web.Controllers.User
         }
 
         [HttpPost("CompleteCourse")]
-        public async Task<IActionResult> CompleteCourse(int enrollmentId, int childId, decimal actualHours)
+        public async Task<IActionResult> CompleteCourse(int enrollmentId, int childId, int courseId, decimal actualHours)
         {
             //int coachId = 16; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
 
@@ -589,7 +589,7 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = $"Error: {ex.Message}";
             }
 
-            return RedirectToAction("ManageEnrollments", new { childId });
+            return RedirectToAction("ManageEnrollments", new { childId, courseId = courseId});
         }
     }
 }
