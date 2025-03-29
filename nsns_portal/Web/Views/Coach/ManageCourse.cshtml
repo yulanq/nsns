@@ -62,7 +62,7 @@
 @foreach (var specialty in Model.Specialties)
 {
     <div style="margin: 40px 0; padding: 10px; background-color: #f8f9fa; border-left: 5px solid #1B7BAB;">
-        <div style="margin: 0; padding: 10px 0; color: #1B7BAB;">@specialty.SpecialtyTitle</div>
+        <div style="margin: 0; padding: 10px 0; color: #1B7BAB;"><strong>@specialty.SpecialtyTitle</strong></div>
     </div>
 
     @foreach (var course in specialty.Courses)
@@ -93,12 +93,12 @@
                                 <td style="padding: 10px; border: 1px solid #ddd;">@child.City</td>
                                 <td style="padding: 10px; border: 1px solid #ddd;">@(child.BirthDate?.ToString("yyyy-MM-dd") ?? "N/A")</td>
                                 <td style="padding: 10px; border: 1px solid #ddd;">@child.RegisteredDate.ToString("yyyy-MM-dd")</td>
-                                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
+                                <td style="padding: 10px; border: 1px solid #ddd;">
                                     <a href="/Coach/ManageSchedules/@child.ChildID?courseId=@course.CourseID">
                                         Manage
                                     </a>
                                 </td>
-                                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
+                                <td style="padding: 10px; border: 1px solid #ddd;">
                                     <a href="/Coach/ManageEnrollments/@child.ChildID?courseId=@course.CourseID">
                                         Manage
                                     </a>

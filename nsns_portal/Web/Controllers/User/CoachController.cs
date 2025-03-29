@@ -448,7 +448,7 @@ namespace Web.Controllers.User
 
 
         [HttpGet("ManageSchedules/{childId}")]
-        public async Task<IActionResult> ManageSchedules(int childId)
+        public async Task<IActionResult> ManageSchedules(int childId, [FromQuery] int courseId)
         {
             var user = await _userManager.GetUserAsync(User);
             var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
@@ -458,7 +458,7 @@ namespace Web.Controllers.User
 
             // ✅ Get courses assigned to the coach
             //var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
-            int courseId = 2; //need to change later
+            //int courseId = 2; //need to change later
             var course = await _courseService.GetAsync(courseId);
 
             // ✅ Get schedules for the child and course
@@ -526,7 +526,7 @@ namespace Web.Controllers.User
 
 
         [HttpGet("ManageEnrollments/{childId}")]
-        public async Task<IActionResult> ManageEnrollments(int childId)
+        public async Task<IActionResult> ManageEnrollments(int childId, [FromQuery] int courseId)
         {
             var user = await _userManager.GetUserAsync(User);
             var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
@@ -537,7 +537,7 @@ namespace Web.Controllers.User
 
             // Get enrollment details
             //var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
-            int courseId = 2;  //need to change later
+            //int courseId = 2;  //need to change later
             var course = await _courseService.GetAsync(courseId);
             Child? child = await _childService.GetAsync(childId);
 

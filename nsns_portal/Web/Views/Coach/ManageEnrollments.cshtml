@@ -2,7 +2,7 @@
 
 <h2>Manage Enrollments</h2>
 
-<a href="/Coach/ManageCourse" style="display: inline-block; margin-top: 20px; background-color: #ddd; color: black; text-decoration: none; padding: 5px 10px; border: 1px solid #ccc;">Back to Children List</a>
+<a href="/Coach/ManageCourse" style="display: inline-block; margin-top: 20px; background-color: #ddd; color: black; text-decoration: none; padding: 5px 10px; border: 1px solid #ccc;">Back to Courses List</a>
 
 <div style="margin: 30px 0; padding: 20px; background-color: #f2f2f2">
     <p><strong>Course:</strong> @Model.Course.Title</p>
@@ -10,8 +10,8 @@
 </div>
 
 
+<div style="margin: 0; padding: 30px 0; color: #1B7BAB;"><strong>Scheduled Courses</strong></div>
 
-<h3>Scheduled Courses</h3>
 
 <table id="scheduleTable" style="border-collapse: collapse; width: 100%; text-align: left;">
     <thead>
@@ -36,7 +36,7 @@
                             <input type="hidden" name="enrollmentId" value="@schedule.EnrollmentID" />
                             <input type="hidden" name="childId" value="@Model.Child.ChildID" />
                             <input name="actualHours" value="@schedule.ActualHours" type="number" step="0.5" min="0" required />
-                            <button type="submit" style="background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; cursor: pointer;">
+                            <button type="submit" style="background-color: #2198D4; color: white; padding: 5px 10px; border: none; cursor: pointer;">
                                 Complete
                             </button>
                         </form>
@@ -77,7 +77,10 @@
 
 <div style="padding-top: 30px"></div>
 
-<h3>Completed Courses</h3>
+
+
+<div style="margin: 0; padding: 30px 0; color: #1B7BAB;"><strong>Completed Courses</strong></div>
+
 
 <table id="completeTable" style="border-collapse: collapse; width: 100%; text-align: left;">
     <thead>
