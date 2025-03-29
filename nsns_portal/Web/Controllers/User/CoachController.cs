@@ -25,19 +25,19 @@ namespace Web.Controllers.User
         private readonly ICityService _cityService;
         private readonly ISpecialtyService _specialtyService;
 
-        //private readonly ICoachSpecialtyService _coachSpecialtyService;
+        private readonly ICoachSpecialtyService _coachSpecialtyService;
         private readonly ICourseEnrollmentService _courseEnrollmentService;
         private readonly ICourseService _courseService;
         private readonly IChildService _childService;
         private readonly UserManager<Core.Models.User> _userManager;
         
-        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICityService cityService, ISpecialtyService specialtyService, /*ICoachSpecialtyService coachSpecialtyService,*/ ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
+        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICityService cityService, ISpecialtyService specialtyService, ICoachSpecialtyService coachSpecialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
         {
             _coachService = coachService;
             _coachRepository = coachRepository;
             _cityService = cityService;
             _specialtyService = specialtyService;
-            //_coachSpecialtyService = coachSpecialtyService;
+            _coachSpecialtyService = coachSpecialtyService;
             _courseEnrollmentService = courseEnrollmentService;
             _courseService = courseService;
             _childService = childService;
@@ -394,21 +394,55 @@ namespace Web.Controllers.User
         {
             var user = await _userManager.GetUserAsync(User);
             var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
-            int coachId = coach.CoachID; 
+            int coachId = coach.CoachID;
 
-            // Get all children registered in the coach's course
-            var children = await _courseEnrollmentService.GetRegisterationByCoachAsync(coachId);
+            var model = new ManageCourseViewModel();
+            model.Coach = coach;
+            
 
-            // Get enrollment details
-            var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
+            var specialties = await _coachSpecialtyService.GetSpecialtiesByCoachAsync(coachId);
 
-            var model = new ManageCourseViewModel
+            var specialtiesCourses = new List<SpecialtyCoursesViewModel>();
+            
+            foreach (Specialty specialty in specialties)
             {
-               Course = course,
-               RegisteredChildren = (List<RegisteredChild>)children
-            };
+                var specialtyCourses = new SpecialtyCoursesViewModel();
+                specialtyCourses.SpecialtyID = specialty.SpecialtyID;
+                specialtyCourses.SpecialtyTitle = specialty.Title;
+
+                
+                var courses = await _courseService.GetActiveCourseByCoachBySpecialtyAsync(coachId, specialty.SpecialtyID);
+
+                var coursesChildren = new List<CourseChildrenViewModel>();
+
+
+                foreach (Course course in courses)
+                {
+                    var courseChildren = new CourseChildrenViewModel();
+                    courseChildren.CourseID = course.CourseID;
+                    courseChildren.CourseTitle = course.Title;
+                    
+                    
+                    var children = (List<ChildViewModel>)await _courseEnrollmentService.GetRegisterationByCourseAsync(course.CourseID);
+                  
+                    courseChildren.RegisteredChildren = children;
+
+                    coursesChildren.Add(courseChildren);
+                    
+                }
+
+                specialtyCourses.Courses = coursesChildren;
+
+                specialtiesCourses.Add(specialtyCourses);
+
+            }
+
+            model.Specialties = specialtiesCourses;
 
             return View(model);
+
+
+           
         }
 
 
@@ -420,15 +454,14 @@ namespace Web.Controllers.User
             var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
             int coachId = coach.CoachID;
             // ✅ Get children who are enrolled in the coach's courses
-            //var children = await _courseEnrollmentService.GetRegisteredChildrenByCoachAsync(coachId);
             var child = await _childService.GetAsync(childId);
-           
-            // ✅ Get courses assigned to the coach
-            var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
 
+            // ✅ Get courses assigned to the coach
+            //var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
+            int courseId = 2; //need to change later
+            var course = await _courseService.GetAsync(courseId);
 
             // ✅ Get schedules for the child and course
-         
             List<CourseEnrollment> schedules = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, childId);
             
 
@@ -503,7 +536,9 @@ namespace Web.Controllers.User
             //var children = await _courseEnrollmentService.GetRegisterationByCoachAsync(coachId);
 
             // Get enrollment details
-            var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
+            //var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
+            int courseId = 2;  //need to change later
+            var course = await _courseService.GetAsync(courseId);
             Child? child = await _childService.GetAsync(childId);
 
             if (child == null)

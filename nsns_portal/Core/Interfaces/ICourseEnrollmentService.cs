@@ -19,9 +19,10 @@ namespace Core.Interfaces
 
         Task<IEnumerable<CourseEnrollment>> GetCompletedEnrollmentsByChildAsync(int childId);
 
-        Task<IEnumerable<Child>> GetRegisteredChildrenByCoachAsync(int coachId);
+        //Task<IEnumerable<Child>> GetRegisteredChildrenByCoachAsync(int coachId);
 
-        Task<IEnumerable<Core.ViewModels.RegisteredChild>> GetRegisterationByCoachAsync(int coachId);
+        //Task<IEnumerable<Core.ViewModels.RegisteredChild>> GetRegisterationByCoachAsync(int coachId);
+        Task<IEnumerable<Core.ViewModels.ChildViewModel>> GetRegisterationByCourseAsync(int courseId);
 
         Task<bool> ScheduleCourseAsync(int childId, int courseId, DateTime scheduledAt, decimal scheduledHours, int coachId);
 

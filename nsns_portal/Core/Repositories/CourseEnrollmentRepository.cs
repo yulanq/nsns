@@ -91,14 +91,24 @@ namespace Core.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCoachAsync(int coachId, string status)
+        //public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCoachAsync(int coachId, string status)
+        //{
+        //    return await _context.CourseEnrollments
+        //        .Include(e => e.Child)
+        //        .Include(e => e.Child.City)
+        //        .Include(e => e.Course.Coach)
+        //        .Where(e => e.Course.Coach.CoachID == coachId && e.Status == status)
+        //        .OrderByDescending(e => e.CreatedDate)
+        //        .ToListAsync();
+        //}
+
+
+        public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCourseAsync(int courseId, string status)
         {
             return await _context.CourseEnrollments
                 .Include(e => e.Child)
-                .Include(e => e.Child.City)
-                .Include(e => e.Course.Coach)
-                .Where(e => e.Course.Coach.CoachID == coachId && e.Status == status)
-                .OrderByDescending(e => e.CreatedDate)
+                .ThenInclude(c => c.City)
+                .Where(e => e.CourseID == courseId && e.Status == status)
                 .ToListAsync();
         }
 

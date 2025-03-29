@@ -24,7 +24,26 @@ namespace Core.Repositories
             _context = context;
         }
 
+        public async Task<List<Specialty>> GetSpecialtiesByCoachAsync(int coachId)
+        {
 
+            List< Specialty> specialties = await _context.CoachSpecialties
+                .Where(cs => cs.CoachID == coachId)
+                .Include(cs => cs.Specialty)
+                    .Select(cs => cs.Specialty)
+                       .ToListAsync();
+
+            return specialties;
+
+                //    .ThenInclude(s => s.CoachSpecialties) // Include Courses under each Specialty
+                //        .ThenInclude(cs.)
+                //        .ThenInclude(c => c.Enrollments
+                //            .Where(e => e.Status == "Registered")) // Filter only "Registered" enrollments
+                //            .ThenInclude(e => e.Child) // Include Child details under each Enrollment
+                //                .ThenInclude(ch => ch.City) // Include City details under Child
+                //.Select(cs => cs.Specialty)
+                //.ToListAsync();
+        }
 
         // Add a new User to the database asynchronously
         //public async Task<bool> AddAsync(Coach entity)

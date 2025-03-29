@@ -15,17 +15,18 @@ using Core.Repositories;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 using System.Collections;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services
 {
-    //public class CoachSpecialtyService : ICoachSpecialtyService
-    //{
-        //private readonly ICoachSpecialtyRepository _coachSpecialtyRepository;
+    public class CoachSpecialtyService : ICoachSpecialtyService
+    {
+        private readonly ICoachSpecialtyRepository _coachSpecialtyRepository;
 
-        //public CoachSpecialtyService(ICoachSpecialtyRepository coachSpecialtyRepository)
-        //{
-        //    _coachSpecialtyRepository = coachSpecialtyRepository;
-        //}
+        public CoachSpecialtyService(ICoachSpecialtyRepository coachSpecialtyRepository)
+        {
+            _coachSpecialtyRepository = coachSpecialtyRepository;
+        }
 
         //public async Task<bool> AddSpecialtyToCoach(int coachId, int specialtyId, int createdBy)
         //{
@@ -61,8 +62,23 @@ namespace Core.Services
         //{
         //    return await _parentChildRepository.DeleteAsync(parentChildId);
         //}
-    //}
+        //}
 
+        public async Task<List<Specialty>> GetSpecialtiesByCoachAsync(int coachId)
+        {
+            return await _coachSpecialtyRepository.GetSpecialtiesByCoachAsync(coachId);
+            //return await _context.CoachSpecialties
+            //    .Where(cs => cs.CoachID == coachId)
+            //    .Include(cs => cs.Specialty)
+            //        .ThenInclude(s => s.Courses) // Include Courses under each Specialty
+            //            .ThenInclude(c => c.Enrollments
+            //                .Where(e => e.Status == "Registered")) // Filter only "Registered" enrollments
+            //                .ThenInclude(e => e.Child) // Include Child details under each Enrollment
+            //                    .ThenInclude(ch => ch.City) // Include City details under Child
+            //    .Select(cs => cs.Specialty)
+            //    .ToListAsync();
+        }
+    }
 
 }
 

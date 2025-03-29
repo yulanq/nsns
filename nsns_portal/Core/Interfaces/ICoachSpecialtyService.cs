@@ -38,6 +38,8 @@ namespace Core.Interfaces
 
         //Task<bool> RemoveParentFromChild(int parentChildId);
 
+        Task<List<Specialty>> GetSpecialtiesByCoachAsync(int coachId);
+
 
 
 

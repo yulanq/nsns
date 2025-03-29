@@ -1,5 +1,6 @@
 ﻿
 using Core.Models;
+using Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,9 @@ namespace Core.Interfaces
 
         //// Get all Specialties
         //Task<IEnumerable<City>> GetByNameAsync(string name);
+
+        Task<List<Specialty>> GetSpecialtiesByCoachAsync(int coachId);
+      
 
 
 

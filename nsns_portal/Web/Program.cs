@@ -133,8 +133,8 @@ builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 builder.Services.AddScoped<ISpecialtyService, SpecialtyService>();
 
-//builder.Services.AddScoped<ICoachSpecialtyRepository, CoachSpecialtyRepository>();
-//builder.Services.AddScoped<ICoachSpecialtyService, CoachSpecialtyService>();
+builder.Services.AddScoped<ICoachSpecialtyRepository, CoachSpecialtyRepository>();
+builder.Services.AddScoped<ICoachSpecialtyService, CoachSpecialtyService>();
 
 
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();

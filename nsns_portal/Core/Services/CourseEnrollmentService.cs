@@ -111,24 +111,25 @@ namespace Core.Services
             return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Completed");
         }
 
-        public async Task<IEnumerable<Child>> GetRegisteredChildrenByCoachAsync(int coachId)
-        {
-            var course_enrollments =  await _enrollmentRepository.GetEnrollmentsByCoachAsync(coachId, "Registered");
+        //public async Task<IEnumerable<Child>> GetRegisteredChildrenByCoachAsync(int coachId)
+        //{
+        //    var course_enrollments =  await _enrollmentRepository.GetEnrollmentsByCoachAsync(coachId, "Registered");
             
-            return course_enrollments.Select(e => e.Child).ToList();
+        //    return course_enrollments.Select(e => e.Child).ToList();
            
-        }
+        //}
 
-        public async Task<IEnumerable<Core.ViewModels.RegisteredChild>> GetRegisterationByCoachAsync(int coachId)
+        public async Task<IEnumerable<Core.ViewModels.ChildViewModel>> GetRegisterationByCourseAsync(int courseId)
         {
-            var course_enrollments = await _enrollmentRepository.GetEnrollmentsByCoachAsync(coachId, "Registered");
+            //var course_enrollments = await _enrollmentRepository.GetEnrollmentsByCoachAsync(coachId, "Registered");
+            var course_enrollments = await _enrollmentRepository.GetEnrollmentsByCourseAsync(courseId, "Registered");
 
-            return course_enrollments.Select(e => new RegisteredChild
+            return course_enrollments.Select(e => new ChildViewModel
             {
                 ChildID = e.Child.ChildID,
                 Name = e.Child.Name,
                 Gender = e.Child.Gender,
-                City = e.Child.City,
+                City = e.Child.City.Name,
                 BirthDate = e.Child.BirthDate,
                 RegisteredDate = e.CreatedDate // Ensure CreatedDate maps to RegisteredDate
             }).ToList();
