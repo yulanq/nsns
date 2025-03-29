@@ -11,7 +11,7 @@ namespace Core.Interfaces
     public interface IChildService
     {
         Task<IEnumerable<Child>> GetAllAsync();
-        Task<Child?> GetAsync(int childId);
+        Task<Child> GetAsync(int childId);
 
         //Task<Child?> GetChildByIdAsync(int childId);
 

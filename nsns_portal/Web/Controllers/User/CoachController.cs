@@ -372,7 +372,6 @@ namespace Web.Controllers.User
 
                 var specialties = await _specialtyService.GetAllAsync(); // Replace with your data fetching logic
 
-                //var coachSpecialtyIds = (await _coachSpecialtyService.GetSpecialtyIdsByCoachAsync(coachId)).ToHashSet(); // Get coach's specialties
                 var coachSpecialtyIds = coach.CoachSpecialties?.Select(cs => cs.SpecialtyID).ToHashSet() ?? new HashSet<int>();
 
                 ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
@@ -392,57 +391,77 @@ namespace Web.Controllers.User
         [HttpGet("ManageCourse")]
         public async Task<IActionResult> ManageCourse()
         {
-            var user = await _userManager.GetUserAsync(User);
-            var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
-            int coachId = coach.CoachID;
-
-            var model = new ManageCourseViewModel();
-            model.Coach = coach;
-            
-
-            var specialties = await _coachSpecialtyService.GetSpecialtiesByCoachAsync(coachId);
-
-            var specialtiesCourses = new List<SpecialtyCoursesViewModel>();
-            
-            foreach (Specialty specialty in specialties)
+            try
             {
-                var specialtyCourses = new SpecialtyCoursesViewModel();
-                specialtyCourses.SpecialtyID = specialty.SpecialtyID;
-                specialtyCourses.SpecialtyTitle = specialty.Title;
+                var user = await _userManager.GetUserAsync(User);
+                var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
+                int coachId = coach.CoachID;
 
-                
-                var courses = await _courseService.GetActiveCourseByCoachBySpecialtyAsync(coachId, specialty.SpecialtyID);
-
-                var coursesChildren = new List<CourseChildrenViewModel>();
+                var model = new ManageCourseViewModel();
+                model.Coach = coach;
 
 
-                foreach (Course course in courses)
+                var specialties = await _coachSpecialtyService.GetSpecialtiesByCoachAsync(coachId);
+
+                if (specialties == null || !specialties.Any())
                 {
-                    var courseChildren = new CourseChildrenViewModel();
-                    courseChildren.CourseID = course.CourseID;
-                    courseChildren.CourseTitle = course.Title;
-                    
-                    
-                    var children = (List<ChildViewModel>)await _courseEnrollmentService.GetRegisterationByCourseAsync(course.CourseID);
-                  
-                    courseChildren.RegisteredChildren = children;
-
-                    coursesChildren.Add(courseChildren);
-                    
+                    TempData["ErrorMessage"] = "No specialties found for this coach.";
+                    return RedirectToAction("Index", "Home"); // Redirect to a safe page
                 }
 
-                specialtyCourses.Courses = coursesChildren;
+                var specialtiesCourses = new List<SpecialtyCoursesViewModel>();
 
-                specialtiesCourses.Add(specialtyCourses);
+                foreach (Specialty specialty in specialties)
+                {
+                    var specialtyCourses = new SpecialtyCoursesViewModel();
+                    specialtyCourses.SpecialtyID = specialty.SpecialtyID;
+                    specialtyCourses.SpecialtyTitle = specialty.Title;
+
+
+                    var courses = await _courseService.GetActiveCourseByCoachBySpecialtyAsync(coachId, specialty.SpecialtyID);
+                    //if (courses == null || !courses.Any())
+                    //{
+                    //    continue; // Skip if no courses
+                    //}
+
+                    var coursesChildren = new List<CourseChildrenViewModel>();
+
+
+                    foreach (Course course in courses)
+                    {
+                        var courseChildren = new CourseChildrenViewModel();
+                        courseChildren.CourseID = course.CourseID;
+                        courseChildren.CourseTitle = course.Title;
+
+                      
+
+                        var children = (List<ChildViewModel>)await _courseEnrollmentService.GetRegisterationByCourseAsync(course.CourseID);
+                        courseChildren.RegisteredChildren = children;
+
+
+
+                        coursesChildren.Add(courseChildren);
+
+                    }
+
+                    specialtyCourses.Courses = coursesChildren;
+
+                    specialtiesCourses.Add(specialtyCourses);
+
+                }
+
+                model.Specialties = specialtiesCourses;
+
+                return View(model);
 
             }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+                return RedirectToAction("Index", "Home"); // Redirect to a safe page
+            }
 
-            model.Specialties = specialtiesCourses;
 
-            return View(model);
-
-
-           
         }
 
 
@@ -450,30 +469,39 @@ namespace Web.Controllers.User
         [HttpGet("ManageSchedules/{childId}")]
         public async Task<IActionResult> ManageSchedules(int childId, [FromQuery] int courseId)
         {
-            var user = await _userManager.GetUserAsync(User);
-            var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
-            int coachId = coach.CoachID;
-            // ✅ Get children who are enrolled in the coach's courses
-            var child = await _childService.GetAsync(childId);
-
-            // ✅ Get courses assigned to the coach
-            //var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
-            //int courseId = 2; //need to change later
-            var course = await _courseService.GetAsync(courseId);
-
-            // ✅ Get schedules for the child and course
-            List<CourseEnrollment> schedules = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, childId);
-            
-
-
-            var model = new ManageSchedulesViewModel
+            try
             {
-                Child =child,
-                Course = course,
-                Schedules = schedules
-            };
+                var user = await _userManager.GetUserAsync(User);
+                var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
+                int coachId = coach.CoachID;
+                // ✅ Get children who are enrolled in the coach's courses
+                var child = await _childService.GetAsync(childId);
 
-            return View(model);
+                // ✅ Get courses assigned to the coach
+                //var course = await _courseService.GetActiveCourseByCoachAsync(coachId);
+                //int courseId = 2; //need to change later
+                var course = await _courseService.GetAsync(courseId);
+
+                // ✅ Get schedules for the child and course
+                List<CourseEnrollment> schedules = (List<CourseEnrollment>)await _courseEnrollmentService.GetSchedulesByCourseChildAsync(course.CourseID, childId);
+
+
+
+                var model = new ManageSchedulesViewModel
+                {
+                    Child = child,
+                    Course = course,
+                    Schedules = schedules
+                };
+
+                return View(model);
+            }
+
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                return RedirectToAction("ManageCourse");
+            }
         }
 
 

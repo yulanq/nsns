@@ -21,17 +21,15 @@ namespace Core.Services
     public class ChildService : IChildService
     {
        
-        //private readonly IPasswordHasher<Child> _passwordHasher;
-        //private readonly JwtOptions _jwtOptions;
+      
         private readonly IChildRepository _childRepository;
         private readonly ICityRepository _cityRepository;
 
-        public ChildService(IChildRepository childRepository, ICityRepository cityRepository/*, IPasswordHasher<Child> password, IOptions<JwtOptions> jwtOptions*/)
+        public ChildService(IChildRepository childRepository, ICityRepository cityRepository)
         {
             _childRepository = childRepository;
             _cityRepository = cityRepository;
-            //_passwordHasher = password;
-            //_jwtOptions = jwtOptions.Value;
+           
         }
 
         public async Task<IEnumerable<Child>> GetAllAsync()
@@ -39,20 +37,19 @@ namespace Core.Services
             return await _childRepository.GetAllAsync();
         }
 
-        public async Task<Child?> GetAsync(int childId)
+        public async Task<Child> GetAsync(int childId)
         {
-            return await _childRepository.GetAsync(childId);
+            var child = await _childRepository.GetAsync(childId);
+            if (child == null)
+            {
+                throw new KeyNotFoundException($"Child with ID {childId} not found.");
+            }
+            return child;
         }
 
-        //public async Task<Child?> GetChildByIdAsync(int childId)
-        //{
-        //    return await _childRepository.GetChildByIdAsync(childId);
-        //}
-        //public async Task<bool> AddAsync(Child child)
+       
         public async Task<bool> AddAsync(string name, DateTime? birthDate, string? gender, int? cityId, string email, string password, User user)
         {
-            //if (string.IsNullOrWhiteSpace(child.Name))
-            //    throw new ArgumentException("Child name cannot be empty.");
 
             var newUser = new User
             {
@@ -75,17 +72,16 @@ namespace Core.Services
                 User = newUser,
                 City = city
             };
-            //child.Password = _passwordHasher.HashPassword(childUser, child.Password);
-
+           
             return await _childRepository.AddAsync(child);
             
         }
 
         public async Task<bool> UpdateAsync(Child child)
         {
-            var existingChild = await _childRepository.GetAsync(child.ChildID);
-            if (existingChild == null)
-                throw new Exception("Child not found.");
+            //var existingChild = await _childRepository.GetAsync(child.ChildID);
+            //if (existingChild == null)
+            //    throw new Exception("Child not found.");
 
             return await _childRepository.UpdateAsync(child);
         }
@@ -98,7 +94,7 @@ namespace Core.Services
             var child = await _childRepository.GetAsync(childId);
             if (child == null)
             {
-                throw new Exception("Child not found.");
+                throw new KeyNotFoundException($"Child with ID {childId} not found.");
             }
 
             // Update fields
@@ -125,7 +121,7 @@ namespace Core.Services
             var child = await _childRepository.GetAsync(childId);
             if (child == null)
             {
-                throw new Exception("Child not found.");
+                throw new KeyNotFoundException($"Child with ID {childId} not found.");
             }
 
             // Remove the coach
