@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Core.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 
 
@@ -31,7 +32,7 @@ namespace Web.Controllers.User
 
 
 
-
+        [Authorize(Roles = "Admin")]
         // POST: Add Staff Action
         [HttpPost("Add")]
         //[HttpPost]
@@ -69,6 +70,7 @@ namespace Web.Controllers.User
 
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Add View
         [HttpGet("Add")]
         //[HttpGet]
@@ -78,6 +80,7 @@ namespace Web.Controllers.User
 
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Staff/Delete/{userId}
         [HttpGet("ConfirmDelete/{staffId}")]
         public async Task<IActionResult> ConfirmDelete(int staffId)
@@ -93,7 +96,7 @@ namespace Web.Controllers.User
             return View(staff);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int staffId)
         {
@@ -117,9 +120,9 @@ namespace Web.Controllers.User
             }
         }
 
-            
 
 
+        [Authorize(Roles = "Admin")]
         // GET: Add View
         [HttpGet("List")]
         //[HttpGet]
@@ -130,8 +133,8 @@ namespace Web.Controllers.User
             return View(staffList); // Ensure there is a corresponding List.cshtml in Views/Staff
 
         }
-       
 
+        [Authorize(Roles = "Admin")]
         // GET: Edit View
         [HttpGet("Edit/{staffId}")]
         //[HttpGet]
@@ -150,6 +153,7 @@ namespace Web.Controllers.User
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("Edit/{staffId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int staffId, string name, string email, /*string password,*/ string phone, string wechat)

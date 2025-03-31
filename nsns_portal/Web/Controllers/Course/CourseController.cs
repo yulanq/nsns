@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers.Courses
 {
@@ -33,7 +34,7 @@ namespace Web.Controllers.Courses
 
 
 
-        
+        [Authorize(Roles = "Staff")]
         [HttpGet("ConfirmDelete/{courseId}")]
         public async Task<IActionResult> ConfirmDelete(int courseId)
         {
@@ -48,7 +49,7 @@ namespace Web.Controllers.Courses
             return View(course);
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int courseId)
         {
@@ -79,6 +80,7 @@ namespace Web.Controllers.Courses
 
 
         // GET: Add View
+        [Authorize(Roles = "Admin, Staff")]
         [HttpGet("List")]
         //[HttpGet]
         public async Task<IActionResult> List()
@@ -96,6 +98,7 @@ namespace Web.Controllers.Courses
             return Json(coaches.Select(c => new { c.CoachID, c.Name }));
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpGet("Add")]
         public async Task<IActionResult> Add()
         {
@@ -109,6 +112,7 @@ namespace Web.Controllers.Courses
             return View();
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpPost("Add")]
         public async Task<IActionResult> Add(CourseViewModel model)
         {
@@ -159,13 +163,14 @@ namespace Web.Controllers.Courses
 
                 
         }
-            
 
 
-      
+
+
 
 
         // GET: Edit View
+        [Authorize(Roles = "Staff")]
         [HttpGet("Edit/{courseId}")]
         //[HttpGet]
         public async Task<IActionResult> Edit(int courseId)
@@ -182,7 +187,7 @@ namespace Web.Controllers.Courses
 
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("Edit/{courseId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int courseId, string title, string description, decimal hourlyCost, bool isActive/*, int userId, int updatedBy*/)

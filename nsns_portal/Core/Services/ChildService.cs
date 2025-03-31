@@ -15,6 +15,7 @@ using Core.Repositories;
 using System.Numerics;
 using System.Xml.Linq;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services
 {
@@ -24,12 +25,18 @@ namespace Core.Services
       
         private readonly IChildRepository _childRepository;
         private readonly ICityRepository _cityRepository;
+        private readonly IUserRepository<User> _userRepository;
+        private readonly IUserRegistrationService _userRegistrationService;
+        private readonly UserManager<Core.Models.User> _userManager;
 
-        public ChildService(IChildRepository childRepository, ICityRepository cityRepository)
+        public ChildService(IChildRepository childRepository, ICityRepository cityRepository, IUserRepository<User> userRepository, IUserRegistrationService userRegistrationService, UserManager<Core.Models.User> userManager)
         {
             _childRepository = childRepository;
             _cityRepository = cityRepository;
-           
+            _userRepository = userRepository;
+            _userRegistrationService = userRegistrationService;
+            _userManager = userManager;
+
         }
 
         public async Task<IEnumerable<Child>> GetAllAsync()
@@ -47,33 +54,60 @@ namespace Core.Services
             return child;
         }
 
-       
+        public async Task<Child?> GetByIdAsync(int userId)
+        {
+            var user = await _userRepository.GetAsync(userId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException($"Child not found.");
+            }
+            var child = await _childRepository.GetByIdAsync(userId);
+            if (child == null)
+            {
+                throw new KeyNotFoundException($"Child not found.");
+            }
+            return child;
+        }
+
+
         public async Task<bool> AddAsync(string name, DateTime? birthDate, string? gender, int? cityId, string email, string password, User user)
         {
 
-            var newUser = new User
+            // Check if a user with the same username or email already exists
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser != null)
             {
-                Email = email,
-                PasswordHash = password,
-                Role = "Child",
-                CreatedBy = user.Id,
-                CreatedDate = DateTime.Now
-            };
+                throw new Exception("A user with the same username or email already exists.");
+            }
 
-            City city = null;
-            if (cityId != null)
-                city = await _cityRepository.GetAsync((int)cityId);
+            var result = await _userRegistrationService.RegisterUserAsync(email, password, "Child", user);
 
-            var child = new Child
+            if (result == true)
             {
-                Name = name,
-                BirthDate = birthDate,
-                Gender = gender,
-                User = newUser,
-                City = city
-            };
-           
-            return await _childRepository.AddAsync(child);
+                //var user = await _userRepository.GetByEmailAsync(email);
+                var newUser = await _userManager.FindByEmailAsync(email);
+                if (newUser != null)
+                {
+                    City city = null;
+                    if (cityId != null)
+                        city = await _cityRepository.GetAsync((int)cityId);
+                    var childUser = new Child
+                    {
+                        Name = name,
+                        BirthDate = birthDate,
+                        Gender = gender,
+                        User = newUser,
+                        City = city
+                    };
+
+
+                    return await _childRepository.AddAsync(childUser);
+                }
+                else return false;
+            }
+            else
+                return false;
+
             
         }
 
@@ -118,14 +152,21 @@ namespace Core.Services
 
         public async Task<bool> RemoveAsync(int childId)
         {
+
+            // Find the child by ID
             var child = await _childRepository.GetAsync(childId);
             if (child == null)
             {
                 throw new KeyNotFoundException($"Child with ID {childId} not found.");
             }
 
-            // Remove the coach
-            return await _childRepository.RemoveAsync(child);
+            // Remove the child
+            var result = await _childRepository.RemoveAsync(child);
+
+
+            if (result)
+                result = await _userRepository.RemoveAsync(child.User);
+            return result;
         }
     }
 }

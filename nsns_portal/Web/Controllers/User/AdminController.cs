@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Core.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 
 
@@ -32,8 +33,9 @@ namespace Web.Controllers.User
 
 
 
-
+       
         // POST: Add Staff Action
+        [Authorize(Roles = "Admin")]
         [HttpPost("Add")]
         //[HttpPost]
         public async Task<IActionResult> Add(string name, string email, string password, string phone, string wechat)
@@ -69,7 +71,9 @@ namespace Web.Controllers.User
             }
         }
 
+
         // GET: Add View
+        [Authorize(Roles = "Admin")]
         [HttpGet("Add")]
         //[HttpGet]
         public async Task<IActionResult> Add()
@@ -79,6 +83,7 @@ namespace Web.Controllers.User
         }
 
         // GET: Admin/Delete/{userId}
+        [Authorize(Roles = "Admin")]
         [HttpGet("ConfirmDelete/{adminId}")]
         public async Task<IActionResult> ConfirmDelete(int adminId)
         {
@@ -93,7 +98,7 @@ namespace Web.Controllers.User
             return View(admin);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int adminId)
         {
@@ -123,6 +128,7 @@ namespace Web.Controllers.User
 
 
         // GET: Add View
+        [Authorize(Roles = "Admin")]
         [HttpGet("List")]
         //[HttpGet]
         public async Task<IActionResult> List()
@@ -132,9 +138,10 @@ namespace Web.Controllers.User
             return View(adminList); // Ensure there is a corresponding List.cshtml in Views/Staff
 
         }
-       
+
 
         // GET: Edit View
+        [Authorize(Roles = "Admin")]
         [HttpGet("Edit/{adminId}")]
         //[HttpGet]
         public async Task<IActionResult> Edit(int adminId)
@@ -151,7 +158,7 @@ namespace Web.Controllers.User
 
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("Edit/{adminId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int adminId, string name, string email, /*string password,*/ string phone, string wechat)

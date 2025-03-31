@@ -1,61 +1,6 @@
 ﻿
  @model Core.ViewModels.ManageCourseViewModel
 
-@* <h2>Manage Courses</h2> 
-
-@foreach (var specialty in Model.Specialties)
-{
-  
-    <div style="margin: 30px 0;"><strong> -- @specialty.SpecialtyTitle </strong> -- </div>
-
-    @foreach (var course in specialty.Courses)
-    {
-        <div style="margin: 30px 0; width: 100%"><strong>Course: </strong> @course.CourseTitle</div>
-            <table style="background-color: #ffffff;">
-            <thead>
-                <tr style="background-color: #f2f2f2;">
-                    <th style="padding: 8px; border: 1px solid #ddd;">Child Name</th>
-                    <th style="padding: 8px; border: 1px solid #ddd;">Gender</th>
-                    <th style="padding: 8px; border: 1px solid #ddd;">City</th>
-                    <th style="padding: 8px; border: 1px solid #ddd;">Birthday</th>
-                    <th style="padding: 8px; border: 1px solid #ddd;">Registration Date</th>
-                    <th style="padding: 8px; border: 1px solid #ddd;">Schedules</th>
-                    <th style="padding: 8px; border: 1px solid #ddd;">Enrollments</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (course.RegisteredChildren.Any())
-                {
-                    foreach (var child in course.RegisteredChildren)
-                    {
-                        <tr>
-                            <td style="padding: 8px; border: 1px solid #ddd;">@child.Name</td>
-                            <td style="padding: 8px; border: 1px solid #ddd;">@child.Gender</td>
-                            <td style="padding: 8px; border: 1px solid #ddd;">@child.City</td>
-                            <td style="padding: 8px; border: 1px solid #ddd;">@(child.BirthDate?.ToString("yyyy-MM-dd") ?? "N/A")</td>
-                            <td style="padding: 8px; border: 1px solid #ddd;">@child.RegisteredDate.ToString("yyyy-MM-dd")</td>
-                            <td style="padding: 8px; border: 1px solid #ddd;">
-                                <a href="/Coach/ManageSchedules/@child.ChildID?courseId=@course.CourseID">Manage</a>
-                            </td>
-                            <td style="padding: 8px; border: 1px solid #ddd;">
-                                <a href="/Coach/ManageEnrollments/@child.ChildID?courseId=@course.CourseID">Manage</a>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 10px;">No registered children for this course.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-   
-} *@
-
-
 
 <h2>Manage Courses</h2>
 

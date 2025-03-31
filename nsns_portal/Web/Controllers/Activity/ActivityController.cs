@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Web.Controllers.Activity
 {
@@ -25,7 +26,7 @@ namespace Web.Controllers.Activity
         }
 
 
-
+        [Authorize(Roles = "Staff")]
         [HttpGet("ConfirmDelete/{activityId}")]
         public async Task<IActionResult> ConfirmDelete(int activityId)
         {
@@ -40,7 +41,7 @@ namespace Web.Controllers.Activity
             return View(activity);
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int activityId)
         {
@@ -71,6 +72,7 @@ namespace Web.Controllers.Activity
 
 
         // GET: Add View
+        [Authorize(Roles = "Admin, Staff")]
         [HttpGet("List")]
         //[HttpGet]
         public async Task<IActionResult> List()
@@ -101,12 +103,14 @@ namespace Web.Controllers.Activity
         //    return View();
         //}
 
+        [Authorize(Roles = "Staff")]
         [HttpGet("Add")]
         public async Task<IActionResult> Add()
         {
             return View();
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpPost("Add")]
         public async Task<IActionResult> Add(string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive)
         {
@@ -150,6 +154,7 @@ namespace Web.Controllers.Activity
 
 
         // GET: Edit View
+        [Authorize(Roles = "Staff")]
         [HttpGet("Edit/{activityId}")]
         //[HttpGet]
         public async Task<IActionResult> Edit(int activityId)
@@ -166,7 +171,7 @@ namespace Web.Controllers.Activity
 
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("Edit/{activityId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int activityId, string title, string description, string address, int maxCapacity, DateTime scheduledAt, decimal cost, bool isActive)

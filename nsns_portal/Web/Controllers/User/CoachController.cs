@@ -219,7 +219,7 @@ namespace Web.Controllers.User
         }
 
 
-
+        [Authorize(Roles = "Staff, Coach")]
         // GET: Edit View
         [HttpGet("Edit/{coachId}")]
         //[HttpGet]
@@ -273,7 +273,7 @@ namespace Web.Controllers.User
 
         }
 
-
+        [Authorize(Roles = "Staff, Coach")]
         [HttpPost("Edit/{coachId}")]
         [ValidateAntiForgeryToken]
 
@@ -387,7 +387,7 @@ namespace Web.Controllers.User
             }
         }
 
-
+        [Authorize(Roles = "Coach")]
         [HttpGet("ManageCourse")]
         public async Task<IActionResult> ManageCourse()
         {
@@ -465,7 +465,7 @@ namespace Web.Controllers.User
         }
 
 
-
+        [Authorize(Roles = "Coach")]
         [HttpGet("ManageSchedules/{childId}")]
         public async Task<IActionResult> ManageSchedules(int childId, [FromQuery] int courseId)
         {
@@ -504,7 +504,7 @@ namespace Web.Controllers.User
             }
         }
 
-
+        [Authorize(Roles = "Coach")]
         [HttpPost("ScheduleCourse")]
         public async Task<IActionResult> ScheduleCourse(int childId, int courseId, DateTime scheduledAt, decimal scheduledHours)
         {
@@ -533,8 +533,8 @@ namespace Web.Controllers.User
             return RedirectToAction("ManageSchedules", new { childId, courseId = courseId });
         }
 
-        
 
+        [Authorize(Roles = "Coach")]
         [HttpPost("DeleteSchedule")]
         public async Task<IActionResult> DeleteSchedule(int enrollmentId, int childId, int courseId)
         {
@@ -553,6 +553,7 @@ namespace Web.Controllers.User
         }
 
 
+        [Authorize(Roles = "Coach")]
         [HttpGet("ManageEnrollments/{childId}")]
         public async Task<IActionResult> ManageEnrollments(int childId, [FromQuery] int courseId)
         {
@@ -586,6 +587,7 @@ namespace Web.Controllers.User
             return View(model);
         }
 
+        [Authorize(Roles = "Coach")]
         [HttpPost("CompleteCourse")]
         public async Task<IActionResult> CompleteCourse(int enrollmentId, int childId, int courseId, decimal actualHours)
         {

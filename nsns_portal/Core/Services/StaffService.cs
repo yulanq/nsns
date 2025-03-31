@@ -20,7 +20,7 @@ namespace Core.Services
     public class StaffService : IStaffService
     {
         private readonly IStaffRepository _staffRepository;
-        IUserRegistrationService _userRegistrationService;
+        private readonly IUserRegistrationService _userRegistrationService;
         private readonly IUserRepository<User> _userRepository;
         private readonly UserManager<Core.Models.User> _userManager;
         //private readonly IRepository<Specialty> _specialtyRepository;
@@ -140,6 +140,8 @@ namespace Core.Services
 
             return staff;
         }
+
+
 
 
         public async Task<IEnumerable<Staff>> GetAllAsync()

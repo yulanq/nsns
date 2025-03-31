@@ -15,10 +15,13 @@ using Microsoft.EntityFrameworkCore;
 
 
 
+
 namespace Web.Controllers.User
 {
+   
+
     [Route("Child")]
-    [Authorize(Roles = "Staff")]
+    
     //[ApiController]
     public class ChildController : Controller
     {
@@ -100,7 +103,7 @@ namespace Web.Controllers.User
             return View();
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("Add")]
         public async Task<IActionResult> Add(string name, DateTime birthDate, string gender, int cityId, string email, string password)
         {
@@ -164,7 +167,7 @@ namespace Web.Controllers.User
             //}
         }
 
-
+        [Authorize(Roles = "Staff")]
         // ✅ GET: Show Edit form with Child data
         [HttpGet("Edit/{childId}")]
         public async Task<IActionResult> Edit(int childId)
@@ -180,8 +183,8 @@ namespace Web.Controllers.User
             return View(child);
         }
 
-       
 
+        [Authorize(Roles = "Staff")]
         [HttpPost("Edit/{userId}")]
         [ValidateAntiForgeryToken]
 
@@ -204,8 +207,6 @@ namespace Web.Controllers.User
                         return NotFound();
                     }
 
-                   
-
 
                     ViewBag.CityList = await GetCityList(child);
 
@@ -226,11 +227,7 @@ namespace Web.Controllers.User
                     return NotFound();
                 }
 
-               
-            
                 ViewBag.CityList = await GetCityList(child);
-
-
 
                 // Pass the child details to the Edit.cshtml view
                 return View(child);
@@ -239,10 +236,7 @@ namespace Web.Controllers.User
 
 
 
-
-
-
-
+        [Authorize(Roles = "Staff")]
         // ✅ GET: Confirm delete page
         [HttpGet("ConfirmDelete/{childId}")]
         public async Task<IActionResult> ConfirmDelete(int childId)
@@ -257,6 +251,7 @@ namespace Web.Controllers.User
             return View(child);
         }
 
+        [Authorize(Roles = "Staff")]
         // ✅ POST: Delete Child
         [HttpPost("DeleteConfirmed")]
         public async Task<IActionResult> DeleteConfirmed(int childId)
@@ -275,7 +270,7 @@ namespace Web.Controllers.User
         }
 
 
-
+        [Authorize(Roles = "Staff")]
         [HttpGet("ManageParents/{childId}")]
         public async Task<IActionResult> ManageParents(int childId)
         {
@@ -298,7 +293,7 @@ namespace Web.Controllers.User
             return View(model);
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("AddParentToChild")]
         public async Task<IActionResult> AddParentToChild(int childId, string parentName, string relationship)
         {
@@ -340,7 +335,7 @@ namespace Web.Controllers.User
             return RedirectToAction("ManageParents", new { childId });
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("RemoveParentFromChild")]
         public async Task<IActionResult> RemoveParentFromChild(int parentChildId, int childId, int parentId)
         {
@@ -368,6 +363,7 @@ namespace Web.Controllers.User
             return RedirectToAction("ManageParents", new { childId });
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpGet("ManageRegistrations/{childId}")]
         public async Task<IActionResult> ManageRegistrations(int childId)
         {
@@ -412,6 +408,7 @@ namespace Web.Controllers.User
             return Json(courses.Select(c => new { c.CourseID, c.Title }));
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpPost("RegisterCourse")]
         public async Task<IActionResult> RegisterCourse(int childId, int courseId, decimal scheduledHours)
         {
@@ -436,7 +433,7 @@ namespace Web.Controllers.User
             return RedirectToAction("ManageRegistrations", new { childId });
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("UnregisterCourse")]
         public async Task<IActionResult> UnregisterCourse(int enrollmentId, int childId)
         {
@@ -462,7 +459,7 @@ namespace Web.Controllers.User
         }
 
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("RegisterActivity")]
         public async Task<IActionResult> RegisterActivity(int childId, int activityId)
         {
@@ -488,6 +485,7 @@ namespace Web.Controllers.User
             return RedirectToAction("ManageRegistrations", new { childId });
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpPost("UnregisterActivity")]
         public async Task<IActionResult> UnregisterActivity(int enrollmentId, int childId)
         {
@@ -513,7 +511,7 @@ namespace Web.Controllers.User
         }
 
 
-
+        [Authorize(Roles = "Staff")]
         [HttpGet("ManagePayments/{childId}")]
         public async Task<IActionResult> ManagePayments(int childId)
         {
@@ -556,7 +554,7 @@ namespace Web.Controllers.User
             return View("ManagePayments", payment);
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("AddPayment")]
         
         public async Task<IActionResult> AddPayment(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate, IFormFile receiptFile)
@@ -604,7 +602,7 @@ namespace Web.Controllers.User
             }
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpPost("RemovePayment")]
         public async Task<IActionResult> RemovePayment(int paymentID, int childId)
         {
@@ -631,7 +629,7 @@ namespace Web.Controllers.User
             
         }
 
-
+        [Authorize(Roles = "Staff")]
         [HttpGet("EnrollmentsHistory/{childId}")]
 
         public async Task<IActionResult> EnrollmentsHistory(int childId)
@@ -653,49 +651,32 @@ namespace Web.Controllers.User
 
             return View("EnrollmentsHistory", enrollmentHistory);
         }
-        //[HttpGet("EditPayment/{paymentId}")]
-        //public async Task<IActionResult> EditPayment(int paymentId)
-        //{
 
 
-        //    // ✅ Fetch Payment Details
-        //    var payment = await _paymentService.GetByIdAsync(paymentId);
-        //    if (payment == null)
-        //    {
-        //        TempData["ErrorMessage"] = "Payment not found.";
-        //        return RedirectToAction("List");
-        //    }
 
-        //    var child = await _childService.GetChildByIdAsync(payment.ChildID);
-        //    // ✅ Pass child details to View
-        //    ViewBag.ChildID = child.ChildID;
-        //    ViewBag.ChildName = child.Name;
 
-        //    // ✅ Fetch Parents linked to the Child from ParentChild table
-        //    var parents = await _paymentService.GetParentsByChildAsync(payment.ChildID);
+        [Authorize(Roles = "Child")]
+        [HttpGet("MyEnrollmentsHistory")]
+        public async Task<IActionResult> MyEnrollmentsHistory()
+        {
+            Core.Models.User user = await _userManager.GetUserAsync(User);
+            var child = await _childService.GetByIdAsync(user.Id);
+            var completedCourses = await _courseEnrollmentService.GetCompletedEnrollmentsByChildAsync(child.ChildID);
+            var completedActivities = await _activityEnrollmentService.GetCompletedEnrollmentsByChildAsync(child.ChildID);
 
-        //    // ✅ Populate Parent dropdown
-        //    ViewBag.ParentList = parents.Select(p => new SelectListItem
-        //    {
-        //        Value = p.ParentID.ToString(),
-        //        Text = p.Name,
-        //        Selected = (payment.ParentID == p.ParentID)
-        //    }).ToList();
 
-        //    // ✅ Fetch all active payment packages
-        //    var packages = await _paymentService.GetAllActivePackagesAsync();
+            EnrollmentsHistoryViewModel enrollmentHistory = new EnrollmentsHistoryViewModel
+            {
+                Child = child,
+                CompletedCourses = (List<CourseEnrollment>)completedCourses,
+                CompletedActivities = (List<ActivityEnrollment>)completedActivities
+            };
 
-        //    // ✅ Populate ViewBag for dropdown
-        //    ViewBag.PaymentPackages = packages.Select(p => new SelectListItem
-        //    {
-        //        Value = p.PackageID.ToString(),
-        //        Text = p.Title,
-        //        Selected = (payment.PaymentPackageID.HasValue && payment.PaymentPackageID.Value == p.PackageID)
-        //    }).ToList();
+            return View("MyEnrollmentsHistory", enrollmentHistory);
+        }
 
-        //    return View("Edit", payment);
-        //}
 
+      
 
     }
 

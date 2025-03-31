@@ -68,22 +68,13 @@
 
                     {
                         @* <li class="nav-item"><a class="nav-link" href="/Dashboard/Child">Dashboard</a></li> *@
-                        <li class="nav-item"><a class="nav-link" href="/Child/EnrollmentsHistory">My Enrollments</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Child/MyEnrollmentsHistory">My Enrollments</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">My Notifications</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">My Statistics</a></li>
                     }
                     @if (User.Identity.IsAuthenticated)
 
                     {
-                        <!-- Show Logout if user is logged in -->
-                       @*  <li class="nav-item">
-                            <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
-                                <button type="submit" class="nav-link btn btn-link" style="border: none; background: none; padding: 0; cursor: pointer;">
-                                    Logout (@User.Identity.Name)
-                                </button>
-                            </form>
-                        </li> *@
-
                         <li class="nav-item">
                             <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit();">Logout (@User.Identity.Name)</a>
                             <form id="logout-form" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>

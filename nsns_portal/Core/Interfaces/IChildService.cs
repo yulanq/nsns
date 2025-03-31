@@ -13,6 +13,8 @@ namespace Core.Interfaces
         Task<IEnumerable<Child>> GetAllAsync();
         Task<Child> GetAsync(int childId);
 
+        Task<Child?> GetByIdAsync(int userId);
+
         //Task<Child?> GetChildByIdAsync(int childId);
 
         Task<bool> AddAsync(string name, DateTime? birthDate, string? gender, int? cityId, string email, string password, User user);
