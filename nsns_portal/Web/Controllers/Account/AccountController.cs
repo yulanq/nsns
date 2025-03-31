@@ -107,11 +107,11 @@ namespace Web.Controllers.Account
             return RedirectToAction("Login");
         }
 
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await _signInManager.SignOutAsync();
-        //    return RedirectToAction("Index", "Home"); // Redirect to homepage after logout
-        //}
-
+        [HttpGet("AccessDenied")]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+        
     }
 }
