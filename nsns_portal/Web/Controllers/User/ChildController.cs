@@ -18,10 +18,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Web.Controllers.User
 {
-   
+
 
     [Route("Child")]
-    
+
     //[ApiController]
     public class ChildController : Controller
     {
@@ -157,7 +157,7 @@ namespace Web.Controllers.User
             //    return RedirectToAction("List"); // Redirect to the child list page
 
             //}
-            
+
             //catch (Exception ex)
             //{
             //    ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
@@ -341,7 +341,7 @@ namespace Web.Controllers.User
         {
             try
             {
-                
+
                 var success = await _parentChildService.RemoveParentFromChild(parentChildId);
                 success = await _parentService.DeleteAsync(parentId);
                 if (!success)
@@ -353,7 +353,7 @@ namespace Web.Controllers.User
                     TempData["SuccessMessage"] = "Parent removed successfully.";
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -399,6 +399,43 @@ namespace Web.Controllers.User
                 ActivityEnrollments = activityEnrollments
             });
         }
+
+
+
+        [Authorize(Roles = "Child")]
+        [HttpGet("MyRegistrations")]
+        public async Task<IActionResult> MyRegistrations()
+        {
+            Core.Models.User user = await _userManager.GetUserAsync(User);
+            var child = await _childService.GetByIdAsync(user.Id);
+
+            var courseEnrollments = await _courseEnrollmentService.GetRegisteredEnrollmentsByChildAsync(child.ChildID);
+            var specialties = await _specialtyService.GetAllAsync();
+
+            ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+            {
+                Value = s.SpecialtyID.ToString(),
+                Text = s.Title
+            }).ToList();
+
+            var activityEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(child.ChildID);
+            var activities = await _activityService.GetAllActiveAsync();
+
+            ViewBag.ActivityList = activities.Select(a => new SelectListItem
+            {
+                Value = a.ActivityID.ToString(),
+                Text = a.Title
+            }).ToList();
+
+            return View("MyRegistrations", new ManageRegisterationsViewModel
+            {
+                Child = child,
+                CourseEnrollments = courseEnrollments,
+                ActivityEnrollments = activityEnrollments
+            });
+        }
+
+
 
 
         [HttpGet("GetCoursesBySpecialty")]
@@ -556,7 +593,7 @@ namespace Web.Controllers.User
 
         [Authorize(Roles = "Staff")]
         [HttpPost("AddPayment")]
-        
+
         public async Task<IActionResult> AddPayment(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate, IFormFile receiptFile)
         {
 
@@ -625,8 +662,8 @@ namespace Web.Controllers.User
                 TempData["ErrorMessage"] = $"Error: {ex.Message}";
                 return RedirectToAction("ManagePayments", new { childId });
             }
-            
-            
+
+
         }
 
         [Authorize(Roles = "Staff")]
@@ -645,12 +682,44 @@ namespace Web.Controllers.User
             EnrollmentsHistoryViewModel enrollmentHistory = new EnrollmentsHistoryViewModel
             {
                 Child = child,
-                CompletedCourses = (List<CourseEnrollment>) completedCourses,
+                CompletedCourses = (List<CourseEnrollment>)completedCourses,
                 CompletedActivities = (List<ActivityEnrollment>)completedActivities
             };
 
             return View("EnrollmentsHistory", enrollmentHistory);
         }
+
+
+
+        [Authorize(Roles = "Child")]
+        [HttpGet("MySchedules")]
+        public async Task<IActionResult> MySchedules()
+        {
+            // Get the currently logged-in user
+            Core.Models.User user = await _userManager.GetUserAsync(User);
+            var child = await _childService.GetByIdAsync(user.Id);
+
+            // Retrieve registered courses and schedules
+           // var courseEnrollments = await _courseEnrollmentService.GetRegisteredEnrollmentsByChildAsync(child.ChildID);
+            var scheduledCourses = await _courseEnrollmentService.GetSchedulesByChildAsync(child.ChildID);
+
+            var courseSchedulesList = scheduledCourses
+                .GroupBy(e => e.Course)
+                .Select(group => new CourseSchedulesViewModel
+                {
+                    Course = group.Key,
+                    Schedules = group.ToList()
+                }).ToList();
+
+            var viewModel = new ChildSchedulesViewModel
+            {
+                Child = child,
+                CoursesSchedules = courseSchedulesList
+            };
+
+            return View("MySchedules", viewModel);
+        }
+
 
 
 
@@ -661,6 +730,8 @@ namespace Web.Controllers.User
         {
             Core.Models.User user = await _userManager.GetUserAsync(User);
             var child = await _childService.GetByIdAsync(user.Id);
+
+            
             var completedCourses = await _courseEnrollmentService.GetCompletedEnrollmentsByChildAsync(child.ChildID);
             var completedActivities = await _activityEnrollmentService.GetCompletedEnrollmentsByChildAsync(child.ChildID);
 
@@ -674,12 +745,7 @@ namespace Web.Controllers.User
 
             return View("MyEnrollmentsHistory", enrollmentHistory);
         }
-
-
-      
-
     }
-
 
 
 }

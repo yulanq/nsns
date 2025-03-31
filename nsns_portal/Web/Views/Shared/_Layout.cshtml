@@ -59,18 +59,23 @@
 
                     {
                        @*  <li class="nav-item"><a class="nav-link" href="/Dashboard/Coach">Dashboard</a></li> *@
-                        <li class="nav-item"><a class="nav-link" href="/Coach/ManageCourse">My Courses</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">My Feedbacks</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">My Statistics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Coach/ManageCourse">Courses</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Feedbacks</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Statistics</a></li>
                     }
 
                     else if (User.IsInRole("Child"))
 
                     {
                         @* <li class="nav-item"><a class="nav-link" href="/Dashboard/Child">Dashboard</a></li> *@
-                        <li class="nav-item"><a class="nav-link" href="/Child/MyEnrollmentsHistory">My Enrollments</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">My Notifications</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">My Statistics</a></li>
+
+
+
+                        <li class="nav-item"><a class="nav-link" href="/Child/MyRegistrations">Registerations</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Child/MySchedules">Schedules</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Child/MyEnrollmentsHistory">Enrollments</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Notifications</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Statistics</a></li>
                     }
                     @if (User.Identity.IsAuthenticated)
 
