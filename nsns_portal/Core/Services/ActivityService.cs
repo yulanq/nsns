@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Core.Models;
+using Core.ViewModels;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,7 +29,7 @@ namespace Core.Services
             _activityRepository = activityRepository;
         }
 
-        public async Task<bool> AddAsync(string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive, User user)
+        public async Task<bool> AddAsync(string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, string status, User user)
         {
 
 
@@ -41,7 +42,8 @@ namespace Core.Services
                 MaxCapacity = maxCapacity,
                 ScheduledAt = scheduledAt,
                 Cost = Cost,
-                IsActive = isActive,
+                //IsActive = isActive,
+                Status = status,
                 CreatedBy = user.Id,
                 CreatedDate = DateTime.Now
 
@@ -70,7 +72,7 @@ namespace Core.Services
         }
 
 
-        public async Task<bool> UpdateAsync(int id, string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal cost, bool isActive, User user)
+        public async Task<bool> UpdateAsync(int id, string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal cost, /*bool isActive, */string status, User user)
         //public async Task<bool> UpdateAsync(Activity activity)
         {
             //Find the staff by ID
@@ -87,7 +89,8 @@ namespace Core.Services
             activity.MaxCapacity = maxCapacity;
             activity.ScheduledAt = scheduledAt;
             activity.Cost = cost;
-            activity.IsActive = isActive;
+            //activity.IsActive = isActive;
+            activity.Status = status;
             //activity.UpdatedDate = DateTime.UtcNow;
             activity.UpdatedDate = DateTime.Now;
             activity.UpdatedBy = user.Id;
@@ -108,7 +111,7 @@ namespace Core.Services
         }
 
 
-        public async Task<IEnumerable<Activity>> GetAllAsync()
+        public async Task<IEnumerable<ActivityViewModel>> GetAllAsync()
         {
             try
             {
@@ -125,12 +128,12 @@ namespace Core.Services
             }
         }
 
-        public async Task<IEnumerable<Activity>> GetAllActiveAsync()
+        public async Task<IEnumerable<Activity>> GetAllActiveOpenAsync()
         {
             try
             {
                 // Fetch all staff records from the repository
-                var activityList = await _activityRepository.GetAllActiveAsync();
+                var activityList = await _activityRepository.GetAllActiveOpenAsync();
 
                 // You can add additional logic or transformations here if necessary
                 return activityList;

@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces;
 using Core.Models;
+using Core.ViewModels;
 using Core.Contexts;
 using System;
 using System.Collections.Generic;
@@ -75,33 +76,67 @@ namespace Core.Repositories
         {
             var now = DateTime.Now;
             var activities = await _context.Activities
-                .Where(a => ((DateTime)a.ScheduledAt).AddDays(1) <= now && a.IsActive == true)
+                .Where(a => ((DateTime)a.ScheduledAt).AddDays(1) <= now /*&& a.IsActive == true*/)
                 .ToListAsync();
 
             foreach (var activity in activities)
             {
-                activity.IsActive = false;
+                //activity.IsActive = false;
+                activity.Status = "Completed";
             }
 
             await _context.SaveChangesAsync();
         }
 
         // Find a activity by its email asynchronously
+        public async Task<ActivityViewModel> Get2Async(int activityId)
+        {
+            return await _context.Activities//.FindAsync(activityId);  // Finds by ID asynchronously
+                         .Where(a => a.ActivityID == activityId)
+                        .Select(a => new ActivityViewModel
+                        {
+                            Title = a.Title,
+                            Description = a.Description,
+                            Address = a.Address,
+                            ScheduledAt = a.ScheduledAt,
+                            Cost = a.Cost,
+                            Status = a.Status,
+                            RegisteredChildrenCount = _context.ActivityEnrollments
+                                        .Count(e => e.ActivityID == a.ActivityID) // Count registered children
+                        }).FirstOrDefaultAsync();
+        }
+
         public async Task<Activity> GetAsync(int activityId)
         {
             return await _context.Activities.FindAsync(activityId);  // Finds by ID asynchronously
+                        
         }
 
         // Get all activities from the database asynchronously
-        public async Task<IEnumerable<Activity>> GetAllAsync()
+        public async Task<IEnumerable<ActivityViewModel>> GetAllAsync()
         {
-            return await _context.Activities.ToListAsync();  // Retrieves all activities asynchronously
+            //return await _context.Activities.ToListAsync();  // Retrieves all activities asynchronously
+
+            return await _context.Activities
+                        .Select(a => new ActivityViewModel
+                        {
+                            ActivityID = a.ActivityID,
+                            Title = a.Title,
+                            Description = a.Description,
+                            Address = a.Address,
+                            ScheduledAt = a.ScheduledAt,
+                            Cost = a.Cost,
+                            Status = a.Status,
+                            RegisteredChildrenCount = _context.ActivityEnrollments
+                                .Count(e => e.ActivityID == a.ActivityID) // Count registered children
+                        })
+                        .ToListAsync();
         }
 
-        public async Task<IEnumerable<Activity>> GetAllActiveAsync()
+        public async Task<IEnumerable<Activity>> GetAllActiveOpenAsync()
         {
             return await _context.Activities
-                .Where(a => a.IsActive) // ✅ Only fetch active activities
+                .Where(a => a.Status == "Open") // ✅ Only fetch active activities
                 .ToListAsync();
         }
 

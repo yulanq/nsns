@@ -39,7 +39,7 @@
         else
         {
             <tr>
-                <td colspan="3" style="text-align: center; padding: 10px;">No completed courses.</td>
+                <td colspan="5" style="text-align: center; padding: 10px;">No completed courses.</td>
             </tr>
         }
 
@@ -57,7 +57,8 @@
     <thead>
         <tr style="background-color: #f2f2f2;">
             <th style="padding: 8px; border: 1px solid #ddd;">Activity</th>
-            
+            <th style="padding: 8px; border: 1px solid #ddd;">Description</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Address</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Scheduled At</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Cost</th>
         </tr>
@@ -70,7 +71,8 @@
             {
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Title</td>
-               
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Description</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Address</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.ScheduledAt</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Cost</td>
                 </tr>
@@ -79,7 +81,7 @@
         else
         {
             <tr>
-                <td colspan="3" style="text-align: center; padding: 10px;">No completed activities.</td>
+                <td colspan="5" style="text-align: center; padding: 10px;">No completed activities.</td>
             </tr>
         }
 

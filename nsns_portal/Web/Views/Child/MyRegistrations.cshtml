@@ -1,11 +1,11 @@
 ﻿
 
 
-<script src="/js/registrations.js"></script>
+@* <script src="/js/registrations.js"></script> *@
 @model Core.ViewModels.ManageRegisterationsViewModel
 
 
-<h2>Registeration History</h2>
+<h2>Registerations</h2>
 
 
 <!-- ✅ Table Showing Already Registered Courses -->
@@ -16,13 +16,13 @@
 <table style="border-collapse: collapse; width: 100%; text-align: left;">
     <thead>
         <tr style="background-color: #f2f2f2;">
-            <th style="padding: 8px; border: 1px solid #ddd;">Course Title</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Course</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Specialty</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Coach</th>
            @*  <th style="padding: 8px; border: 1px solid #ddd;">Scheduled Hours</th> *@
             <th style="padding: 8px; border: 1px solid #ddd;">Hourly Cost</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Status</th>
-            <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
+           @*  <th style="padding: 8px; border: 1px solid #ddd;">Actions</th> *@
         </tr>
     </thead>
     <tbody>
@@ -39,7 +39,7 @@
                     @* <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.ScheduledHours</td> *@
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Course.HourlyCost</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Status</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">
+                  @*   <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Child/UnregisterCourse">
                             <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentID" />
                             <input type="hidden" name="childId" value="@enrollment.ChildID" />
@@ -47,14 +47,14 @@
                                 Remove
                             </button>
                         </form>
-                    </td>
+                    </td> *@
                 </tr>
             }
         }
         else
         {
             <tr>
-                <td colspan="6" style="text-align: center; padding: 10px;">No courses enrolled.</td>
+                <td colspan="5" style="text-align: center; padding: 10px;">No courses enrolled.</td>
             </tr>
         }
 
@@ -75,12 +75,13 @@
 <table style="border-collapse: collapse; width: 100%; text-align: left;">
     <thead>
         <tr style="background-color: #f2f2f2;">
-            <th style="padding: 8px; border: 1px solid #ddd;">Activity Title</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Activity</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Description</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Address</th>
-            <th style="padding: 8px; border: 1px solid #ddd;">Scheduled Date</th>
+            <th style="padding: 8px; border: 1px solid #ddd;">Scheduled At</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Cost</th>
             <th style="padding: 8px; border: 1px solid #ddd;">Status</th>
-            <th style="padding: 8px; border: 1px solid #ddd;">Actions</th>
+           @*  <th style="padding: 8px; border: 1px solid #ddd;">Actions</th> *@
         </tr>
     </thead>
     <tbody>
@@ -90,11 +91,12 @@
             {
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Title</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Description</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Address</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.ScheduledAt?.ToString("yyyy-MM-dd")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.ScheduledAt.ToString("yyyy-MM-dd")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Cost</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Status</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">
+                @*     <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Child/UnregisterActivity">
                             <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentID" />
                             <input type="hidden" name="childId" value="@enrollment.ChildID" />
@@ -102,7 +104,7 @@
                                 Remove
                             </button>
                         </form>
-                    </td>
+                    </td> *@
                 </tr>
             }
         }

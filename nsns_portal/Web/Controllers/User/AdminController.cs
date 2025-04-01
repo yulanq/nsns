@@ -66,7 +66,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
+                ModelState.AddModelError(String.Empty, $"{ex.Message}");
                 return View();
             }
         }
@@ -117,7 +117,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
             }
 
             // If delete fails, reload the confirmation page
@@ -183,7 +183,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
                 var admin = await _adminService.GetAsync(adminId);
                 return View(admin);
             }

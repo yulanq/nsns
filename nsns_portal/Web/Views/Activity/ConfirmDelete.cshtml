@@ -9,10 +9,10 @@
     <p><strong>Description：</strong> @Model.Description</p>
     <p><strong>Address：</strong> @Model.Address</p>
     <p><strong>Max Capacity：</strong> @Model.MaxCapacity</p>
-    <p><strong>Scheduled Date：</strong> @(Model.ScheduledAt.HasValue ? Model.ScheduledAt.Value.ToString("yyyy-MM-dd HH:mm") : "Not Scheduled")</p>
-    <p><strong>Cost：</strong> @(Model.Cost.HasValue ? Model.Cost.Value.ToString("C") : "Free")</p>
+    <p><strong>Scheduled Date：</strong> @(Model.ScheduledAt.ToString("yyyy-MM-dd HH:mm") )</p>
+    <p><strong>Cost：</strong> @(Model.Cost.ToString("C"))</p>
     <p><strong>Address：</strong> @Model.Address</p>
-    <p><strong>Is Active：</strong> @Model.IsActive</p>
+  @*   <p><strong>Is Active：</strong> @Model.IsActive</p> *@
   
 </div>
 

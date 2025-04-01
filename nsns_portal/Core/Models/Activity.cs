@@ -25,12 +25,14 @@ namespace Core.Models
 
         public int? MaxCapacity { get; set; }
 
-        public DateTime? ScheduledAt { get; set; }
+        public DateTime ScheduledAt { get; set; }
 
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal? Cost { get; set; }
+        public decimal Cost { get; set; }
 
-        public bool IsActive { get; set; } = true;
+        //public bool IsActive { get; set; } = true;
+
+        public string Status { get; set; } 
 
         public int? ContactID { get; set; }
 

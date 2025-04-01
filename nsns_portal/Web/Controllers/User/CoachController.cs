@@ -107,7 +107,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
+                ModelState.AddModelError(String.Empty, $"{ex.Message}");
                 
                 // Repopulate CityList for the dropdown if validation fails
 
@@ -197,7 +197,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
                 return RedirectToAction("List");
             }
         }
@@ -499,7 +499,7 @@ namespace Web.Controllers.User
 
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
                 return RedirectToAction("ManageCourse");
             }
         }
@@ -616,7 +616,7 @@ namespace Web.Controllers.User
             catch (Exception ex)
             {
                 
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
             }
 
             return RedirectToAction("ManageEnrollments", new { childId, courseId = courseId});

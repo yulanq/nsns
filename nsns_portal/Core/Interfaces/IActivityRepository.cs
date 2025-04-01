@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Contexts;
 using Core.Models;
+using Core.ViewModels;
 //using Core.mo
 
 namespace Core.Interfaces
@@ -26,13 +27,15 @@ namespace Core.Interfaces
 
 
         // Find a Activity by its id asynchronously
+        //Task<ActivityViewModel> GetAsync(int activityId);
+
         Task<Activity> GetAsync(int activityId);
 
 
         // Get all Activity from the database asynchronously
-        Task<IEnumerable<Activity>> GetAllAsync();
+        Task<IEnumerable<ActivityViewModel>> GetAllAsync();
 
-        Task<IEnumerable<Activity>> GetAllActiveAsync();
+        Task<IEnumerable<Activity>> GetAllActiveOpenAsync();
 
         Task UpdateActivityStatusAsync();
 

@@ -67,6 +67,7 @@ namespace Core.Repositories
             return await _context.CourseEnrollments
                 .Include(e => e.Course)
                 .Include(e => e.Course.Coach)
+                .Include(e => e.Course.Specialty)
                 .Where(e => e.ChildID == childId && e.Status == status)
                 .OrderBy(e => e.CourseID)
                 .OrderBy(e => e.ScheduledAt)

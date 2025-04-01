@@ -130,7 +130,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(String.Empty, $"Error: {ex.Message}");
+                ModelState.AddModelError(String.Empty, $"{ex.Message}");
                 ViewBag.CityList = await GetCityList();
                 return View();
 
@@ -329,7 +329,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
             }
 
             return RedirectToAction("ManageParents", new { childId });
@@ -357,7 +357,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
             }
 
             return RedirectToAction("ManageParents", new { childId });
@@ -384,7 +384,7 @@ namespace Web.Controllers.User
             }).ToList();
 
             var activityEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(childId);
-            var activities = await _activityService.GetAllActiveAsync();
+            var activities = await _activityService.GetAllActiveOpenAsync();
 
             ViewBag.ActivityList = activities.Select(a => new SelectListItem
             {
@@ -410,22 +410,22 @@ namespace Web.Controllers.User
             var child = await _childService.GetByIdAsync(user.Id);
 
             var courseEnrollments = await _courseEnrollmentService.GetRegisteredEnrollmentsByChildAsync(child.ChildID);
-            var specialties = await _specialtyService.GetAllAsync();
+            //var specialties = await _specialtyService.GetAllAsync();
 
-            ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
-            {
-                Value = s.SpecialtyID.ToString(),
-                Text = s.Title
-            }).ToList();
+            //ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
+            //{
+            //    Value = s.SpecialtyID.ToString(),
+            //    Text = s.Title
+            //}).ToList();
 
             var activityEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(child.ChildID);
-            var activities = await _activityService.GetAllActiveAsync();
+            //var activities = await _activityService.GetAllActiveOpenAsync();
 
-            ViewBag.ActivityList = activities.Select(a => new SelectListItem
-            {
-                Value = a.ActivityID.ToString(),
-                Text = a.Title
-            }).ToList();
+            //ViewBag.ActivityList = activities.Select(a => new SelectListItem
+            //{
+            //    Value = a.ActivityID.ToString(),
+            //    Text = a.Title
+            //}).ToList();
 
             return View("MyRegistrations", new ManageRegisterationsViewModel
             {
@@ -464,7 +464,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage1"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage1"] = $"{ex.Message}";
             }
 
             return RedirectToAction("ManageRegistrations", new { childId });
@@ -489,7 +489,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage1"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage1"] = $"{ex.Message}";
             }
 
             return RedirectToAction("ManageRegistrations", new { childId });
@@ -516,7 +516,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage2"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage2"] = $"{ex.Message}";
             }
 
             return RedirectToAction("ManageRegistrations", new { childId });
@@ -541,7 +541,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage2"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage2"] = $"{ex.Message}";
             }
 
             return RedirectToAction("ManageRegistrations", new { childId });
@@ -634,7 +634,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
                 return RedirectToAction("ManagePayments", new { childId });
             }
         }
@@ -659,7 +659,7 @@ namespace Web.Controllers.User
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
                 return RedirectToAction("ManagePayments", new { childId });
             }
 

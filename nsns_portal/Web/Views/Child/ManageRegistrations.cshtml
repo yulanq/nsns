@@ -146,7 +146,7 @@
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Title</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Address</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.ScheduledAt?.ToString("yyyy-MM-dd")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.ScheduledAt.ToString("yyyy-MM-dd")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Activity.Cost</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Status</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
@@ -211,5 +211,6 @@
     </select>
 
     <button type="submit" style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer;">Register</button>
+    <small>   - Open active activities are shown here</small>
 </form>
 </div>

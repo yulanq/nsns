@@ -45,16 +45,16 @@
         </tr>
 
         <tr>
-            <td style="padding: 8px;"><label for="ScheduledAt">Scheduled Date:</label></td>
+            <td style="padding: 8px;"><label for="ScheduledAt">Scheduled At:</label></td>
             <td style="padding: 8px;">
                 <input type="datetime-local" name="scheduledAt"
-                       value="@(Model.ScheduledAt.HasValue ? Model.ScheduledAt.Value.ToString("yyyy-MM-ddTHH:mm") : "")"
+                       value="@(Model.ScheduledAt.ToString("yyyy-MM-dd HH:mm"))"
                        style="width: 100%;" />
             </td>
         </tr>
 
         <tr>
-            <td style="padding: 8px;"><label for="Cost">Cost ($):</label></td>
+            <td style="padding: 8px;"><label for="Cost">Cost:</label></td>
             <td style="padding: 8px;">
                 <input type="hidden" name="cost" step="0.01" value="@Model.Cost" placeholder="Enter cost" style="width: 100%;" />
                 @Model.Cost
@@ -70,12 +70,26 @@
             </td>
         </tr> *@
 
-        <tr>
-            @*  <td style="padding: 8px;"><label for="isActive">Is Active:</label></td>
-            <td style="padding: 8px;"> <input id="isActive" name="isActive" type="checkbox" value="@Model.IsActive" /> </td> *@
+        @* <tr>
+          
             <td style="padding: 8px;"><label for="isActive">Is Active:</label></td>
             <td style="padding: 8px;"> <input asp-for="IsActive" type="checkbox" /></td></>
             <input type="hidden" asp-for="IsActive" value="false" />
+        </tr> *@
+
+
+        <tr>
+           
+            <td style="padding: 8px;"><label for="Status">Status:</label></td>
+            <td style="padding: 8px;">
+                <select name="status" style="width: 100%;">
+                    <option value="">-- Select Status --</option>
+                    <option value="Open" selected="@(Model.Status == "Open" ? "selected" : null)">Open to registration</option>
+                    <option value="Closed" selected="@(Model.Status == "Closed" ? "selected" : null)">Closed to registration</option> 
+                    <option value="Canceled" selected="@(Model.Status == "Canceled" ? "selected" : null)">Canceled</option>
+                    @* <option value="Completed" selected="@(Model.Status == "Completed" ? "selected" : null)">Completed</option> *@
+                </select>
+            </td>
         </tr>
 
         @*   <tr>

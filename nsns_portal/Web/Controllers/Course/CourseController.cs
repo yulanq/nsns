@@ -68,7 +68,7 @@ namespace Web.Controllers.Courses
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
                 return RedirectToAction("List"); // Redirect to the course list page
             }
 
@@ -151,7 +151,7 @@ namespace Web.Controllers.Courses
             catch (Exception ex)
             {
                
-                ModelState.AddModelError(string.Empty, $"Error: {ex.Message}");
+                ModelState.AddModelError(string.Empty, $"{ex.Message}");
                 var specialties = await _specialtyService.GetAllAsync();
                 ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
                 {
@@ -204,12 +204,12 @@ namespace Web.Controllers.Courses
                     return View(course);
                 }
 
-                TempData["SuccessMessage"] = "Staff information updated successfully.";
+                TempData["SuccessMessage"] = "Course information updated successfully.";
                 return RedirectToAction("List");
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                TempData["ErrorMessage"] = $"{ex.Message}";
                 var course = await _courseService.GetAsync(courseId);
                 return View(course);
             }
