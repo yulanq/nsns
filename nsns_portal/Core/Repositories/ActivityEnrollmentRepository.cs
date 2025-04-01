@@ -58,9 +58,25 @@ namespace Core.Repositories
                 .FirstOrDefaultAsync(e => e.EnrollmentID == enrollmentId);
         }
 
+
+        public async Task UpdateActivityStatusAsync()
+        {
+            var now = DateTime.Now;
+            var activities = await _context.ActivityEnrollments
+                .Where(a => ((DateTime)a.Activity.ScheduledAt).AddDays(1)  <= now && a.Status == "Registered")
+                .ToListAsync();
+
+            foreach (var activity in activities)
+            {
+                activity.Status = "Completed";
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         //public async Task<IEnumerable<ActivityEnrollment>> GetEnrollmentsByChildAsync(int childId, string status)
         //{
-            
+
         //    return await _context.ActivityEnrollments
         //        .Include(e => e.Activity)
         //        //.Include(e => e.Course.Coach)

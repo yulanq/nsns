@@ -31,6 +31,8 @@ namespace Core.Interfaces
 
         Task<IEnumerable<ActivityEnrollment>> GetCompletedEnrollmentsByChildAsync(int childId);
 
+        Task UpdateActivityStatusAsync();
+
     }
 
 }

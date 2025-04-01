@@ -21,9 +21,11 @@ namespace Core.Services
     {
         private readonly IActivityEnrollmentRepository _enrollmentRepository;
         private readonly IChildRepository _childRepository;
+        private readonly IActivityRepository _activityRepository;
 
-        public ActivityEnrollmentService(IActivityEnrollmentRepository enrollmentRepository, IChildRepository childRepository)
+        public ActivityEnrollmentService(IActivityRepository activityRepository, IActivityEnrollmentRepository enrollmentRepository, IChildRepository childRepository)
         {
+            _activityRepository = activityRepository;
             _enrollmentRepository = enrollmentRepository;
             _childRepository = childRepository;
         }
@@ -88,6 +90,13 @@ namespace Core.Services
         public async Task<IEnumerable<ActivityEnrollment>> GetCompletedEnrollmentsByChildAsync(int childId)
         {
             return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Completed");
+        }
+
+
+        public async Task UpdateActivityStatusAsync()
+        {
+            await _enrollmentRepository.UpdateActivityStatusAsync();
+           
         }
 
         //public async Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId)

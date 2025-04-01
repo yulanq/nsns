@@ -1,6 +1,7 @@
 using Core.Contexts;
 using Core.Interfaces;
 using Core.Models;
+using Core.BackendService;
 using Core.Repositories;
 using Core.Services;
 using Microsoft.AspNetCore.Identity;
@@ -136,10 +137,11 @@ builder.Services.AddScoped<ISpecialtyService, SpecialtyService>();
 builder.Services.AddScoped<ICoachSpecialtyRepository, CoachSpecialtyRepository>();
 builder.Services.AddScoped<ICoachSpecialtyService, CoachSpecialtyService>();
 
-
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql( builder.Configuration.GetConnectionString("DefaultConnection"),  new MySqlServerVersion(new Version(8, 0, 39)) ));
+
+builder.Services.AddHostedService<ActivityStatusUpdater>();
 
 
 // Add Identity

@@ -34,5 +34,7 @@ namespace Core.Interfaces
 
         Task<IEnumerable<Activity>> GetAllActiveAsync();
 
+        Task UpdateActivityStatusAsync();
+
     }
 }

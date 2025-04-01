@@ -71,6 +71,21 @@ namespace Core.Repositories
             }
         }
 
+        public async Task UpdateActivityStatusAsync()
+        {
+            var now = DateTime.Now;
+            var activities = await _context.Activities
+                .Where(a => ((DateTime)a.ScheduledAt).AddDays(1) <= now && a.IsActive == true)
+                .ToListAsync();
+
+            foreach (var activity in activities)
+            {
+                activity.IsActive = false;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         // Find a activity by its email asynchronously
         public async Task<Activity> GetAsync(int activityId)
         {

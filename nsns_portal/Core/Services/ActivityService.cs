@@ -17,7 +17,7 @@ using System.Net;
 
 namespace Core.Services
 {
-    
+
 
     public class ActivityService : IActivityService
     {
@@ -28,7 +28,7 @@ namespace Core.Services
             _activityRepository = activityRepository;
         }
 
-        public async Task<bool> AddAsync(string title, string description, string address, int maxCapacity, DateTime scheduledAt,Decimal Cost, bool isActive, User user)
+        public async Task<bool> AddAsync(string title, string description, string address, int maxCapacity, DateTime scheduledAt, Decimal Cost, bool isActive, User user)
         {
 
 
@@ -46,12 +46,12 @@ namespace Core.Services
                 CreatedDate = DateTime.Now
 
 
-            }; 
-            
+            };
+
             // Save to the database
             return await _activityRepository.AddAsync(activity);
 
-            
+
         }
 
 
@@ -74,7 +74,7 @@ namespace Core.Services
         //public async Task<bool> UpdateAsync(Activity activity)
         {
             //Find the staff by ID
-           var activity = await _activityRepository.GetAsync(id);
+            var activity = await _activityRepository.GetAsync(id);
             if (activity == null)
             {
                 throw new Exception("Activity not found.");
@@ -107,7 +107,7 @@ namespace Core.Services
             return activity;
         }
 
-        
+
         public async Task<IEnumerable<Activity>> GetAllAsync()
         {
             try
@@ -141,6 +141,14 @@ namespace Core.Services
                 throw new Exception("An error occurred while retrieving activity records.", ex);
             }
         }
+
+
+
+        public async Task UpdateActivityStatusAsync()
+        {
+            await _activityRepository.UpdateActivityStatusAsync();
+        }
+    
 
 
 
