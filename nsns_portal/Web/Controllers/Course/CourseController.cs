@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using System.Numerics;
 
 namespace Web.Controllers.Courses
 {
@@ -20,16 +22,17 @@ namespace Web.Controllers.Courses
         private readonly ICourseService _courseService;
         private readonly ICoachService _coachService;
         private readonly ISpecialtyService _specialtyService;
+        private readonly ICourseEnrollmentService _courseEnrollmentService;
         private readonly UserManager<Core.Models.User> _userManager;
 
 
-        public CourseController(ICourseService courseService, ICoachService coachService, ISpecialtyService specialtyService, UserManager<Core.Models.User> userManager)
+        public CourseController(ICourseService courseService, ICourseEnrollmentService courseEnrollmentService, ICoachService coachService, ISpecialtyService specialtyService, UserManager<Core.Models.User> userManager)
         {
             _courseService = courseService;
             _coachService = coachService;
             _specialtyService = specialtyService;
             _userManager = userManager;
-
+            _courseEnrollmentService = courseEnrollmentService;
         }
 
 
@@ -39,13 +42,18 @@ namespace Web.Controllers.Courses
         public async Task<IActionResult> ConfirmDelete(int courseId)
         {
             // Fetch the staff details from the database
+
+           
             var course = await _courseService.GetAsync(courseId);
-            if (course == null)
+            if(course == null)
             {
                 return NotFound();
             }
 
-            // Pass the staff details to the Delete.cshtml view
+           
+                
+
+                // Pass the staff details to the Delete.cshtml view
             return View(course);
         }
 
@@ -55,6 +63,15 @@ namespace Web.Controllers.Courses
         {
             try
             {
+                var enrollments = await _courseEnrollmentService.GetRegisteredEnrollmentsByCourseAsync(courseId);
+
+                if (enrollments != null && enrollments.Any())
+                {
+                    TempData["ErrorMessage"] = "This course cannot be deleted because it has enrolled students. Please try editing the course and set it to inactive.";
+                    return RedirectToAction("List"); // Redirect to the course list page
+                }
+
+
                 var result = await _courseService.RemoveAsync(courseId);
 
                 if (!result)
@@ -195,11 +212,19 @@ namespace Web.Controllers.Courses
             try
             {
                 var user = await _userManager.GetUserAsync(User);
+
+                var enrollments = await _courseEnrollmentService.GetScheduledEnrollmentsByCourseAsync(courseId);
+                if (enrollments != null && enrollments.Any())
+                {
+                    TempData["ErrorMessage"] = "This course cannot be set to inactive because it has scheduled sessions.  Please wait until all scheduled sessions completed or deleted all scheduled sessions before deactivating the course.";
+                    return RedirectToAction("List");
+                }
+                    
                 var result = await _courseService.UpdateAsync(courseId, title, description, hourlyCost, isActive, user);
 
                 if (!result)
                 {
-                    ModelState.AddModelError(string.Empty, "Failed to update staff information.");
+                    ModelState.AddModelError(string.Empty, "Failed to update course information.");
                     var course = await _courseService.GetAsync(courseId);
                     return View(course);
                 }
@@ -209,7 +234,8 @@ namespace Web.Controllers.Courses
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"{ex.Message}";
+                //TempData["ErrorMessage"] = $"{ex.Message}";
+                ModelState.AddModelError(string.Empty, $"{ex.Message}");
                 var course = await _courseService.GetAsync(courseId);
                 return View(course);
             }

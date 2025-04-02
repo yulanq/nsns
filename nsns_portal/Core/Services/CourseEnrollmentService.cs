@@ -114,10 +114,20 @@ namespace Core.Services
         //public async Task<IEnumerable<Child>> GetRegisteredChildrenByCoachAsync(int coachId)
         //{
         //    var course_enrollments =  await _enrollmentRepository.GetEnrollmentsByCoachAsync(coachId, "Registered");
-            
+
         //    return course_enrollments.Select(e => e.Child).ToList();
-           
+
         //}
+
+        public async Task<IEnumerable<CourseEnrollment>> GetScheduledEnrollmentsByCourseAsync(int courseId)
+        {
+            return await _enrollmentRepository.GetEnrollmentsByCourseAsync(courseId, "Scheduled");
+        }
+
+        public async Task<IEnumerable<CourseEnrollment>> GetRegisteredEnrollmentsByCourseAsync(int courseId)
+        {
+            return await _enrollmentRepository.GetEnrollmentsByCourseAsync(courseId, "Registered");
+        }
 
         public async Task<IEnumerable<Core.ViewModels.ChildViewModel>> GetRegisterationByCourseAsync(int courseId)
         {

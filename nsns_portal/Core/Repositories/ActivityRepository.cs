@@ -89,22 +89,22 @@ namespace Core.Repositories
         }
 
         // Find a activity by its email asynchronously
-        public async Task<ActivityViewModel> Get2Async(int activityId)
-        {
-            return await _context.Activities//.FindAsync(activityId);  // Finds by ID asynchronously
-                         .Where(a => a.ActivityID == activityId)
-                        .Select(a => new ActivityViewModel
-                        {
-                            Title = a.Title,
-                            Description = a.Description,
-                            Address = a.Address,
-                            ScheduledAt = a.ScheduledAt,
-                            Cost = a.Cost,
-                            Status = a.Status,
-                            RegisteredChildrenCount = _context.ActivityEnrollments
-                                        .Count(e => e.ActivityID == a.ActivityID) // Count registered children
-                        }).FirstOrDefaultAsync();
-        }
+        //public async Task<ActivityViewModel> Get2Async(int activityId)
+        //{
+        //    return await _context.Activities//.FindAsync(activityId);  // Finds by ID asynchronously
+        //                 .Where(a => a.ActivityID == activityId)
+        //                .Select(a => new ActivityViewModel
+        //                {
+        //                    Title = a.Title,
+        //                    Description = a.Description,
+        //                    Address = a.Address,
+        //                    ScheduledAt = a.ScheduledAt,
+        //                    Cost = a.Cost,
+        //                    Status = a.Status,
+        //                    RegisteredChildrenCount = _context.ActivityEnrollments
+        //                                .Count(e => e.ActivityID == a.ActivityID) // Count registered children
+        //                }).FirstOrDefaultAsync();
+        //}
 
         public async Task<Activity> GetAsync(int activityId)
         {
