@@ -72,7 +72,7 @@ namespace Core.Repositories
             }
         }
 
-        public async Task UpdateActivityStatusAsync()
+        public async Task UpdateActivityStatusToCompletedAsync()
         {
             var now = DateTime.Now;
             var activities = await _context.Activities
@@ -87,6 +87,8 @@ namespace Core.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+      
 
         // Find a activity by its email asynchronously
         //public async Task<ActivityViewModel> Get2Async(int activityId)

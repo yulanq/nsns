@@ -24,7 +24,9 @@ namespace Core.Interfaces
 
         Task<IEnumerable<Activity>> GetAllActiveOpenAsync();
 
-        Task UpdateActivityStatusAsync();
+        Task UpdateActivityStatusToCompletedAsync();
+
+        //Task UpdateActivityStatusToCanceledAsync();
 
     }
 

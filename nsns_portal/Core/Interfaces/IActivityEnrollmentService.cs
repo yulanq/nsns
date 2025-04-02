@@ -31,7 +31,11 @@ namespace Core.Interfaces
 
         Task<IEnumerable<ActivityEnrollment>> GetCompletedEnrollmentsByChildAsync(int childId);
 
-        Task UpdateActivityStatusAsync();
+        Task<IEnumerable<ActivityEnrollment>> GetCanceledEnrollmentsByChildAsync(int childId);
+
+        Task UpdateActivityStatusToCompletedAsync();
+
+        Task UpdateActivityStatusToCanceledAsync(int activityId);
 
     }
 

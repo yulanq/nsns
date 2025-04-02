@@ -23,10 +23,10 @@ namespace Core.BackendService
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var activityEnrollmentService = scope.ServiceProvider.GetRequiredService<IActivityEnrollmentService>();
-                    await activityEnrollmentService.UpdateActivityStatusAsync();
+                    await activityEnrollmentService.UpdateActivityStatusToCompletedAsync();
 
                     var activityService = scope.ServiceProvider.GetRequiredService<IActivityService>();
-                    await activityService.UpdateActivityStatusAsync();
+                    await activityService.UpdateActivityStatusToCompletedAsync();
                 }
 
                 await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken); // Run every 10 minutes

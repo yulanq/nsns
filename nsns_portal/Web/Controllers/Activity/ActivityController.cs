@@ -14,13 +14,15 @@ namespace Web.Controllers.Activity
         //[ApiController]
 
         private readonly IActivityService _activityService;
+        private readonly IActivityEnrollmentService _activityEnrollmentService;
         private readonly UserManager<Core.Models.User> _userManager;
 
 
 
-        public ActivityController(IActivityService activityService, UserManager<Core.Models.User> userManager)
+        public ActivityController(IActivityService activityService, IActivityEnrollmentService activityEnrollmentService, UserManager<Core.Models.User> userManager)
         {
             _activityService = activityService;
+            _activityEnrollmentService = activityEnrollmentService;
             _userManager = userManager;
             _userManager = userManager;
         }
@@ -186,6 +188,11 @@ namespace Web.Controllers.Activity
                     ModelState.AddModelError(string.Empty, "Failed to update activity information.");
                     var activity = await _activityService.GetAsync(activityId);
                     return View(activity);
+                }
+
+                if(status == "Canceled")
+                {
+                    await _activityEnrollmentService.UpdateActivityStatusToCanceledAsync(activityId);
                 }
 
                 TempData["SuccessMessage"] = "Activity information updated successfully.";

@@ -93,8 +93,8 @@ namespace Core.Services
             {
                 foreach (var e in course_enrollment)
                 {
-                    if (e.ChildID == childId && e.Status != "Registered")
-                        throw new Exception("Enrollment removal is only allowed for courses that have not started.");
+                    if (e.ChildID == childId && e.Status == "Scheduled")
+                        throw new Exception("This registration cannot be removed because the child has scheduled sessions in this course. Please cancel or complete all sessions before removing the registration.");
                 }
                   
             }

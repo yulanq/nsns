@@ -59,16 +59,32 @@ namespace Core.Repositories
         }
 
 
-        public async Task UpdateActivityStatusAsync()
+        public async Task UpdateActivityStatusToCompletedAsync()
         {
             var now = DateTime.Now;
-            var activities = await _context.ActivityEnrollments
-                .Where(a => ((DateTime)a.Activity.ScheduledAt).AddDays(1)  <= now && a.Status == "Registered")
+            var enrollments = await _context.ActivityEnrollments
+                .Where(e => ((DateTime)e.Activity.ScheduledAt).AddDays(1)  <= now && e.Status == "Registered")
                 .ToListAsync();
 
-            foreach (var activity in activities)
+            foreach (var enrollment in enrollments)
             {
-                activity.Status = "Completed";
+                enrollment.Status = "Completed";
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+
+        public async Task UpdateActivityStatusToCanceledAsync(int activityId)
+        {
+
+            var enrollments = await _context.ActivityEnrollments
+                .Where(e => e.Status == "Registered" && e.Activity.ActivityID == activityId)
+                .ToListAsync();
+
+            foreach (var enrollment in enrollments)
+            {
+                enrollment.Status = "Canceled";
             }
 
             await _context.SaveChangesAsync();

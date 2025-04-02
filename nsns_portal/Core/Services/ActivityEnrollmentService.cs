@@ -86,6 +86,11 @@ namespace Core.Services
             return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Registered");
         }
 
+        public async Task<IEnumerable<ActivityEnrollment>> GetCanceledEnrollmentsByChildAsync(int childId)
+        {
+            return await _enrollmentRepository.GetEnrollmentsByChildAsync(childId, "Canceled");
+        }
+
 
         public async Task<IEnumerable<ActivityEnrollment>> GetCompletedEnrollmentsByChildAsync(int childId)
         {
@@ -93,10 +98,16 @@ namespace Core.Services
         }
 
 
-        public async Task UpdateActivityStatusAsync()
+        public async Task UpdateActivityStatusToCompletedAsync()
         {
-            await _enrollmentRepository.UpdateActivityStatusAsync();
+            await _enrollmentRepository.UpdateActivityStatusToCompletedAsync();
            
+        }
+
+        public async Task UpdateActivityStatusToCanceledAsync(int activityId)
+        {
+            await _enrollmentRepository.UpdateActivityStatusToCanceledAsync(activityId);
+
         }
 
         //public async Task<bool> RemoveRegisteredEnrollmentAsync(int enrollmentId)

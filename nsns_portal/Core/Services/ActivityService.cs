@@ -147,11 +147,16 @@ namespace Core.Services
 
 
 
-        public async Task UpdateActivityStatusAsync()
+        public async Task UpdateActivityStatusToCompletedAsync()
         {
-            await _activityRepository.UpdateActivityStatusAsync();
+            await _activityRepository.UpdateActivityStatusToCompletedAsync();
         }
-    
+
+        //public async Task UpdateActivityStatusToCanceledAsync()
+        //{
+        //    await _activityRepository.UpdateActivityStatusTocanceledAsync();
+        //}
+
 
 
 

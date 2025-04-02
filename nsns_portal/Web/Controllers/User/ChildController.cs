@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Core.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 
 
@@ -383,7 +384,9 @@ namespace Web.Controllers.User
                 Text = s.Title
             }).ToList();
 
-            var activityEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(childId);
+            var activityRegisteredEnrollments =  await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(childId);
+            var activityCanceledEnrollments =  await _activityEnrollmentService.GetCanceledEnrollmentsByChildAsync(childId);
+            var activityEnrollments = activityRegisteredEnrollments.Concat(activityCanceledEnrollments);
             var activities = await _activityService.GetAllActiveOpenAsync();
 
             ViewBag.ActivityList = activities.Select(a => new SelectListItem
