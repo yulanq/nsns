@@ -16,9 +16,12 @@ namespace Core.Interfaces
 
         Task<IEnumerable<ActivityEnrollment>> GetEnrollmentsByChildAsync(int childId, string status);
 
-        Task UpdateActivityStatusToCompletedAsync();
+        Task<bool> UpdateActivityStatusToCompletedAsync();
 
-        Task UpdateActivityStatusToCanceledAsync(int activityId);
+        Task<bool> UpdateActivityStatusToCanceledAsync(int activityId);
+
+
+        Task<bool> UpdateActivityStatusToClosedAsync(int activityId);
 
         //Task<CourseEnrollment> GetAsync(int enrollmentId);
         //Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByChildAsync(int childId, string status);

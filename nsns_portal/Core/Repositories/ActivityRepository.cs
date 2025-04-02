@@ -128,6 +128,7 @@ namespace Core.Repositories
                             Address = a.Address,
                             ScheduledAt = a.ScheduledAt,
                             Cost = a.Cost,
+                            MaxCapacity = a.MaxCapacity,
                             Status = a.Status,
                             RegisteredChildrenCount = _context.ActivityEnrollments
                                 .Count(e => e.ActivityID == a.ActivityID) // Count registered children

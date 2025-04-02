@@ -456,6 +456,7 @@ namespace Web.Controllers.User
             {
                 var user = await _userManager.GetUserAsync(User);
                 var success = await _courseEnrollmentService.AddRegisteredEnrollmentAsync(childId, courseId, scheduledHours, "Registered", user);
+
                 if (!success)
                 {
                     TempData["ErrorMessage1"] = "Enrollment failed.";
@@ -506,9 +507,11 @@ namespace Web.Controllers.User
             try
             {
                 var user = await _userManager.GetUserAsync(User);
-                var success = await _activityEnrollmentService.AddRegisteredEnrollmentAsync(childId, activityId, "Registered", user);
-
-                if (!success)
+                var success1 = false;
+                var success2 = false;
+                success1 = await _activityEnrollmentService.AddRegisteredEnrollmentAsync(childId, activityId, "Registered", user);
+                success2 = await _activityEnrollmentService.UpdateActivityStatusToClosedAsync(activityId);
+                if (!success1 || !success2)
                 {
                     TempData["ErrorMessage2"] = "Failed to enroll in activity.";
                 }

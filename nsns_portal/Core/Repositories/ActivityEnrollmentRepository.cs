@@ -59,7 +59,7 @@ namespace Core.Repositories
         }
 
 
-        public async Task UpdateActivityStatusToCompletedAsync()
+        public async Task<bool> UpdateActivityStatusToCompletedAsync()
         {
             var now = DateTime.Now;
             var enrollments = await _context.ActivityEnrollments
@@ -71,11 +71,11 @@ namespace Core.Repositories
                 enrollment.Status = "Completed";
             }
 
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
 
-        public async Task UpdateActivityStatusToCanceledAsync(int activityId)
+        public async Task<bool> UpdateActivityStatusToCanceledAsync(int activityId)
         {
 
             var enrollments = await _context.ActivityEnrollments
@@ -87,7 +87,28 @@ namespace Core.Repositories
                 enrollment.Status = "Canceled";
             }
 
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+
+        public async Task<bool> UpdateActivityStatusToClosedAsync(int activityId)
+        {
+            var activity = await _context.Activities.FindAsync(activityId);
+            if (activity == null)
+                return false;
+            
+
+            var enrollments = await _context.ActivityEnrollments
+                .Where(e => e.Status == "Registered" && e.Activity.ActivityID == activityId)
+                .ToListAsync();
+
+            if (enrollments.Count == activity.MaxCapacity)
+            {
+                activity.Status = "Closed";
+            }
+            return await _context.SaveChangesAsync() > 0;
+
+
         }
 
         //public async Task<IEnumerable<ActivityEnrollment>> GetEnrollmentsByChildAsync(int childId, string status)

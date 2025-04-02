@@ -98,15 +98,21 @@ namespace Core.Services
         }
 
 
-        public async Task UpdateActivityStatusToCompletedAsync()
+        public async Task<bool> UpdateActivityStatusToCompletedAsync()
         {
-            await _enrollmentRepository.UpdateActivityStatusToCompletedAsync();
+            return await _enrollmentRepository.UpdateActivityStatusToCompletedAsync();
            
         }
 
-        public async Task UpdateActivityStatusToCanceledAsync(int activityId)
+        public async Task<bool> UpdateActivityStatusToCanceledAsync(int activityId)
         {
-            await _enrollmentRepository.UpdateActivityStatusToCanceledAsync(activityId);
+            return await _enrollmentRepository.UpdateActivityStatusToCanceledAsync(activityId);
+
+        }
+
+        public async Task<bool> UpdateActivityStatusToClosedAsync(int activityId)
+        {
+            return await _enrollmentRepository.UpdateActivityStatusToClosedAsync(activityId);
 
         }
 

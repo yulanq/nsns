@@ -25,6 +25,8 @@ namespace Core.BackendService
                     var activityEnrollmentService = scope.ServiceProvider.GetRequiredService<IActivityEnrollmentService>();
                     await activityEnrollmentService.UpdateActivityStatusToCompletedAsync();
 
+                    //await activityEnrollmentService.UpdateActivityStatusToClosedAsync();
+
                     var activityService = scope.ServiceProvider.GetRequiredService<IActivityService>();
                     await activityService.UpdateActivityStatusToCompletedAsync();
                 }

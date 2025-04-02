@@ -23,7 +23,7 @@ namespace Core.Models
         [MaxLength(255)]
         public string? Address { get; set; }
 
-        public int? MaxCapacity { get; set; }
+        public int MaxCapacity { get; set; }
 
         public DateTime ScheduledAt { get; set; }
 
