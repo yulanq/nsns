@@ -413,23 +413,13 @@ namespace Web.Controllers.User
             var child = await _childService.GetByIdAsync(user.Id);
 
             var courseEnrollments = await _courseEnrollmentService.GetRegisteredEnrollmentsByChildAsync(child.ChildID);
-            //var specialties = await _specialtyService.GetAllAsync();
+            
 
-            //ViewBag.SpecialtyList = specialties.Select(s => new SelectListItem
-            //{
-            //    Value = s.SpecialtyID.ToString(),
-            //    Text = s.Title
-            //}).ToList();
+            var activityRegisteredEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(child.ChildID);
+            var activityCanceledEnrollments = await _activityEnrollmentService.GetCanceledEnrollmentsByChildAsync(child.ChildID);
+            var activityEnrollments = activityRegisteredEnrollments.Concat(activityCanceledEnrollments);
 
-            var activityEnrollments = await _activityEnrollmentService.GetRegisteredEnrollmentsByChildAsync(child.ChildID);
-            //var activities = await _activityService.GetAllActiveOpenAsync();
-
-            //ViewBag.ActivityList = activities.Select(a => new SelectListItem
-            //{
-            //    Value = a.ActivityID.ToString(),
-            //    Text = a.Title
-            //}).ToList();
-
+           
             return View("MyRegistrations", new ManageRegisterationsViewModel
             {
                 Child = child,
