@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Models;
+using Core.ViewModels;
 
 namespace Core.ViewModels
 {
     public class ManageRegisterationsViewModel
     {
         public Child Child { get; set; }
-        public IEnumerable<CourseEnrollment> CourseEnrollments { get; set; }
+        public IEnumerable<CourseEnrollmentViewModel> CourseEnrollments { get; set; }
 
         public IEnumerable<ActivityEnrollment> ActivityEnrollments { get; set; }
     }

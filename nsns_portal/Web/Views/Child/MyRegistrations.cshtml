@@ -35,12 +35,12 @@
 
             {
                 <tr>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Course.Title</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;@(enrollment.Course.IsActive == false ?"color: red":"")">@enrollment.Course.IsActive</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Course.Specialty.Title</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Course.Coach.Name</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Title</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;@(enrollment.IsActive == false ?"color: red":"")">@enrollment.IsActive</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.SpecialtyName</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.CoachName</td>
                     @* <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.ScheduledHours</td> *@
-                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Course.HourlyCost</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.HourlyCost</td>
                     
                     <td style="padding: 8px; border: 1px solid #ddd;">@enrollment.Status</td>
                   @*   <td style="padding: 8px; border: 1px solid #ddd;">

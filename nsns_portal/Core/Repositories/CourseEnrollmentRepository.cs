@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces;
 using Core.Models;
+using Core.ViewModels;
 using Core.Contexts;
 using System;
 using System.Collections.Generic;
@@ -72,6 +73,32 @@ namespace Core.Repositories
                 .OrderBy(e => e.CourseID)
                 .OrderBy(e => e.ScheduledAt)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<CourseEnrollmentViewModel>> GetRegisteredEnrollmentsByChildAsync(int childId)  //Get Registered courses for a child, include number of scheduled sessions, number of completed sessions
+        {
+            return await _context.CourseEnrollments
+           .Include(e => e.Course)
+           .Include(e => e.Course.Coach)
+           .Include(e => e.Course.Specialty)
+           .Where(e => e.ChildID == childId && e.Status == "Registered")
+           .OrderBy(e => e.CourseID)
+           .Select(e => new CourseEnrollmentViewModel
+           {
+               CourseID = e.CourseID,
+               IsActive = e.Course.IsActive,
+               ChildID = e.ChildID,
+               EnrollmentID = e.EnrollmentID,
+               Title = e.Course.Title,
+               CoachName = e.Course.Coach.Name,
+               SpecialtyName = e.Course.Specialty.Title,
+               HourlyCost = e.Course.HourlyCost,
+               Status = "Registered",
+               ScheduledSessions = _context.CourseEnrollments.Count(c => c.ChildID == e.ChildID && c.CourseID == e.CourseID && c.Status == "Scheduled"), // Count all scheduled sessions
+               CompletedSessions = _context.CourseEnrollments.Count(c => c.ChildID == e.ChildID && c.CourseID == e.CourseID && c.Status == "Completed") // Count completed sessions
+           })
+           .OrderBy(e => e.CourseID)
+           .ToListAsync();
         }
 
         public async Task<IEnumerable<CourseEnrollment>> GetEnrollmentsByCourseAsync(int courseId)
