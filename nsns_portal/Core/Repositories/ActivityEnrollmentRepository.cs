@@ -71,7 +71,8 @@ namespace Core.Repositories
                 enrollment.Status = "Completed";
             }
 
-            return await _context.SaveChangesAsync() > 0;
+            var changes = await _context.SaveChangesAsync();
+            return changes >= 0; // Returns true even if 0 rows were affected
         }
 
 
@@ -87,7 +88,8 @@ namespace Core.Repositories
                 enrollment.Status = "Canceled";
             }
 
-            return await _context.SaveChangesAsync() > 0;
+            var changes = await _context.SaveChangesAsync();
+            return changes >= 0; // Returns true even if 0 rows were affected
         }
 
 
@@ -106,7 +108,8 @@ namespace Core.Repositories
             {
                 activity.Status = "Closed";
             }
-            return await _context.SaveChangesAsync() > 0;
+            var changes = await _context.SaveChangesAsync();
+            return changes >= 0; // Returns true even if 0 rows were affected
 
 
         }

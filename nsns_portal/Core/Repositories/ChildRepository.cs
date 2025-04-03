@@ -54,7 +54,8 @@ namespace Core.Repositories
         public async Task<bool> UpdateAsync(Child entity)
         {
             _context.Children.Update(entity);
-            return await _context.SaveChangesAsync() > 0;
+            var changes = await _context.SaveChangesAsync();
+            return changes >= 0; // Returns true even if 0 rows were affected
         }
 
         //public async Task<bool> DeleteAsync(int usrId)

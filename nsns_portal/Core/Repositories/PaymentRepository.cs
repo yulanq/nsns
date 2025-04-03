@@ -98,7 +98,8 @@ namespace Core.Repositories
                 if (existingPayment == null) return false;
 
                 _context.Entry(existingPayment).CurrentValues.SetValues(payment);
-                return await _context.SaveChangesAsync() > 0;
+                var changes = await _context.SaveChangesAsync();
+                return changes >= 0; // Returns true even if 0 rows were affected
             }
             catch (Exception)
             {
