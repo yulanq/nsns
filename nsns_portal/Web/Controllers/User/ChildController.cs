@@ -186,7 +186,7 @@ namespace Web.Controllers.User
 
 
         [Authorize(Roles = "Staff")]
-        [HttpPost("Edit/{userId}")]
+        [HttpPost("Edit/{childId}")]
         [ValidateAntiForgeryToken]
 
         public async Task<IActionResult> Edit(int childId, string name, DateTime birthDate, string gender, int cityId, string email/*, string password*/)
