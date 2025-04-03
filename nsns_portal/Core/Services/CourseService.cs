@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Core.Repositories;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Core.ViewModels;
 
 namespace Core.Services
 {
@@ -35,7 +36,7 @@ namespace Core.Services
         }
 
         // Get all courses
-        public async Task<IEnumerable<Course>> GetAllAsync()
+        public async Task<IEnumerable<CourseViewModel>> GetAllAsync()
         {
             return await _courseRepository.GetAllAsync();
         }

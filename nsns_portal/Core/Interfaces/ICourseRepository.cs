@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Contexts;
 using Core.Models;
+using Core.ViewModels;
 using Microsoft.EntityFrameworkCore;
 //using Core.mo
 
@@ -14,7 +15,8 @@ namespace Core.Interfaces
     public interface ICourseRepository
     {
 
-        Task<IEnumerable<Course>> GetAllAsync();
+       
+        Task<IEnumerable<CourseViewModel>> GetAllAsync();
 
 
         // Get a course by ID

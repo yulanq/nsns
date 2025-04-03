@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Core.ViewModels;
 
 namespace Core.Repositories
 {
@@ -20,26 +21,48 @@ namespace Core.Repositories
         }
 
         // Get all courses
-        public async Task<IEnumerable<Course>> GetAllAsync()
-        {
-            try
-            {
-                return await _context.Courses
-                .Include(c => c.Coach)
-                .Include(c => c.CreatedByUser)
-                .Include(c => c.Specialty)
-                .ToListAsync();
+        //public async Task<IEnumerable<Course>> GetAllAsync()
+        //{
+        //    try
+        //    {
+        //        return await _context.Courses
+        //        .Include(c => c.Coach)
+        //        .Include(c => c.CreatedByUser)
+        //        .Include(c => c.Specialty)
+        //        .ToListAsync();
 
-                //return await _context.Courses.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+        //        //return await _context.Courses.ToListAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
+
+        public async Task<IEnumerable<CourseViewModel>> GetAllAsync()
+        {
+           
+            return await _context.Courses
+                .Include(c => c.Coach)
+                .Include(c => c.Specialty)
+                .Select(c => new CourseViewModel
+                {
+                    CourseID = c.CourseID,
+                    SpecialtyName = c.Specialty.Title,
+                    CoachName = c.Coach.Name,
+                    Title = c.Title,
+                    Description = c.Description,
+                    HourlyCost = c.HourlyCost,
+                    RegisteredChildrenCount = _context.CourseEnrollments.Count(e => e.CourseID == c.CourseID && e.Status == "Registered"), // Count of registered children
+                    IsActive = c.IsActive
+                })
+                .ToListAsync();
+           
+           
         }
 
 
-       
+
 
         // Get a course by ID
         public async Task<Course> GetAsync(int courseId)

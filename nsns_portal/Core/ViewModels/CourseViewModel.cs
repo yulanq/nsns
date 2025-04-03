@@ -1,26 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Core.ViewModels
 {
     public class CourseViewModel
     {
-        [Required]
-        public int SpecialtyID { get; set; }
+        public int CourseID { get; set; }
 
-        [Required]
-        public int CoachID { get; set; }
+        public string SpecialtyName { get; set; }
 
-        [Required]
-        [StringLength(255)]
+        public string CoachName { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }
 
-        [Required]
-        [Range(0, double.MaxValue)]
         public decimal HourlyCost { get; set; }
+
+        public int RegisteredChildrenCount { get; set; }
 
         public bool IsActive { get; set; }
     }
-
 }

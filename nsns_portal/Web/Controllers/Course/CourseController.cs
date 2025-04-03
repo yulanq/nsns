@@ -131,7 +131,7 @@ namespace Web.Controllers.Courses
 
         [Authorize(Roles = "Staff")]
         [HttpPost("Add")]
-        public async Task<IActionResult> Add(CourseViewModel model)
+        public async Task<IActionResult> Add(AddCourseViewModel model)
         {
             if (!ModelState.IsValid)
             {

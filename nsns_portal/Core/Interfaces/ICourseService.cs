@@ -1,5 +1,6 @@
 ﻿using Core.Models;
 using Core.Repositories;
+using Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Core.Interfaces
     {
 
 
-        Task<IEnumerable<Course>> GetAllAsync();
+        Task<IEnumerable<CourseViewModel>> GetAllAsync();
 
 
         // Get a course by ID
