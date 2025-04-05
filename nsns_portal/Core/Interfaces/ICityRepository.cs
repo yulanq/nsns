@@ -28,6 +28,9 @@ namespace Core.Interfaces
         // Get all Specialties
         Task<IEnumerable<City>> GetAllAsync();
 
+
+        Task<IEnumerable<City>> GetAllUsedAsync();
+
         // Get all Specialties
         Task<IEnumerable<City>> GetByNameAsync(string name);
        

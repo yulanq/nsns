@@ -81,13 +81,29 @@ namespace Core.Repositories
                 .FirstOrDefaultAsync(s => s.CityID == id);
         }
 
-        // Get all Specialties
+        // Get all Cities
         public async Task<IEnumerable<City>> GetAllAsync()
         {
             return await _context.Cities
                 .Include(s => s.CreatedByUser)
                 .Include(s => s.UpdatedByUser)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<City>> GetAllUsedAsync()
+        {
+            var city_of_Children = await _context.Children
+                                    .Include(c => c.City)
+                                    .Select(c => c.City)
+                                    .ToListAsync();
+
+            var city_of_Coaches = await _context.Coaches
+                                   .Include(c => c.City)
+                                   .Select(c => c.City)
+                                   .ToListAsync();
+
+            return city_of_Children.Concat(city_of_Coaches).DistinctBy(c => c.CityID); ;
+
         }
 
         // Get all Specialties

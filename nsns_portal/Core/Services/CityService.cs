@@ -82,5 +82,27 @@ namespace Core.Services
 
           
         }
+
+
+        public async Task<IEnumerable<City>> GetAllUsedAsync()
+        {
+            try
+            {
+                
+                // Fetch all coach records from the repository
+                var cityList = await _cityRepository.GetAllUsedAsync();
+
+                // You can add additional logic or transformations here if necessary
+                return cityList;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions as needed (e.g., logging)
+                throw new Exception("An error occurred while retrieving city records.", ex);
+            }
+
+
+        }
+
     }
 }

@@ -28,7 +28,10 @@ namespace Core.Interfaces
 
         // ✅ Get All Cities
         Task<IEnumerable<City>> GetAllAsync();
-       
+
+        Task<IEnumerable<City>> GetAllUsedAsync();
+
+
 
 
     }

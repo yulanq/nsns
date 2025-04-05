@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Core.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Core.ViewModels;
 
 
 
@@ -30,10 +31,23 @@ namespace Web.Controllers.Setting
         [HttpGet("List")]
         public async Task<IActionResult> List()
         {
-            //var cities = await _context.Cities.ToListAsync();
-            var cities =await _cityService.GetAllAsync();
-            return View(cities);
+            
+            //var cities =await _cityService.GetAllAsync();
+            //return View(cities);
+
+            var allCities = await _cityService.GetAllAsync();
+            var usedCities = (await _cityService.GetAllUsedAsync()).Select(c => c.CityID).ToHashSet(); // Get used city IDs as HashSet for fast lookup
+
+            var viewModel = new ManageCitiesViewModel
+            {
+                Cities = allCities,
+                UsedCityIds = usedCities
+            };
+
+            return View(viewModel);
         }
+
+        
 
         // ✅ Load Partial View for Add/Edit Form
         [HttpGet("Add")]
