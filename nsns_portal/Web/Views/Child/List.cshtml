@@ -7,7 +7,8 @@
     ViewData["Title"] = "Manage Children";
 }
 
-@model IEnumerable<Child>
+@* @model IEnumerable<Child> *@
+@model List<Core.ViewModels.ChildWithDeleteViewModel>
 
 <h1>Manage Children</h1>
 
@@ -32,30 +33,33 @@
         @{
             int index = 1;
 
-            foreach (var child in Model)
+            foreach (var childWithDelete in Model)
             {
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">@index</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@child.Name</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@(child.BirthDate.HasValue ? child.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@child.Gender</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@(child.City != null ? child.City.Name : "N/A")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@childWithDelete.Child.Name</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@(childWithDelete.Child.BirthDate.HasValue ? childWithDelete.Child.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@childWithDelete.Child.Gender</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@(childWithDelete.Child.City != null ? childWithDelete.Child.City.Name : "N/A")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Child/Edit/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
-                        <a href="/Child/ConfirmDelete/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
+                        <a href="/Child/Edit/@childWithDelete.Child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                        @if (childWithDelete.CanDelete)
+                        {
+                            <a href="/Child/ConfirmDelete/@childWithDelete.Child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
+                        }
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Child/ManageParents/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
+                        <a href="/Child/ManageParents/@childWithDelete.Child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Child/ManagePayments/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
+                        <a href="/Child/ManagePayments/@childWithDelete.Child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
                     </td>
                     
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Child/ManageRegistrations/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
+                        <a href="/Child/ManageRegistrations/@childWithDelete.Child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Manage</a>
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <a href="/Child/EnrollmentsHistory/@child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">View</a>
+                        <a href="/Child/EnrollmentsHistory/@childWithDelete.Child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">View</a>
                     </td>
                    
                 </tr>

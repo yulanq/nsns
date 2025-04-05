@@ -23,5 +23,9 @@ namespace Core.Interfaces
         Task<bool> UpdateAsync(Child entity);
         //Task<bool> RemoveAsync(int userId);
         Task<bool> RemoveAsync(Child entity);
+
+        Task<bool> CheckRegisteredAsync(int childId);
+
+        Task<bool> CheckPaidAsync(int childId);
     }
 }

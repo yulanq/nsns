@@ -168,6 +168,19 @@ namespace Core.Services
                 result = await _userRepository.RemoveAsync(child.User);
             return result;
         }
+
+        public async Task<bool> CheckRegisteredAsync(int childId)
+        {
+            var result = await _childRepository.CheckRegisteredAsync(childId);
+            return result;
+        }
+
+        public async Task<bool> CheckPaidAsync(int childId)
+        {
+            var result = await _childRepository.CheckPaidAsync(childId);
+            return result;
+        }
+
     }
 }
 

@@ -22,6 +22,10 @@ namespace Core.Interfaces
         Task<bool> UpdateAsync(int childId, string name, DateTime birthDate, string gender, int cityId, string email/*, string password*/);
 
         Task<bool> RemoveAsync(int childId);
+
+        Task<bool> CheckRegisteredAsync(int childId);
+
+        Task<bool> CheckPaidAsync(int childId);
     }
 
 

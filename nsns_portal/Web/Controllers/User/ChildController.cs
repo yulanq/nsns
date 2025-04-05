@@ -80,8 +80,18 @@ namespace Web.Controllers.User
         // ✅ List all children
         public async Task<IActionResult> List()
         {
+            var childrenWithDelete = new List<ChildWithDeleteViewModel>();
             var children = await _childService.GetAllAsync();
-            return View(children);
+            foreach (Child c in children)
+            {
+                var canDelete = !await _childService.CheckPaidAsync(c.ChildID) && !await _childService.CheckRegisteredAsync(c.ChildID);
+                var childWithDelete = new ChildWithDeleteViewModel();
+                childWithDelete.Child = c;
+                childWithDelete.CanDelete = canDelete;
+                childrenWithDelete.Add(childWithDelete);
+            }
+                
+            return View(childrenWithDelete);
 
 
             //var children = await _childService.GetAllAsync();
