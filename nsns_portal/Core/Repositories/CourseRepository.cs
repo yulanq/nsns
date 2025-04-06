@@ -181,8 +181,16 @@ namespace Core.Repositories
                .ToListAsync();
         }
 
+        public async Task<IEnumerable<Course>> GetCoursesByCoachAsync(int coachId)
+        {
+            return await _context.Courses
+               .Include(c => c.Coach)
+               .Where(c => c.CoachID == coachId) 
+               .ToListAsync();
+        }
 
-       
+
+
 
     }
 }

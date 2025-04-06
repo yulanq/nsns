@@ -13,18 +13,17 @@ namespace Core.ViewModels
 {
    
 
-    public class ManageChildViewModel
+    public class ManageCoachViewModel
     {
-        public List<ChildWithDeleteViewModel> Children { get; set; } = new List<ChildWithDeleteViewModel>();
+        public List<CoachWithDeleteViewModel> Coaches { get; set; } = new List<CoachWithDeleteViewModel>();
     }
 
 
-    public class ChildWithDeleteViewModel
+    public class CoachWithDeleteViewModel
     {
-        public Child Child { get; set; }
+        public Coach Coach { get; set; }
         public bool CanDelete{ get; set; }
 
-        
     }
 
 

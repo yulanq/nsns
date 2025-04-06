@@ -7,7 +7,8 @@
 }
 
 
-@model IEnumerable<Coach>
+@* @model IEnumerable<Coach> *@
+@model List<Core.ViewModels.CoachWithDeleteViewModel>
 
 
 <h1>Manage Coaches</h1>
@@ -32,15 +33,15 @@
         @{
             int index = 1;
             
-            foreach (var coach in Model)
+            foreach (var coachWithDelete in Model)
             {
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;">@index</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@coach.Name</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@coachWithDelete.Coach.Name</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        @if (coach.CoachSpecialties != null && coach.CoachSpecialties.Any())
+                        @if (coachWithDelete.Coach.CoachSpecialties != null && coachWithDelete.Coach.CoachSpecialties.Any())
                         {
-                            @string.Join(", ", coach.CoachSpecialties.Select(cs => cs.Specialty.Title))
+                            @string.Join(", ", coachWithDelete.Coach.CoachSpecialties.Select(cs => cs.Specialty.Title))
                         }
                         else
                         {
@@ -48,15 +49,17 @@
                         }
                     
                     </td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@coach.Gender</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@coach.User.Email</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@coach.Phone</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@coach.Wechat</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@(coach.City != null ? coach.City.Name : "N/A")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@coachWithDelete.Coach.Gender</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@coachWithDelete.Coach.User.Email</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@coachWithDelete.Coach.Phone</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@coachWithDelete.Coach.Wechat</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@(coachWithDelete.Coach.City != null ? coachWithDelete.Coach.City.Name : "N/A")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-
-                      <a href="/Coach/ConfirmDelete/@coach.CoachID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
-                        <a href="/Coach/Edit/@coach.CoachID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                        @if (coachWithDelete.CanDelete)
+                        {
+                            <a href="/Coach/ConfirmDelete/@coachWithDelete.Coach.CoachID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Delete</a>
+                        }
+                        <a href="/Coach/Edit/@coachWithDelete.Coach.CoachID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
 
                     </td>
                 </tr>

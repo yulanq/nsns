@@ -213,7 +213,21 @@ namespace Web.Controllers.User
         {
 
             var coachList = await _coachService.GetAllAsync();
-            return View(coachList); // Ensure there is a corresponding List.cshtml in Views/Staff
+
+
+           
+
+            List<CoachWithDeleteViewModel> coaches = new List<CoachWithDeleteViewModel>();
+
+            foreach (Coach coach in coachList)
+            {
+                CoachWithDeleteViewModel coachWithDeleteViewModel = new CoachWithDeleteViewModel();
+                coachWithDeleteViewModel.Coach = coach;
+                bool canDelete =!(await _courseService.GetCoursesByCoachAsync(coach.CoachID)).Any();
+                coachWithDeleteViewModel.CanDelete = canDelete;
+                coaches.Add(coachWithDeleteViewModel);
+            }
+            return View(coaches); // Ensure there is a corresponding List.cshtml in Views/Staff
 
            
         }

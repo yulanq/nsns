@@ -40,7 +40,14 @@
                     <td style="padding: 8px; border: 1px solid #ddd;">@childWithDelete.Child.Name</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@(childWithDelete.Child.BirthDate.HasValue ? childWithDelete.Child.BirthDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@childWithDelete.Child.Gender</td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">@(childWithDelete.Child.City != null ? childWithDelete.Child.City.Name : "N/A")</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@(childWithDelete.Child.City != null ? childWithDelete.Child.City.Name : "N/A")@childWithDelete.Child.User.PasswordHash</td>
+
+                    @* <tr>
+            <td style="padding: 8px;"><label for="Password">Password:</label></td>
+            <td style="padding: 8px;"><input type="text" name="password" value="@Model.User.PasswordHash" placeholder="Password" value="12345" style="width: 100%;" /></td>
+            </tr> *@
+
+
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <a href="/Child/Edit/@childWithDelete.Child.ChildID" style="margin-left: 10px; color: #007bff; text-decoration: none;">Edit</a>
                         @if (childWithDelete.CanDelete)

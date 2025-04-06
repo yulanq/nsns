@@ -191,6 +191,11 @@ namespace Core.Services
             return await _courseRepository.GetActiveCourseByCoachBySpecialtyAsync(coachId, specialtyId);
         }
 
+        public async Task<IEnumerable<Course>> GetCoursesByCoachAsync(int coachId)
+        {
+            return await _courseRepository.GetCoursesByCoachAsync(coachId);
+        }
+
 
     }
 }

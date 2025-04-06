@@ -32,7 +32,7 @@ async Task SeedRolesAndAdmin(IServiceProvider serviceProvider)
     }
 
     // Create an admin user if none exists
-    var adminEmail = "admin@example.com";
+    var adminEmail = "admin@nsns.ca";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
     if (adminUser == null)
