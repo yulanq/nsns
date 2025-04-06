@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Core.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Core.ViewModels;
 
 
 namespace Web.Controllers.Payment
@@ -17,17 +18,26 @@ namespace Web.Controllers.Payment
     public class PaymentPackageController: Controller
     {
         private readonly IPaymentPackageService _paymentPackageService;
+        private readonly IPaymentService _paymentService;
 
-        public PaymentPackageController(IPaymentPackageService paymentPackageService)
+        public PaymentPackageController(IPaymentPackageService paymentPackageService, IPaymentService paymentService)
         {
             _paymentPackageService = paymentPackageService;
+            _paymentService = paymentService;
         }
 
         [HttpGet("List")]
         public async Task<IActionResult> List()
         {
             var packages = await _paymentPackageService.GetAllAsync();
-            return View(packages);
+            List<PackageWithDeleteViewModel> packagesWithDelete = new List<PackageWithDeleteViewModel>();
+
+            foreach (var package in packages)
+            {
+                bool canDelete = !(await _paymentService.GetByPackageAsync(package.PackageID)).Any();
+                packagesWithDelete.Add(new PackageWithDeleteViewModel { Package = package, CanDelete = canDelete});
+            }
+            return View(packagesWithDelete);
         }
 
         [HttpGet("AddEdit/{packageId?}")]

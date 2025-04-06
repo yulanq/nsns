@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PaymentPackage>
+﻿@model IEnumerable<Core.ViewModels.PackageWithDeleteViewModel>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -23,17 +23,20 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var package in Model)
+        @foreach (var packageWithDelete in Model)
 
         {
             <tr>
-                <td style="padding: 8px; border: 1px solid #ddd;">@package.Title</td>
-                <td style="padding: 8px; border: 1px solid #ddd;">@package.Description</td>
-                <td style="padding: 8px; border: 1px solid #ddd;">$@package.Amount</td>
-                <td style="padding: 8px; border: 1px solid #ddd;">@(package.IsActive ? "Yes" : "No")</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@packageWithDelete.Package.Title</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@packageWithDelete.Package.Description</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">$@packageWithDelete.Package.Amount</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">@(packageWithDelete.Package.IsActive ? "Yes" : "No")</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">
-                    <a href="/PaymentPackage/AddEdit/@package.PackageID" style="margin-right: 10px; color: #007bff; text-decoration: none;">Edit</a>
-                    <a href="/PaymentPackage/ConfirmDelete/@package.PackageID" style="color: #007bff; text-decoration: none;">Delete</a>
+                    <a href="/PaymentPackage/AddEdit/@packageWithDelete.Package.PackageID" style="margin-right: 10px; color: #007bff; text-decoration: none;">Edit</a>
+                    @if (packageWithDelete.CanDelete)
+                    {
+                        <a href="/PaymentPackage/ConfirmDelete/@packageWithDelete.Package.PackageID" style="color: #007bff; text-decoration: none;">Delete</a>
+                    }
                 </td>
             </tr>
         }

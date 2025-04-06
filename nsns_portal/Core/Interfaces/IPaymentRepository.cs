@@ -14,6 +14,7 @@ namespace Core.Interfaces
 
         Task<IEnumerable<Payment>> GetByChildAsync(int childId);
         Task<Payment> GetByIdAsync(int id);
+        Task<IEnumerable<Payment>> GetByPackageAsync(int packageId);
         Task<bool> AddAsync(Payment payment);
 
         Task<Child> GetChildByIdAsync(int childId);

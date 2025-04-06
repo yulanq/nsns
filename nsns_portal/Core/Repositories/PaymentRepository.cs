@@ -51,6 +51,14 @@ namespace Core.Repositories
                 .FirstOrDefaultAsync(p => p.PaymentID == id);
         }
 
+        public async Task<IEnumerable<Payment>> GetByPackageAsync(int packageId)
+        {
+            return await _context.Payments
+                .Include(p => p.PaymentPackage)
+                .Where(p => p.PaymentPackage.PackageID == packageId)
+                .ToListAsync();
+        }
+
 
         public async Task<Child> GetChildByIdAsync(int childId)
         {
