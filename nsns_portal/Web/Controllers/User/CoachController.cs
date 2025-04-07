@@ -221,11 +221,11 @@ namespace Web.Controllers.User
 
             foreach (Coach coach in coachList)
             {
-                CoachWithDeleteViewModel coachWithDeleteViewModel = new CoachWithDeleteViewModel();
-                coachWithDeleteViewModel.Coach = coach;
+                CoachWithDeleteViewModel coachWithDelete = new CoachWithDeleteViewModel();
+                coachWithDelete.Coach = coach;
                 bool canDelete =!(await _courseService.GetCoursesByCoachAsync(coach.CoachID)).Any();
-                coachWithDeleteViewModel.CanDelete = canDelete;
-                coaches.Add(coachWithDeleteViewModel);
+                coachWithDelete.CanDelete = canDelete;
+                coaches.Add(coachWithDelete);
             }
             return View(coaches); // Ensure there is a corresponding List.cshtml in Views/Staff
 
