@@ -35,7 +35,10 @@ namespace Core.Interfaces
         //Task<IEnumerable<City>> GetByNameAsync(string name);
 
         Task<List<Specialty>> GetSpecialtiesByCoachAsync(int coachId);
-      
+
+        Task<List<Coach>> GetCoachesBySpecialtyAsync(int specialtyId);
+
+
 
 
 

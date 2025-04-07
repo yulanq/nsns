@@ -63,6 +63,8 @@ namespace Core.Services
             return await _specialtyRepository.GetAsync(specialtyId) ?? throw new KeyNotFoundException("Specialty not found.");
         }
 
+       
+
         // ✅ Get All Cities
         public async Task<IEnumerable<Specialty>> GetAllAsync()
         {

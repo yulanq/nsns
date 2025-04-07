@@ -67,16 +67,13 @@ namespace Core.Services
         public async Task<List<Specialty>> GetSpecialtiesByCoachAsync(int coachId)
         {
             return await _coachSpecialtyRepository.GetSpecialtiesByCoachAsync(coachId);
-            //return await _context.CoachSpecialties
-            //    .Where(cs => cs.CoachID == coachId)
-            //    .Include(cs => cs.Specialty)
-            //        .ThenInclude(s => s.Courses) // Include Courses under each Specialty
-            //            .ThenInclude(c => c.Enrollments
-            //                .Where(e => e.Status == "Registered")) // Filter only "Registered" enrollments
-            //                .ThenInclude(e => e.Child) // Include Child details under each Enrollment
-            //                    .ThenInclude(ch => ch.City) // Include City details under Child
-            //    .Select(cs => cs.Specialty)
-            //    .ToListAsync();
+          
+        }
+
+        public async Task<List<Coach>> GetCoachesBySpecialtyAsync(int specialtyId)
+        {
+            return await _coachSpecialtyRepository.GetCoachesBySpecialtyAsync(specialtyId);
+
         }
     }
 

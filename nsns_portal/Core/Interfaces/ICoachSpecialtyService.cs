@@ -40,6 +40,8 @@ namespace Core.Interfaces
 
         Task<List<Specialty>> GetSpecialtiesByCoachAsync(int coachId);
 
+        Task<List<Coach>> GetCoachesBySpecialtyAsync(int specialtyId);
+
 
 
 

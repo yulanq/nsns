@@ -10,6 +10,7 @@ using Core.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis;
+using Core.ViewModels;
 
 
 
@@ -20,10 +21,12 @@ namespace Web.Controllers.Setting
     {
         //private readonly AppDbContext _context;
         private ISpecialtyService _specialtyService;
+        private ICoachSpecialtyService _coachSpecialtyService;
         private readonly UserManager<Core.Models.User> _userManager;
-        public SpecialtyController(ISpecialtyService specialtyService,  UserManager<Core.Models.User> userManager)
+        public SpecialtyController(ISpecialtyService specialtyService, ICoachSpecialtyService coachSpecialtyService, UserManager<Core.Models.User> userManager)
         {
             _specialtyService = specialtyService;
+            _coachSpecialtyService = coachSpecialtyService;
             _userManager = userManager;
         }
 
@@ -33,7 +36,19 @@ namespace Web.Controllers.Setting
         {
             //var cities = await _context.Cities.ToListAsync();
             var specialties = await _specialtyService.GetAllAsync();
-            return View(specialties);
+
+            List<SpecialtyWithDeleteViewModel> specialtiesWithDelete = new List<SpecialtyWithDeleteViewModel>();
+
+            foreach (Specialty specialty in specialties)
+            {
+                SpecialtyWithDeleteViewModel specialtyWithDelete = new SpecialtyWithDeleteViewModel();
+                specialtyWithDelete.Specialty = specialty;
+                bool canDelete = !(await _coachSpecialtyService.GetCoachesBySpecialtyAsync(specialty.SpecialtyID)).Any();
+                specialtyWithDelete.CanDelete = canDelete;
+                specialtiesWithDelete.Add(specialtyWithDelete);
+            }
+            return View(specialtiesWithDelete); // Ensure there is a corresponding List.cshtml in Views/Staff
+
         }
 
         // ✅ Load Partial View for Add/Edit Form
