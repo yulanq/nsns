@@ -90,7 +90,7 @@ namespace Web.Controllers.User
                 childWithDelete.CanDelete = canDelete;
                 childrenWithDelete.Add(childWithDelete);
             }
-                
+
             return View(childrenWithDelete);
 
 
@@ -304,9 +304,96 @@ namespace Web.Controllers.User
             return View(model);
         }
 
+        //[Authorize(Roles = "Staff")]
+        //[HttpPost("AddParentToChild")]
+        //public async Task<IActionResult> AddParentToChild(int childId, string parentName, string relationship, string phone,string email, string wechat)
+        //{
+        //    try
+        //    {
+        //        // ✅ 1. Create a new Parent object
+        //        var user = await _userManager.GetUserAsync(User);
+        //        var newParent = new Parent
+        //        {
+        //            Name = parentName,
+        //            Phone = phone,
+        //            Email = email,
+        //            Wechat = wechat,
+        //            CreatedBy = user.Id, // Assume the user ID of admin/creator
+        //            CreatedDate = DateTime.Now
+        //        };
+
+        //        // ✅ 2. Save the parent in the database
+        //        var parentId = await _parentService.AddAndReturnIdAsync(newParent);
+        //        if (parentId == 0)
+        //        {
+        //            TempData["ErrorMessage"] = "Failed to add parent.";
+        //            return RedirectToAction("ManageParents", new { childId });
+        //        }
+
+
+        //        var success = await _parentChildService.AddParentToChild(parentId, newParent, childId, relationship, user.Id); // Assuming CreatedBy = 1
+        //        if (!success)
+        //        {
+        //            TempData["ErrorMessage"] = "Failed to add parent to child.";
+        //        }
+        //        else
+        //        {
+        //            TempData["SuccessMessage"] = "Parent added to child successfully.";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData["ErrorMessage"] = $"{ex.Message}";
+        //    }
+
+        //    return RedirectToAction("ManageParents", new { childId });
+        //}
+
+        //[Authorize(Roles = "Staff")]
+        //[HttpPost("RemoveParentFromChild")]
+        //public async Task<IActionResult> RemoveParentFromChild(int parentChildId, int childId, int parentId)
+        //{
+        //    try
+        //    {
+
+        //        var success = await _parentChildService.RemoveParentFromChild(parentChildId);
+        //        success = await _parentService.DeleteAsync(parentId);
+        //        if (!success)
+        //        {
+        //            TempData["ErrorMessage"] = "Failed to remove parent.";
+        //        }
+        //        else
+        //        {
+        //            TempData["SuccessMessage"] = "Parent removed successfully.";
+        //        }
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData["ErrorMessage"] = $"{ex.Message}";
+        //    }
+
+        //    return RedirectToAction("ManageParents", new { childId });
+        //}
+
+
         [Authorize(Roles = "Staff")]
-        [HttpPost("AddParentToChild")]
-        public async Task<IActionResult> AddParentToChild(int childId, string parentName, string relationship)
+        [HttpGet("AddParent")]
+        public async Task<IActionResult> AddParent(int childId)
+        {
+            ViewBag.ChildId = childId;
+            return View();
+        }
+
+
+
+
+
+
+        [Authorize(Roles = "Staff")]
+        [HttpPost("AddParent")]
+        public async Task<IActionResult> AddParent(int childId, string parentName, string relationship, string phone, string email, string wechat)
         {
             try
             {
@@ -315,6 +402,9 @@ namespace Web.Controllers.User
                 var newParent = new Parent
                 {
                     Name = parentName,
+                    Phone = phone,
+                    Email = email,
+                    Wechat = wechat,
                     CreatedBy = user.Id, // Assume the user ID of admin/creator
                     CreatedDate = DateTime.Now
                 };
@@ -347,8 +437,71 @@ namespace Web.Controllers.User
         }
 
         [Authorize(Roles = "Staff")]
-        [HttpPost("RemoveParentFromChild")]
-        public async Task<IActionResult> RemoveParentFromChild(int parentChildId, int childId, int parentId)
+        [HttpGet("EditParent /{parentId}")]
+        public async Task<IActionResult> EditParent(int childId, int parentId/*, string parentName, string relationship, string phone, string email, string wechat*/)
+        {
+            ViewBag.ChildId = childId;
+            Parent parent = await _parentService.GetParentByIdAsync(parentId);
+            return View(parent);
+        }
+
+
+        [Authorize(Roles = "Staff")]
+        [HttpPost("EditParent")]
+        //public async Task<IActionResult> EditParent(int parentId, string parentName, string relationship, string phone, string email, string wechat)
+        public async Task<IActionResult> EditParent(Parent parent)
+        {
+            //ViewBag.ParentId = parentId;
+            var childId = ViewBag.ChildId;
+            //Parent parent = await _parentService.GetParentByIdAsync(parentId);
+            try
+            {
+                var result = await _parentService.UpdateAsync(parent);
+                if (result == true)
+                {
+                    TempData["SuccessMessage"] = "Parent info updated";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Parent info not updated";
+                }
+                //return RedirectToAction("ManageParents");
+                return RedirectToAction("ManageParents", new { childId });
+            }
+
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("ManageParents", new { childId });
+            }
+        }
+            
+       
+
+
+        [Authorize(Roles = "Staff")]
+        [HttpGet("ConfirmDeleteParent/{parentId}")]
+        public async Task<IActionResult> ConfirmDeleteParent(int parentChildId, int childId, int parentId)
+        {
+            try
+            {
+                ViewBag.ChildId = childId;
+                ViewBag.ParentChildId = parentChildId;
+
+                var parent = await _parentService.GetParentByIdAsync(parentId);
+                return View(parent);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"{ex.Message}";
+                return RedirectToAction("ManageParents", new { childId });
+            }
+        }
+
+
+        [Authorize(Roles = "Staff")]
+        [HttpPost("DeleteParentConfirmed")]
+        public async Task<IActionResult> DeleteParentConfirmed(int parentChildId, int childId, int parentId)
         {
             try
             {
@@ -363,15 +516,15 @@ namespace Web.Controllers.User
                 {
                     TempData["SuccessMessage"] = "Parent removed successfully.";
                 }
-
+                return RedirectToAction("ManageParents", new { childId });
 
             }
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"{ex.Message}";
+                return RedirectToAction("ManageParents", new { childId });
             }
 
-            return RedirectToAction("ManageParents", new { childId });
         }
 
         [Authorize(Roles = "Staff")]
