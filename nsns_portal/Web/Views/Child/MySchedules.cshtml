@@ -27,7 +27,7 @@
                     {
 
                         <tr>
-                            <td style="padding: 8px; border: 1px solid #ddd;">@schedule.ScheduledAt</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">@((schedule.ScheduledAt.HasValue) ? schedule.ScheduledAt.Value.ToString("yyyy-MM-dd HH:mm") : "")</td>
                             <td style="padding: 8px; border: 1px solid #ddd;">@schedule.ScheduledHours</td>
                       
                         </tr>

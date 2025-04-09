@@ -29,7 +29,7 @@
             {
                 <tr>
 
-                    <td style="padding: 8px; border: 1px solid #ddd;">@schedule.ScheduledAt</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@((schedule.ScheduledAt.HasValue) ? schedule.ScheduledAt.Value.ToString("yyyy-MM-dd HH:mm") : "")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@schedule.ScheduledHours</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
                         <form method="post" action="/Coach/CompleteCourse">
@@ -99,7 +99,7 @@
             {
                 <tr>
 
-                    <td style="padding: 8px; border: 1px solid #ddd;">@complete.ScheduledAt</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">@((complete.ScheduledAt.HasValue) ? complete.ScheduledAt.Value.ToString("yyyy-MM-dd HH:mm") : "")</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@complete.ScheduledHours</td>
                     <td style="padding: 8px; border: 1px solid #ddd;">@complete.ActualHours</td>
                 </tr>
