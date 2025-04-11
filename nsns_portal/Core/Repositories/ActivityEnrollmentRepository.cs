@@ -59,10 +59,11 @@ namespace Core.Repositories
         }
 
 
-        public async Task<bool> UpdateActivityStatusToCompletedAsync()
+        public async Task<IEnumerable<ActivityEnrollment>> UpdateActivityStatusToCompletedAsync()
         {
             var now = DateTime.Now;
             var enrollments = await _context.ActivityEnrollments
+                .Include(e => e.Activity)
                 .Where(e => ((DateTime)e.Activity.ScheduledAt).AddDays(1)  <= now && e.Status == "Registered")
                 .ToListAsync();
 
@@ -72,7 +73,7 @@ namespace Core.Repositories
             }
 
             var changes = await _context.SaveChangesAsync();
-            return changes >= 0; // Returns true even if 0 rows were affected
+            return enrollments;
         }
 
 

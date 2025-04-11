@@ -74,7 +74,7 @@ namespace Core.Services
         }
 
         // 🔹 Add a new payment
-        public async Task<bool> AddAsync(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate, string receiptPath, User user)
+        public async Task<int> AddAndReturnIdAsync(int childId, int parentId, int packageId, decimal amount, DateTime? paymentDate, string receiptPath, User user)
         {
             
             var createdBy = 1;
@@ -115,7 +115,8 @@ namespace Core.Services
             // Add the course to the repository
             try
             {
-                return await _paymentRepository.AddAsync(payment);
+                return await _paymentRepository.AddAndReturnIdAsync(payment);
+                
             }
             catch (Exception ex)
             {

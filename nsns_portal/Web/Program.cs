@@ -93,6 +93,12 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<ICoachService, CoachService>();
 
+builder.Services.AddScoped<ICoachIncomeRepository, CoachIncomeRepository>();
+builder.Services.AddScoped<ICoachIncomeService, CoachIncomeService>();
+
+builder.Services.AddScoped<IChildBalanceRepository, ChildBalanceRepository>();
+builder.Services.AddScoped<IChildBalanceService, ChildBalanceService>();
+
 
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ICourseService, CourseService>();

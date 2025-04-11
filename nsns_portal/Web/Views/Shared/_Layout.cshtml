@@ -61,7 +61,7 @@
                        @*  <li class="nav-item"><a class="nav-link" href="/Dashboard/Coach">Dashboard</a></li> *@
                         <li class="nav-item"><a class="nav-link" href="/Coach/ManageCourse">Courses</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Feedbacks</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Statistics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Coach/Income">Income</a></li>
                     }
 
                     else if (User.IsInRole("Child"))
@@ -75,7 +75,7 @@
                         <li class="nav-item"><a class="nav-link" href="/Child/MySchedules">Schedules</a></li>
                         <li class="nav-item"><a class="nav-link" href="/Child/MyEnrollmentsHistory">Enrollments</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Notifications</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Statistics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/Child/MyBalance">Balance</a></li>
                     }
                     @if (User.Identity.IsAuthenticated)
 

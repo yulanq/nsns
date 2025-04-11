@@ -84,17 +84,14 @@ namespace Core.Repositories
         }
 
         // 🔹 Add a new payment
-        public async Task<bool> AddAsync(Payment payment)
+        public async Task<int> AddAndReturnIdAsync(Payment payment)
         {
-            try
-            {
-                await _context.Payments.AddAsync(payment);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            
+            await _context.Payments.AddAsync(payment);
+            await _context.SaveChangesAsync();
+            return payment.PaymentID;
+           
+         
         }
 
         // 🔹 Update an existing payment

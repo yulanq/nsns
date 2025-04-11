@@ -10,10 +10,12 @@ namespace Core.BackendService
     public class ActivityStatusUpdater : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly IChildBalanceService _childBalanceService;
 
         public ActivityStatusUpdater(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
+           
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -23,7 +25,15 @@ namespace Core.BackendService
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var activityEnrollmentService = scope.ServiceProvider.GetRequiredService<IActivityEnrollmentService>();
-                    await activityEnrollmentService.UpdateActivityStatusToCompletedAsync();
+                    var enrollments = await activityEnrollmentService.UpdateActivityStatusToCompletedAsync();
+
+
+                    var childBalanceService = scope.ServiceProvider.GetRequiredService<IChildBalanceService>();
+                    foreach (var enrollment in enrollments)
+                    {
+                        var result = await childBalanceService.DeductActivityCostAsync(enrollment.ChildID, enrollment.ActivityID, enrollment.Activity.Cost, 7);
+                    }
+                    
 
                     //await activityEnrollmentService.UpdateActivityStatusToClosedAsync();
 

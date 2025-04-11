@@ -13,6 +13,7 @@ using Core.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 
@@ -36,11 +37,13 @@ namespace Web.Controllers.User
         private readonly IActivityEnrollmentService _activityEnrollmentService;
         private readonly IActivityService _activityService;
         private readonly IPaymentService _paymentService;
+        private readonly IChildBalanceService _balanceService;
         private readonly UserManager<Core.Models.User> _userManager;
 
-        public ChildController(IChildService childService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, IActivityService activityService, ICourseEnrollmentService courseEnrollmentService, IActivityEnrollmentService activityEnrollmentService, IPaymentService paymentService, UserManager<Core.Models.User> userManager)
+        public ChildController(IChildService childService, IChildBalanceService balanceService, IParentService parentService, ICityService cityService, IParentChildService parentChildService, ICourseService courseService, ISpecialtyService specialtyService, IActivityService activityService, ICourseEnrollmentService courseEnrollmentService, IActivityEnrollmentService activityEnrollmentService, IPaymentService paymentService, UserManager<Core.Models.User> userManager)
         {
             _childService = childService;
+            _balanceService = balanceService;
             _parentService = parentService;
             _cityService = cityService;
             _parentChildService = parentChildService;
@@ -778,7 +781,8 @@ namespace Web.Controllers.User
                 }
 
                 Core.Models.User user = await _userManager.GetUserAsync(User);
-                var result = await _paymentService.AddAsync(childId, parentId, packageId, amount, paymentDate, receiptPath, user);
+                var paymentId = await _paymentService.AddAndReturnIdAsync(childId, parentId, packageId, amount, paymentDate, receiptPath, user);
+                var result = await _balanceService.AddPaymentToBalanceAsync(childId, paymentId, amount, user.Id);
                 if (result)
                 {
                     TempData["SuccessMessage"] = "Payment info has been added successfully.";
@@ -903,6 +907,20 @@ namespace Web.Controllers.User
             };
 
             return View("MyEnrollmentsHistory", enrollmentHistory);
+        }
+
+
+
+        [Authorize(Roles = "Child")]
+        [HttpGet("MyBalance")]
+        public async Task<IActionResult> MyBalance()
+        {
+            Core.Models.User user = await _userManager.GetUserAsync(User);
+            var child = await _childService.GetByIdAsync(user.Id);
+            var balances = await _balanceService.GetBalanceHistoryAsync(child.ChildID);
+            var finalBalance = await _balanceService.GetFinalBalanceAsync(child.ChildID);
+            ViewBag.FinalBalance = finalBalance;
+            return View(balances);
         }
     }
 

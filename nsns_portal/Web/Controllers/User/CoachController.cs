@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Hosting;
 
 
 
@@ -21,6 +24,8 @@ namespace Web.Controllers.User
     public class CoachController : Controller
     {
         private readonly ICoachService _coachService;
+        private readonly ICoachIncomeService _incomeService;
+        private readonly IChildBalanceService _balanceService;
         private readonly ICoachRepository _coachRepository;
         private readonly ICityService _cityService;
         private readonly ISpecialtyService _specialtyService;
@@ -31,9 +36,11 @@ namespace Web.Controllers.User
         private readonly IChildService _childService;
         private readonly UserManager<Core.Models.User> _userManager;
         
-        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICityService cityService, ISpecialtyService specialtyService, ICoachSpecialtyService coachSpecialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
+        public CoachController(ICoachService coachService, ICoachRepository coachRepository, ICoachIncomeService incomeService, IChildBalanceService balanceService, ICityService cityService, ISpecialtyService specialtyService, ICoachSpecialtyService coachSpecialtyService, ICourseEnrollmentService courseEnrollmentService, ICourseService courseService, IChildService childService, UserManager<Core.Models.User> userManager)
         {
             _coachService = coachService;
+            _incomeService = incomeService;
+            _balanceService = balanceService;
             _coachRepository = coachRepository;
             _cityService = cityService;
             _specialtyService = specialtyService;
@@ -606,7 +613,7 @@ namespace Web.Controllers.User
         public async Task<IActionResult> CompleteCourse(int enrollmentId, int childId, int courseId, decimal actualHours)
         {
             //int coachId = 16; // GetLoggedInCoachId(); // Replace with actual logic to get coach ID
-
+            var user = await _userManager.GetUserAsync(User);
 
             Child? child = await _childService.GetAsync(childId);
             if (child == null)
@@ -616,9 +623,11 @@ namespace Web.Controllers.User
 
             try
             {
-                bool result = await _courseEnrollmentService.CompleteCourseAsync(enrollmentId, actualHours);
+                bool result1 = await _courseEnrollmentService.CompleteCourseAsync(enrollmentId, actualHours);
+                bool result2 = await _incomeService.UpdateCoachIncomeAsync(enrollmentId, user.Id);
+                bool result3 = await _balanceService.DeductCourseSessionCostAsync(enrollmentId, user.Id);
 
-                if (result)
+                if (result1 && result2 && result3)
                 {
                     TempData["SuccessMessage"] = "Course Completed successfully.";
                 }
@@ -634,6 +643,40 @@ namespace Web.Controllers.User
             }
 
             return RedirectToAction("ManageEnrollments", new { childId, courseId = courseId});
+        }
+
+        [Authorize(Roles = "Coach")]
+        [HttpGet("Income")]
+        public async Task<IActionResult> Income()
+        {
+            // Get current coach based on User ID
+            var user = await _userManager.GetUserAsync(User);
+            var coach = await _coachRepository.GetCoachByIdAsync(user.Id);
+            //int coachId = coach.CoachID;
+
+            //var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            //var coach = await _context.Coaches.FirstOrDefaultAsync(c => c.UserID == userId);
+
+            if (coach == null)
+                return NotFound("Coach profile not found.");
+
+            // Get income records
+            var incomeRecords = await _incomeService.GetCoachIncomeAsync(coach.CoachID);
+
+            var viewModel = incomeRecords.Select(i => new CoachIncomeViewModel
+            {
+                EnrollmentID = i.EnrollmentID ?? 0,
+                CourseName = i.Course?.Title ?? "N/A",
+                ChildName = i.Enrollment?.Child.Name ?? "N/A",
+                SessionDate = i.Enrollment?.ScheduledAt ?? DateTime.MinValue,
+                SessionHours = i.Enrollment?.ActualHours ?? 0,
+                IncomeChange = i.IncomeChange ?? 0,
+                TotalIncomeSoFar = i.Income ?? 0
+            }).ToList();
+
+            ViewBag.TotalIncome = viewModel.LastOrDefault()?.TotalIncomeSoFar ?? 0;
+
+            return View(viewModel);
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Core.Services
         }
 
 
-        public async Task<bool> UpdateActivityStatusToCompletedAsync()
+        public async Task<IEnumerable<ActivityEnrollment>> UpdateActivityStatusToCompletedAsync()
         {
             return await _enrollmentRepository.UpdateActivityStatusToCompletedAsync();
            

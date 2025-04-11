@@ -95,6 +95,10 @@ namespace Core.Contexts
 
         public DbSet<CoachSpecialty> CoachSpecialties { get; set; }
 
+        public DbSet<CoachIncome> CoachIncomes { get; set; }
+
+        public DbSet<ChildBalance> ChildBalances { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

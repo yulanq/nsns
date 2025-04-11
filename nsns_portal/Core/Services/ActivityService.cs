@@ -149,7 +149,17 @@ namespace Core.Services
 
         public async Task UpdateActivityStatusToCompletedAsync()
         {
-            await _activityRepository.UpdateActivityStatusToCompletedAsync();
+            try
+            {
+                await _activityRepository.UpdateActivityStatusToCompletedAsync();
+                
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions as needed (e.g., logging)
+                throw new Exception("An error occurred while updating activities to complete.", ex);
+            }
+
         }
 
         //public async Task UpdateActivityStatusToCanceledAsync()

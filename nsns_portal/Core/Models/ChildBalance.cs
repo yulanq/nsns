@@ -28,7 +28,7 @@ namespace Core.Models
 
         public DateTime CreatedDate { get; set; } = DateTime.Now; // Default Current Timestamp
 
-        public int CreatedBy { get; set; } // Created By User
+        public int? CreatedBy { get; set; } // Created By User
 
         public int? UpdatedBy { get; set; } // Updated By User
 
