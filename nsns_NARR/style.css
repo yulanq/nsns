@@ -180,6 +180,34 @@ footer {
     font-size: 1.5rem;
    
   }
+
+  @media (max-width: 768px) {
+    .slide {
+      /* height: auto; */
+      padding: 2rem 1rem;
+    }
+  
+    .headline {
+      font-size: 1rem;
+      /* padding: 1rem; */
+    }
+  }
+
+  @media (max-width: 400px) {
+
+    .slide {
+      /* height: auto; */
+      padding: 0.5rem 0.5rem;
+    }
+
+    .headline {
+      font-size: 0.8rem; /* or whatever size looks best */
+    }
+  
+    .headline small {
+      font-size: 0.7rem;
+    }
+  }
   
   /*slideshow end*/
   
@@ -431,6 +459,9 @@ footer {
     color: #363636;
   }
   
+  .accordion-content ul {
+    padding-left: 1.2rem;
+  }
   
   .register-btn{
     display: inline-block;
