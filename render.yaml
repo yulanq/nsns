@@ -2,7 +2,7 @@ services:
   - type: web
     name: nsns_management
     runtime: docker
-    dockerfilePath: Dockerfile
+    dockerfilePath: nsns_management/Dockerfile
     contextPath: nsns_management
     buildCommand: |
       test -f Web/Web.csproj || (echo "请从 nsns_management/ 目录构建" && exit 1)    
