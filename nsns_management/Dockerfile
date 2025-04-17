@@ -1,9 +1,9 @@
 # 使用 .NET SDK 构建镜像
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /Web
 
 # 复制项目文件
-COPY . ./
+COPY . .
 RUN dotnet publish Web/Web.csproj -c Release -o /app/out
 
 # 运行阶段
