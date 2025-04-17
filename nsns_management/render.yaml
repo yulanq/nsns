@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: nsns_management
+    runtime: dotnet
+    buildCommand: dotnet publish Web/Web.csproj -c Release -o out
+    startCommand: dotnet out/Web.dll
+    branch: main
+    autoDeploy: true
