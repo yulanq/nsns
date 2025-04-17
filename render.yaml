@@ -4,5 +4,7 @@ services:
     runtime: docker
     dockerfilePath: Dockerfile
     contextPath: nsns_management
+    buildCommand: |
+      test -f Web/Web.csproj || (echo "请从 nsns_management/ 目录构建" && exit 1)    
     branch: main
     autoDeploy: true
