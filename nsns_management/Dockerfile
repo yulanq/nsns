@@ -6,7 +6,7 @@ WORKDIR /src
 COPY . .
 # Debug: print where we are and list files
 
-RUN echo "Folder Inside container at:" && pwd && echo "--- ls -al ---" && ls -al && echo "--- Web folder ---" && ls -al Web
+RUN echo "Folder Inside container at:" && pwd && echo "--- ls -al ---" && ls -al
 RUN test -f Web/Web.csproj || (echo "必须从 nsns_management/ 目录执行 docker build" && exit 1)
 RUN dotnet publish Web/Web.csproj -c Release -o /app/out
 
