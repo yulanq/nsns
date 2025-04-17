@@ -1,6 +1,6 @@
 # 使用 .NET SDK 构建镜像
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /Web
+WORKDIR /app
 
 # 复制项目文件
 COPY . .
