@@ -2,6 +2,7 @@ services:
   - type: web
     name: nsns_management
     runtime: docker
-    dockerfilePath: nsns_management/Dockerfile
+    dockerfilePath: Dockerfile
+    contextPath: nsns_management
     branch: main
     autoDeploy: true
