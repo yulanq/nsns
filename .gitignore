@@ -76,3 +76,4 @@
 /nsns_management/.vs/nsns_management/v17/DocumentLayout.backup.json
 /nsns_management/.vs/nsns_management/v17/DocumentLayout.json
 *.vsidx
+/nsns_management/Web/bin/Debug/net8.0/appsettings.json
