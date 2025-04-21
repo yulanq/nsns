@@ -145,7 +145,10 @@ builder.Services.AddScoped<ICoachSpecialtyService, CoachSpecialtyService>();
 
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
-builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql( builder.Configuration.GetConnectionString("DefaultConnection"),  new MySqlServerVersion(new Version(8, 0, 39)) ));
+var connectionString = Environment.GetEnvironmentVariable("DefaultConnection")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql(connectionString,  new MySqlServerVersion(new Version(8, 0, 39)) ));
 
 builder.Services.AddHostedService<ActivityStatusUpdater>();
 
