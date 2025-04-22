@@ -1,4 +1,4 @@
-using Core.Contexts;
+﻿using Core.Contexts;
 using Core.Interfaces;
 using Core.Models;
 using Core.BackendService;
@@ -146,11 +146,21 @@ builder.Services.AddScoped<ICoachSpecialtyService, CoachSpecialtyService>();
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
 var connectionString1 = Environment.GetEnvironmentVariable("DefaultConnection");
-
-var connectionString = Environment.GetEnvironmentVariable("DefaultConnection")
+try
+{
+    var connectionString = Environment.GetEnvironmentVariable("DefaultConnection")
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
+    //builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 39))));
+    builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString,ServerVersion.AutoDetect(connectionString)));
 
-builder.Services.AddDbContext<AppDbContext>(options =>  options.UseMySql(connectionString,  new MySqlServerVersion(new Version(8, 0, 39)) ));
+}
+catch (Exception ex)
+{
+    Console.WriteLine("❌ DB setup failed: " + ex.Message);
+    throw;
+}
+
+
 
 builder.Services.AddHostedService<ActivityStatusUpdater>();
 
