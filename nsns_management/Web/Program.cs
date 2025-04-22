@@ -145,6 +145,8 @@ builder.Services.AddScoped<ICoachSpecialtyService, CoachSpecialtyService>();
 
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
+var connectionString1 = Environment.GetEnvironmentVariable("DefaultConnection");
+
 var connectionString = Environment.GetEnvironmentVariable("DefaultConnection")
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
