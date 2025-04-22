@@ -150,13 +150,14 @@ try
 {
     var connectionString = Environment.GetEnvironmentVariable("DefaultConnection")
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
+    Console.WriteLine($"Connection string: {connectionString}");
     //builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 39))));
     builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString,ServerVersion.AutoDetect(connectionString)));
 
 }
 catch (Exception ex)
 {
-    Console.WriteLine("❌ DB setup failed: " + ex.Message);
+    Console.WriteLine("DB setup failed: " + ex.Message);
     throw;
 }
 
