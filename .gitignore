@@ -77,3 +77,9 @@
 /nsns_management/.vs/nsns_management/v17/DocumentLayout.json
 *.vsidx
 /nsns_management/Web/bin/Debug/net8.0/appsettings.json
+/nsns_management/Web/obj/Debug/net8.0/staticwebassets/msbuild.Web.Microsoft.AspNetCore.StaticWebAssets.props
+/nsns_management/Web/bin/Debug/net8.0/Web.staticwebassets.runtime.json
+/nsns_management/Web/obj/Debug/net8.0/staticwebassets.build.json
+/nsns_management/Web/obj/Debug/net8.0/staticwebassets.development.json
+/nsns_management/Web/obj/Debug/net8.0/staticwebassets.pack.json
+/nsns_management/.vs/nsns_management/DesignTimeBuild/.dtbcache.v2
