@@ -295,7 +295,7 @@ footer {
 
   .project-goals-section {
     background-color: #f4faff;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 4rem 1rem;
   }
   
   .project-goals-section .container {
@@ -350,12 +350,17 @@ footer {
 
   /*Project goals section end*/
 
+  /**/
+  .banner-section {
+    padding: 2rem 1rem 1rem 1rem;
+  }
+  
 
   /*Event section start*/
 
   .events-section {
     background-color: #ffffff;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 2rem 1rem;
   }
   
   .events-section .container {
